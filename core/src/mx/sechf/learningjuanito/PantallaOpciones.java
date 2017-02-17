@@ -83,7 +83,7 @@ public class PantallaOpciones implements Screen {
         btnJugar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                menu.setScreen(new PantallaJuego(menu));
+                menu.setScreen(new PantallaDificultades(menu));
             }
         });
 
