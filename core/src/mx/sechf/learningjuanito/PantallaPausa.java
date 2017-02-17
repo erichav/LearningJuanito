@@ -61,7 +61,7 @@ public class PantallaPausa implements Screen {
         // Botón Regresar
         TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
         ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
-        btnRegresar.setPosition(ANCHO/10-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
+        btnRegresar.setPosition(ANCHO*11/100-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
         escenaPausa.addActor(btnRegresar);
 
         // Acción del botón Regresar
@@ -75,7 +75,7 @@ public class PantallaPausa implements Screen {
         // Botón Jugar
         TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable(new TextureRegion(texturaBtnJugar));
         ImageButton btnJugar = new ImageButton(trdBtnJugar);
-        btnJugar.setPosition(9*ANCHO/10-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
+        btnJugar.setPosition(85*ANCHO/100-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
         escenaPausa.addActor(btnJugar);
 
         // Acción del botón jugar
