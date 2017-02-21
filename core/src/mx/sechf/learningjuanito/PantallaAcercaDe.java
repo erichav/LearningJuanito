@@ -40,7 +40,6 @@ public class PantallaAcercaDe implements Screen {
     // Escenas
     private Stage escenaAcercaDe;
 
-
     public PantallaAcercaDe(LearningJuanito menu) {
         this.menu=menu;
     }
