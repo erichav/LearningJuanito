@@ -164,6 +164,7 @@ public class PantallaJuego implements Screen {
     public void render(float delta) {
         tiempo = tiempo + delta;
         borrarPantalla();
+        actualizarCamara();
         batch.setProjectionMatrix(camara.combined);
         rendererMapa.setView(camara);
         rendererMapa.render();
@@ -188,8 +189,25 @@ public class PantallaJuego implements Screen {
             if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
                 menu.setScreen(new PantallaMenu(menu));
             }
+            batch.begin();
             puntaje.mostrarMensaje(batch, "Puntaje: " + Integer.toString(puntosJugador), ANCHO*85/100,118*ALTO/120);
+            batch.end();
         }
+    }
+
+    private void actualizarCamara() {
+        float posX = Juanito.sprite.getX();
+        // Si está en la parte 'media'
+        if (posX>=ANCHO/2 && posX<=ANCHO*10-ANCHO/2) {
+            // El personaje define el centro de la cámara
+            camara.position.set((int)posX, camara.position.y, 0);
+        } else if (posX>ANCHO*10-ANCHO/2) {    // Si está en la última mitad
+            // La cámara se queda a media pantalla antes del fin del mundo  :)
+            camara.position.set(ANCHO*10-ANCHO/2, camara.position.y, 0);
+        } else if ( posX<ANCHO/2 ) { // La primera mitad
+            camara.position.set(ANCHO/2, ALTO/2,0);
+        }
+        camara.update();
     }
 
     private void borrarPantalla() {
