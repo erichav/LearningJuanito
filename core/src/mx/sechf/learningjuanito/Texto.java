@@ -17,11 +17,9 @@ public class Texto {
     }
 
     public void mostrarMensaje(SpriteBatch batch, String mensaje, float x, float y){
-        batch.begin();
         GlyphLayout glyp = new GlyphLayout();
         glyp.setText(font, mensaje);
         float anchoTexto = glyp.width;
         font.draw(batch, glyp, x-anchoTexto/2, y);
-        batch.end();
     }
 }
