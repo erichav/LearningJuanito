@@ -34,7 +34,7 @@ public class PantallaJuego implements Screen {
     public static float ANCHO = 1280;
     public static float ALTO = 800;
     private final LearningJuanito menu;
-    private EstadoJuego estadoJuego = EstadoJuego.CORRIENDO;
+    private EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
     private float tiempo;
 
     //Mapa
@@ -78,7 +78,7 @@ public class PantallaJuego implements Screen {
         tiempo =0;
         crearCamara();
         texturaJuanito = new Texture("juanitoSprite.png");
-        Juanito = new Personaje(texturaJuanito,0,64);
+        Juanito = new Personaje(texturaJuanito,-50,64);
         cargarMapa();
         batch = new SpriteBatch();
         cargarTexturas();
@@ -162,24 +162,29 @@ public class PantallaJuego implements Screen {
 
     @Override
     public void render(float delta) {
-        if(estadoJuego == EstadoJuego.CORRIENDO)
+        tiempo = tiempo + delta;
+        borrarPantalla();
+        batch.setProjectionMatrix(camara.combined);
+        rendererMapa.setView(camara);
+        rendererMapa.render();
+        batch.begin();
+        Juanito.dibujar(batch);
+        batch.end();
+        if(estadoJuego == EstadoJuego.INICIANDO)
         {
-            tiempo = tiempo + delta;
-            if(tiempo>1){
-                if(tiempo<5)
-                {
-                    return;
-                }
-                puntosJugador = (int)((tiempo-5)*10);
+            if (tiempo < 5)
+            {
+                return;
             }
+            else
+            {
+                estadoJuego = EstadoJuego.CORRIENDO;
+            }
+        }
+        else if (estadoJuego == EstadoJuego.CORRIENDO) // Actualizar a Juanito
+        {
+            puntosJugador = (int)((tiempo-5)*10);
             Juanito.actualizar(mapa);
-            borrarPantalla();
-            batch.setProjectionMatrix(camara.combined);
-            rendererMapa.setView(camara);
-            rendererMapa.render();
-            batch.begin();
-            Juanito.dibujar(batch);
-            batch.end();
             //escenaJuego.draw();
             if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
                 menu.setScreen(new PantallaMenu(menu));
@@ -219,6 +224,7 @@ public class PantallaJuego implements Screen {
     }
 
     public enum EstadoJuego {
+        INICIANDO,
         CORRIENDO,
         PAUSADO
     }
