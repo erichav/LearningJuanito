@@ -185,7 +185,6 @@ public class PantallaJuego implements Screen {
         {
             puntosJugador = (int)((tiempo-5)*10);
             Juanito.actualizar(mapa);
-            //escenaJuego.draw();
             if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
                 menu.setScreen(new PantallaMenu(menu));
             }
