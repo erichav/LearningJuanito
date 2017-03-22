@@ -21,22 +21,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Created by Csar on 16/02/2017.
  */
 
-public class PantallaPausa implements Screen {
-    private static final float ANCHO = 1280;
-    private static final float ALTO = 800;
-    private final LearningJuanito menu;
+public class PantallaPausa extends Pantalla {
 
-    // Camara, vista
-    private OrthographicCamera camara;
-    private Viewport vista;
+    private final LearningJuanito menu;
 
     // Texturas
     private Texture texturaPausa;
     private Texture texturaBtnRegresar;
     private Texture texturaBtnJugar;
-
-    // Sprite batch
-    private SpriteBatch batch;
 
     // Escenas
     private Stage escenaPausa;
@@ -111,11 +103,6 @@ public class PantallaPausa implements Screen {
             menu.setScreen(new PantallaMenu(menu));
         }
 
-    }
-
-    private void borrarPantalla() {
-        Gdx.gl.glClearColor(0,1,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override

@@ -30,9 +30,8 @@ import java.sql.Time;
 /**
  * Created by Erick Chávez on 15/02/2017.
  */
-public class PantallaJuego implements Screen {
-    public static float ANCHO = 1280;
-    public static float ALTO = 800;
+public class PantallaJuego extends Pantalla {
+
     private final LearningJuanito menu;
     private EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
     private float tiempo;
@@ -56,18 +55,11 @@ public class PantallaJuego implements Screen {
     private int puntosJugador = 0;
     private Texto puntaje;
 
-    //camara, vista
-    private OrthographicCamera camara;
-    private Viewport vista;
-
     //texturas
     private Texture texturaJuego;
     private Texture texturaBtnPausa;
     private Texture texturaMama;
     private Texture texturaVida;
-
-    // Sprite batch
-    private SpriteBatch batch;
 
     // Escenas
     private Stage escenaJuego;
@@ -210,10 +202,6 @@ public class PantallaJuego implements Screen {
         camara.update();
     }
 
-    private void borrarPantalla() {
-        Gdx.gl.glClearColor(0,1,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    }
 
     @Override
     public void resize(int width, int height) {
