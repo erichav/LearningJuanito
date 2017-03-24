@@ -15,10 +15,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -56,9 +60,17 @@ public class PantallaJuego implements Screen {
     private int puntosJugador = 0;
     private Texto puntaje;
 
-    //camara, vista
+    //camara
     private OrthographicCamera camara;
+
+    //hud
+    private OrthographicCamera camaraHUD;
     private Viewport vista;
+    private Viewport vistaHUD;
+    private Stage escenaHUD;
+
+    //AssetManager
+    private AssetManager manager;
 
     //texturas
     private Texture texturaJuego;
@@ -80,6 +92,7 @@ public class PantallaJuego implements Screen {
         texturaJuanito = new Texture("juanitoSprite.png");
         Juanito = new Personaje(texturaJuanito,-50,64);
         cargarMapa();
+        //crearbtnSaltar();
         batch = new SpriteBatch();
         cargarTexturas();
         crearObjetos();
@@ -89,20 +102,55 @@ public class PantallaJuego implements Screen {
         Gdx.input.setCatchBackKey(true);
     }
 
+//    private void crearbtnSaltar() {
+//        camaraHUD = new OrthographicCamera(ANCHO,ALTO);
+//        camaraHUD.position.set(ANCHO/2, ALTO/2, 0);
+//        camaraHUD.update();
+//        vistaHUD = new StretchViewport(ANCHO, ALTO, camaraHUD);
+//        // HUD
+//        Skin skin = new Skin();
+//        skin.add("saltar1", manager.get("Images/btns/btnSaltar1.png")); //new Texture("padBack.png"));
+//        skin.add("saltar2", manager.get("Images/btns/btnSaltar2.png")); //new Texture("padKnob.png"));
+//
+//        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
+//        estilo.background = skin.getDrawable("saltar1");
+//        estilo.knob = skin.getDrawable("saltar2");
+//
+//        pad = new Touchpad(20, estilo);
+//        pad.setBounds(0, 0, 200, 200);
+//
+//        pad.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                Touchpad pad = (Touchpad) actor;
+//                if (pad.getKnobPercentX()>0.20) {
+//                    mario.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+//                } else if (pad.getKnobPercentX()<-0.20){
+//                    mario.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA);
+//                } else {
+//                    mario.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+//                }
+//            }
+//        });
+//
+//        escenaHUD = new Stage(vistaHUD);
+//        escenaHUD.addActor(pad);
+//    }
+
     private void cargarMapa() {
         AssetManager manager = new AssetManager();
         manager.setLoader(TiledMap.class,
                 new TmxMapLoader(new InternalFileHandleResolver()));
         manager.load("mapaNivel1.tmx", TiledMap.class);
         //Cargar Audios
-        manager.load("Audio/Fondo.mp3",Music.class);
+        //manager.load("Audio/Fondo.mp3",Music.class);
         manager.finishLoading();
         batch = new SpriteBatch();
 
             mapa = manager.get("mapaNivel1.tmx");
-        musicaFondo = manager.get("Audio/Fondo.mp3");
-        musicaFondo.setLooping(true);
-        musicaFondo.play();
+        //musicaFondo = manager.get("Audio/Fondo.mp3");
+       // musicaFondo.setLooping(true);
+        //musicaFondo.play();
         rendererMapa = new OrthogonalTiledMapRenderer(mapa, batch);
         rendererMapa.setView(camara);
     }
@@ -119,7 +167,7 @@ public class PantallaJuego implements Screen {
 
         //imagenJuanito
         Image imgJuanito= new Image(texturaJuanito);
-        imgJuanito.setPosition(ANCHO*4/10-imgJuanito.getWidth()/2,26*ALTO/120-imgJuanito.getHeight()/2);
+        imgJuanito.setPosition(ANCHO/4-imgJuanito.getWidth()/2,26*ALTO/120-imgJuanito.getHeight()/2);
         escenaJuego.addActor(imgJuanito);
 
         //imagenesVidas

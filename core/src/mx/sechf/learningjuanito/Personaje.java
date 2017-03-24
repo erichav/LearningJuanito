@@ -15,7 +15,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Personaje extends Objeto
 {
-    private final float velocidad = 15; // Velocidad inicial de Juanito
+    private final float velocidad = 5; // Velocidad inicial de Juanito
 
     private Animation<TextureRegion> spriteAnimado;         // Animación de Juanito caminando
     private float timerAnimacion;                           // Tiempo para cambiar frames de la animación
