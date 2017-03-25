@@ -53,7 +53,7 @@ public class PantallaAcercaDe extends Pantalla {
         TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable
                 (new TextureRegion(texturaBtnRegresar));
         ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
-        btnRegresar.setPosition(ANCHO/10-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
+        btnRegresar.setPosition(ANCHO/10+50-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
         escenaAcercaDe.addActor(btnRegresar);
 
         //accion del boton Regresar
@@ -68,7 +68,7 @@ public class PantallaAcercaDe extends Pantalla {
         TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable
                 (new TextureRegion(texturaBtnJugar));
         ImageButton btnJugar = new ImageButton(trdBtnJugar);
-        btnJugar.setPosition(9*ANCHO/10-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
+        btnJugar.setPosition(9*ANCHO/10-70-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
         escenaAcercaDe.addActor(btnJugar);
 
         //accion del boton jugar

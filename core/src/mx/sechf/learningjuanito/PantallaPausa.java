@@ -29,6 +29,7 @@ public class PantallaPausa extends Pantalla {
     private Texture texturaPausa;
     private Texture texturaBtnRegresar;
     private Texture texturaBtnJugar;
+    private Texture texturaBtnOpciones;
 
     // Escenas
     private Stage escenaPausa;
@@ -53,7 +54,7 @@ public class PantallaPausa extends Pantalla {
         // Botón Regresar
         TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
         ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
-        btnRegresar.setPosition(ANCHO*11/100-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
+        btnRegresar.setPosition(ANCHO*11/100+50-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
         escenaPausa.addActor(btnRegresar);
 
         // Acción del botón Regresar
@@ -67,7 +68,7 @@ public class PantallaPausa extends Pantalla {
         // Botón Jugar
         TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable(new TextureRegion(texturaBtnJugar));
         ImageButton btnJugar = new ImageButton(trdBtnJugar);
-        btnJugar.setPosition(85*ANCHO/100-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
+        btnJugar.setPosition(ANCHO/2-30-btnJugar.getWidth()/2,2*ALTO/12+90-btnJugar.getHeight()/2);
         escenaPausa.addActor(btnJugar);
 
         // Acción del botón jugar
@@ -78,6 +79,20 @@ public class PantallaPausa extends Pantalla {
             }
         });
 
+        // Botón Opciones
+        TextureRegionDrawable trdBtnOpciones = new TextureRegionDrawable(new TextureRegion(texturaBtnOpciones));
+        ImageButton btnOpciones = new ImageButton(trdBtnOpciones);
+        btnOpciones.setPosition(85*ANCHO/100-btnOpciones.getWidth()/2,2*ALTO/12-btnOpciones.getHeight()/2);
+        escenaPausa.addActor(btnOpciones);
+
+        // Acción del botón jugar
+        btnOpciones.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                menu.setScreen(new PantallaOpciones(menu));
+            }
+        });
+
         Gdx.input.setInputProcessor(escenaPausa);
         Gdx.input.setCatchBackKey(true);
     }
@@ -85,7 +100,8 @@ public class PantallaPausa extends Pantalla {
     private void cargarTexturas() {
         texturaPausa = new Texture("Images/screens/pausa.jpg");
         texturaBtnRegresar = new Texture("Images/btns/btnMenuPrinc.png");
-        texturaBtnJugar = new Texture("Images/btns/btnJugarPantallas.png");
+        texturaBtnJugar = new Texture("Images/btns/btnJugarPausa.png");
+        texturaBtnOpciones = new Texture("Images/btns/btnOpcionesPausa.png");
     }
 
     private void crearCamara() {

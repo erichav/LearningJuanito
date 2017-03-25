@@ -58,7 +58,7 @@ public class PantallaMenu extends Pantalla {
         //botonJugar
         TextureRegionDrawable trdBtnPlay = new TextureRegionDrawable(new TextureRegion(texturaBtnPlay));
         ImageButton btnPlay = new ImageButton(trdBtnPlay);
-        btnPlay.setPosition(ANCHO/2-btnPlay.getWidth()/2,5*ALTO/12-btnPlay.getHeight()/2);
+        btnPlay.setPosition(ANCHO/2-btnPlay.getWidth()/2,5*ALTO/12+5-btnPlay.getHeight()/2);
         escenaMenu.addActor(btnPlay);
 
         //accion del boton jugar
@@ -72,7 +72,7 @@ public class PantallaMenu extends Pantalla {
         //boton AcercaDe
         TextureRegionDrawable trdBtnAcercaDe = new TextureRegionDrawable(new TextureRegion(texturaBtnAcercaDe));
         ImageButton btnAcercaDe = new ImageButton(trdBtnAcercaDe);
-        btnAcercaDe.setPosition(7*ANCHO/10-btnAcercaDe.getWidth()/2,7*ALTO/18-btnAcercaDe.getHeight()/2);
+        btnAcercaDe.setPosition(12*ANCHO/13-btnAcercaDe.getWidth()/2,15*ALTO/23-btnAcercaDe.getHeight()/2);
         escenaMenu.addActor(btnAcercaDe);
 
         //accion del boton acercade
@@ -86,7 +86,7 @@ public class PantallaMenu extends Pantalla {
         //boton Opciones
         TextureRegionDrawable trdBtnOpciones = new TextureRegionDrawable(new TextureRegion(texturaBtnOpciones));
         ImageButton btnOpciones = new ImageButton(trdBtnOpciones);
-        btnOpciones.setPosition(7*ANCHO/8-btnOpciones.getWidth()/2,2*ALTO/15-btnOpciones.getHeight()/2);
+        btnOpciones.setPosition(7*ANCHO/8-45-btnOpciones.getWidth()/2,ALTO/19+90-btnOpciones.getHeight()/2);
         escenaMenu.addActor(btnOpciones);
 
         //accion del boton Opciones
@@ -100,7 +100,7 @@ public class PantallaMenu extends Pantalla {
         //boton Intrucciones
         TextureRegionDrawable trdBtnInstrucciones = new TextureRegionDrawable(new TextureRegion(texturaBtnInstrucciones));
         ImageButton btnInstrucciones = new ImageButton(trdBtnInstrucciones);
-        btnInstrucciones.setPosition(7*ANCHO/16,4*ALTO/19-btnInstrucciones.getHeight()/2);
+        btnInstrucciones.setPosition(ANCHO/2-btnInstrucciones.getWidth()/2,ALTO/2-270-btnInstrucciones.getHeight()/2);
         escenaMenu.addActor(btnInstrucciones);
 
         //accion del boton Instrucciones
@@ -114,7 +114,7 @@ public class PantallaMenu extends Pantalla {
         //boton Puntaciones
         TextureRegionDrawable trdBtnPuntaciones = new TextureRegionDrawable(new TextureRegion(texturaBtnPuntuaciones));
         ImageButton btnPuntuaciones = new ImageButton(trdBtnPuntaciones);
-        btnPuntuaciones.setPosition(1*ANCHO/13-btnPuntuaciones.getWidth()/2,15*ALTO/23-btnPuntuaciones.getHeight()/2);
+        btnPuntuaciones.setPosition(ANCHO/13-btnPuntuaciones.getWidth()/2,15*ALTO/23-40-btnPuntuaciones.getHeight()/2);
         escenaMenu.addActor(btnPuntuaciones);
 
         //accion del boton puntuaciones
@@ -128,7 +128,7 @@ public class PantallaMenu extends Pantalla {
         //boton Salir
         TextureRegionDrawable trdBtnSalir = new TextureRegionDrawable(new TextureRegion(texturaBtnSalir));
         ImageButton btnSalir = new ImageButton(trdBtnSalir);
-        btnSalir.setPosition(1*ANCHO/8-btnSalir.getWidth()/2,3*ALTO/19-btnSalir.getHeight()/2);
+        btnSalir.setPosition(ANCHO/8+45-btnSalir.getWidth()/2,ALTO/19+90-btnSalir.getHeight()/2);
         escenaMenu.addActor(btnSalir);
 
         //accion del boton Salir

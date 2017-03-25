@@ -28,6 +28,8 @@ public class PantallaOpciones extends Pantalla {
     private Texture texturaOpciones;
     private Texture texturaBtnRegresar;
     private Texture texturaBtnJugar;
+    private Texture texturaBtnSonidoOn;
+    private Texture texturaBtnSonidoOff;
 
     // Escenas
     private Stage escenaOpciones;
@@ -53,7 +55,7 @@ public class PantallaOpciones extends Pantalla {
         TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable
                 (new TextureRegion(texturaBtnRegresar));
         ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
-        btnRegresar.setPosition(ANCHO/10-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
+        btnRegresar.setPosition(ANCHO/10+50-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
         escenaOpciones.addActor(btnRegresar);
 
         //accion del boton Regresar
@@ -68,7 +70,7 @@ public class PantallaOpciones extends Pantalla {
         TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable
                 (new TextureRegion(texturaBtnJugar));
         ImageButton btnJugar = new ImageButton(trdBtnJugar);
-        btnJugar.setPosition(9*ANCHO/10-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
+        btnJugar.setPosition(9*ANCHO/10-70-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
         escenaOpciones.addActor(btnJugar);
 
         //accion del boton jugar
@@ -76,6 +78,37 @@ public class PantallaOpciones extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 menu.setScreen(new PantallaDificultades(menu));
+            }
+        });
+
+        //boton Musica on
+        TextureRegionDrawable trdBtnMusicOn = new TextureRegionDrawable
+                (new TextureRegion(texturaBtnSonidoOn));
+        ImageButton btnMusicOn = new ImageButton(trdBtnMusicOn);
+        btnMusicOn.setPosition(ANCHO/2+180-btnMusicOn.getWidth()/2,5*ALTO/12+110-btnMusicOn.getHeight()/2);
+        escenaOpciones.addActor(btnMusicOn);
+
+        //accion del boton Musica On
+        btnJugar.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
+
+
+        //boton Efectos on
+        TextureRegionDrawable trdBtnEfectOn = new TextureRegionDrawable
+                (new TextureRegion(texturaBtnSonidoOn));
+        ImageButton btnEfectoOn = new ImageButton(trdBtnEfectOn);
+        btnEfectoOn.setPosition(ANCHO/2+180-btnEfectoOn.getWidth()/2,4*ALTO/12-btnEfectoOn.getHeight()/2);
+        escenaOpciones.addActor(btnEfectoOn);
+
+        //accion del boton Musica On
+        btnJugar.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
             }
         });
 
@@ -87,6 +120,8 @@ public class PantallaOpciones extends Pantalla {
         texturaOpciones = new Texture("Images/screens/opciones.jpg");
         texturaBtnRegresar = new Texture("Images/btns/btnMenuPrinc.png");
         texturaBtnJugar = new Texture("Images/btns/btnJugarPantallas.png");
+        texturaBtnSonidoOn = new Texture("Images/btns/btnSoundOn.png");
+        texturaBtnSonidoOff = new Texture("Images/btns/btnSoundOff.png");
     }
 
     private void crearCamara() {
