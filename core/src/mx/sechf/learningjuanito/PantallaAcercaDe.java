@@ -20,22 +20,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 /**
  * Created by Erick Chávez on 03/02/2017.
  */
-public class PantallaAcercaDe implements Screen {
-    private static final float ANCHO = 1280;
-    private static final float ALTO = 800;
-    private final LearningJuanito menu;
+public class PantallaAcercaDe extends Pantalla {
 
-    //camara, vista
-    private OrthographicCamera camara;
-    private Viewport vista;
+    private final LearningJuanito menu;
 
     //texturas
     private Texture texturaAcercaDe;
     private Texture texturaBtnRegresar;
     private Texture texturaBtnJugar;
-
-    // Sprite batch
-    private SpriteBatch batch;
 
     // Escenas
     private Stage escenaAcercaDe;
@@ -112,11 +104,6 @@ public class PantallaAcercaDe implements Screen {
             menu.setScreen(new PantallaMenu(menu));
         }
 
-    }
-
-    private void borrarPantalla() {
-        Gdx.gl.glClearColor(0,1,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //llena la pantalla del color elegido
     }
 
     @Override
