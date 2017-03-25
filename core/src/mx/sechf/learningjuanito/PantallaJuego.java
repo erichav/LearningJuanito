@@ -69,8 +69,8 @@ public class PantallaJuego extends Pantalla {
     public void show() {
         tiempo =0;
         crearCamara();
-        texturaJuanito = new Texture("juanitoSprite.png");
-        Juanito = new Personaje(texturaJuanito,-50,64);
+        texturaJuanito = new Texture("Images/objects/Juanito/juanito.png");
+        Juanito = new Personaje(texturaJuanito,90,180,-50,64);
         cargarMapa();
         batch = new SpriteBatch();
         cargarTexturas();
