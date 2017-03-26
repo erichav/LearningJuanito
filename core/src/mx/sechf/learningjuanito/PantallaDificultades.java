@@ -60,7 +60,7 @@ public class PantallaDificultades extends Pantalla {
         btnPrincipiante.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                menu.setScreen(new PantallaJuego(menu ));
+                menu.setScreen(new PantallaCargando(menu, Pantallas.NIVEL_PRINCIPIANTE));
             }
         });
 
@@ -75,7 +75,7 @@ public class PantallaDificultades extends Pantalla {
         btnIntermedio.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                menu.setScreen(new PantallaJuego(menu ));
+                menu.setScreen(new PantallaCargando(menu, Pantallas.NIVEL_INTERMEDIO));
             }
         });
 
@@ -90,7 +90,7 @@ public class PantallaDificultades extends Pantalla {
         btnExperto.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                menu.setScreen(new PantallaJuego(menu ));
+                menu.setScreen(new PantallaCargando(menu, Pantallas.NIVEL_EXPERTO));
             }
         });
     }

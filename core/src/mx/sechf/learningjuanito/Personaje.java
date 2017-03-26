@@ -15,25 +15,26 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Personaje extends Objeto
 {
-    private final float velocidad = 15; // Velocidad inicial de Juanito
-    private int w, h;
+    private final float velocidad = 10; // Velocidad inicial de Juanito
+    private int ANCHO_PERSONAJE, ALTO_PERSONAJE;
 
     private Animation<TextureRegion> spriteAnimado;         // Animación de Juanito caminando
-    private float timerAnimacion;                           // Tiempo para cambiar frames de la animación
+    private float timerAnimacion, yInicial, tiempo;                          // Tiempo para cambiar frames de la animación
 
-    private EstadoMovimiento estadoMovimiento = EstadoMovimiento.MOV_DERECHA;
+    private EstadoMovimiento estadoMovimiento = EstadoMovimiento.INICIANDO;
+    private EstadoSalto estadoSalto = EstadoSalto.EN_PISO;
 
     // Recibe la imagen de Juanito con todos sus frames
     public Personaje(Texture textura, int w, int h, float x, float y) {
-        this.w = w;
-        this.h = h;
+        this.ANCHO_PERSONAJE = w;
+        this.ALTO_PERSONAJE = h;
         // Lee la textura como región
         TextureRegion texturaCompleta = new TextureRegion(textura);
         // La divide en 4 frames de 32x64
         TextureRegion[][] texturaPersonaje = texturaCompleta.split(w,h);
         // Crea la animación con tiempo de 0.25 segundos entre frames.
 
-        spriteAnimado = new Animation(0.15f, texturaPersonaje[0][0], texturaPersonaje[0][1], texturaPersonaje[0][2], texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1] );
+        spriteAnimado = new Animation(0.1f, texturaPersonaje[0][0], texturaPersonaje[0][1], texturaPersonaje[0][2], texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1] );
         // Animación infinita
         spriteAnimado.setPlayMode(Animation.PlayMode.LOOP);
         // Inicia el timer que contará tiempo para saber qué frame se dibuja
@@ -65,7 +66,13 @@ public class Personaje extends Objeto
             case MOV_DERECHA:
                 moverHorizontal(mapa);
                 break;
+            case INICIANDO:
+                moverDerecha(mapa);
         }
+    }
+
+    private void moverDerecha(TiledMap mapa) {
+        sprite.setX(sprite.getX()+velocidad);
     }
 
 
@@ -77,9 +84,19 @@ public class Personaje extends Objeto
         float nuevaX = sprite.getX();
         // ¿Quiere ir a la Derecha?
         if ( estadoMovimiento== EstadoMovimiento.MOV_DERECHA) {
+            if(estadoSalto == EstadoSalto.SUBIENDO)
+            {
+                sprite.setY((int)(yInicial+velocidad*2*tiempo-(0.98*tiempo*tiempo)/2));
+                tiempo++;
+                if(sprite.getY() <= yInicial)
+                {
+                    sprite.setY(yInicial);
+                    estadoSalto = EstadoSalto.EN_PISO;
+                }
+            }
             // Obtiene el bloque del lado derecho. Asigna null si puede pasar.
-            int x = (int) ((sprite.getX() + w) / w);   // Convierte coordenadas del mundo en coordenadas del mapa
-            int y = (int) (sprite.getY() / h);
+            int x = (int) ((sprite.getX() + ANCHO_PERSONAJE) / ANCHO_PERSONAJE);   // Convierte coordenadas del mundo en coordenadas del mapa
+            int y = (int) (sprite.getY() / ALTO_PERSONAJE);
             TiledMapTileLayer.Cell celdaDerecha = capa.getCell(x, y);
             if (celdaDerecha != null) {
                 Object tipo = (String) celdaDerecha.getTile().getProperties().get("tipo");
@@ -101,8 +118,8 @@ public class Personaje extends Objeto
     public boolean recolectarObjetos(TiledMap mapa) {
         // Revisar si toca una moneda (pies)
         TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(1);
-        int x = (int)(sprite.getX()/w)+1;
-        int y = (int)(sprite.getY()/h);
+        int x = (int)(sprite.getX()/ ANCHO_PERSONAJE)+1;
+        int y = (int)(sprite.getY()/ ALTO_PERSONAJE);
         TiledMapTileLayer.Cell celda = capa.getCell(x,y);
         if (celda!=null ) {
             Object tipo = celda.getTile().getProperties().get("tipo");
@@ -112,8 +129,8 @@ public class Personaje extends Objeto
                 return true;
             }
         }
-        x = (int)(sprite.getX()/w)+1;
-        y = (int)(sprite.getY()/h)+1;
+        x = (int)(sprite.getX()/ ANCHO_PERSONAJE)+1;
+        y = (int)(sprite.getY()/ ALTO_PERSONAJE)+1;
         celda = capa.getCell(x,y);
         if (celda!=null ) {
             Object tipo = celda.getTile().getProperties().get("tipo");
@@ -136,9 +153,23 @@ public class Personaje extends Objeto
         this.estadoMovimiento = estadoMovimiento;
     }
 
+    public void saltar() {
+        if (estadoSalto!=EstadoSalto.SUBIENDO && estadoSalto!=EstadoSalto.BAJANDO) {
+            // inicia
+            estadoSalto = EstadoSalto.SUBIENDO;
+            yInicial = sprite.getY();
+            tiempo = 1;
+        }
+    }
+
     public enum EstadoMovimiento {
         INICIANDO,
         MOV_DERECHA,
         ALCANZADO
+    }
+    public enum EstadoSalto {
+        SUBIENDO,
+        BAJANDO,
+        EN_PISO
     }
 }

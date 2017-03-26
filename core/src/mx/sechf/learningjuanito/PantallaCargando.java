@@ -64,17 +64,10 @@ class PantallaCargando extends Pantalla
     }
 
     private void cargarRecursosNivel() {
-        /*manager.load("whackamole/fondoPasto.jpg", Texture.class);
-        manager.load("whackamole/hoyo.png", Texture.class);
-        manager.load("whackamole/mole.png", Texture.class);
-        manager.load("whackamole/estrellasGolpe.png", Texture.class);
-        manager.load("whackamole/mazo.png", Texture.class);
-        manager.load("whackamole/golpe.mp3", Sound.class);
-        manager.load("whackamole/risa.mp3", Sound.class);
-        manager.load("comun/btnPausa.png", Texture.class);
-        manager.load("whackamole/btnSalir.png", Texture.class);
-        manager.load("whackamole/btnReintentar.png", Texture.class);
-        manager.load("whackamole/btnContinuar.png", Texture.class);*/
+        manager.load("Images/objects/Juanito/juanito.png", Texture.class);
+        manager.load("Images/objects/Mama/mamaJuanito.png", Texture.class);
+        manager.load("mapaNivel1.tmx", TiledMap.class);
+        manager.load("Audio/Fondo.mp3",Music.class);
     }
 
     private void cargarRecursosMenu() {

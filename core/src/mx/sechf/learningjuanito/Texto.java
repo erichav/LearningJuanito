@@ -4,12 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
  * Created by ethan on 03/02/2017.
  */
 
-public class Texto {
+public class Texto extends Actor {
     private BitmapFont font;
 
     public Texto(){
