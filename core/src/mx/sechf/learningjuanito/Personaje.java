@@ -65,13 +65,13 @@ public class Personaje extends Objeto
     public void actualizar(TiledMap mapa) {
         switch (estadoMovimiento) {
             case MOV_DERECHA:
-                verificaSalto();
+                verificaSalto(mapa);
                 moverHorizontal(mapa);
                 break;
             case INICIANDO:
                 moverDerecha(mapa);
             case QUIETO:
-                verificaSalto();
+                verificaSalto(mapa);
                 break;
         }
     }
@@ -79,13 +79,33 @@ public class Personaje extends Objeto
     private void moverDerecha(TiledMap mapa) {sprite.setX(sprite.getX()+velocidad);
     }
 
-    private void verificaSalto() {
-        if(estadoSalto == EstadoSalto.SUBIENDO)
-        {
-            sprite.setY((int)(yInicial+20*tiempo-(0.98*tiempo*tiempo)/2));
+    private void verificaSalto(TiledMap mapa) {
+        int yNueva;
+        if (estadoSalto == EstadoSalto.SUBIENDO) {
+            yNueva = (int) (yInicial + 20 * tiempo - (0.98 * tiempo * tiempo) / 2);
+            if (yNueva < sprite.getY()) {
+                estadoSalto = EstadoSalto.BAJANDO;
+            }
+            sprite.setY(yNueva);
             tiempo++;
-            if(sprite.getY() <= yInicial)
-            {
+        } else if (estadoSalto == EstadoSalto.BAJANDO) {
+            // VERIFICAMOS QUE NO TENGA UN OBSTÁCULO DEBAJO
+            TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
+            int x = (int) (sprite.getX() / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
+            int y = (int) ((sprite.getY() + 10 ) / 32);
+            TiledMapTileLayer.Cell celdaAbajo = capa.getCell(x, y);
+            if (celdaAbajo != null) {
+                Object tipo = (String) celdaAbajo.getTile().getProperties().get("tipo");
+                if (!"obstaculo".equals(tipo)) {
+                    celdaAbajo = null;  // Puede pasar
+                }
+            }
+            if (celdaAbajo == null) {
+                yNueva = (int) (yInicial + 20 * tiempo - (0.98 * tiempo * tiempo) / 2);
+                sprite.setY(yNueva);
+                tiempo++;
+            }
+            if (sprite.getY() <= yInicial) {
                 sprite.setY(yInicial);
                 estadoSalto = EstadoSalto.EN_PISO;
             }
@@ -104,7 +124,7 @@ public class Personaje extends Objeto
             velocidad = velocidad + 0.005f;
             // Obtiene el bloque del lado derecho. Asigna null si puede pasar.
             int x = (int) ((sprite.getX() + 32) / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
-            int y = (int) (sprite.getY() / 32);
+            int y = (int) ((sprite.getY() + 32) / 32);
             TiledMapTileLayer.Cell celdaDerecha = capa.getCell(x, y);
             if (celdaDerecha != null) {
                 Object tipo = (String) celdaDerecha.getTile().getProperties().get("tipo");
@@ -164,6 +184,10 @@ public class Personaje extends Objeto
     public void setEstadoMovimiento(EstadoMovimiento estadoMovimiento) {
         this.estadoMovimiento = estadoMovimiento;
     }
+    public void setEstadoSalto(EstadoSalto estadoSalto)
+    {
+        this.estadoSalto = estadoSalto;
+    }
 
     public void saltar() {
         if (estadoSalto!=EstadoSalto.SUBIENDO && estadoSalto!=EstadoSalto.BAJANDO) {
@@ -180,6 +204,19 @@ public class Personaje extends Objeto
             return true;
         }
         return false;
+    }
+
+    public void checaSalto(TiledMap mapa) {
+        TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
+        int x = (int) ((sprite.getX() + 32) / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
+        int y = (int) (sprite.getY() / 32);
+        TiledMapTileLayer.Cell celdaDerecha = capa.getCell(x+(int)(velocidad/3), y);
+        if (celdaDerecha != null) {
+            Object tipo = (String) celdaDerecha.getTile().getProperties().get("tipo");
+            if ("obstaculo".equals(tipo)) {
+                saltar();
+            }
+        }
     }
 
     public enum EstadoMovimiento {

@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -38,8 +39,10 @@ public class PantallaJuego extends Pantalla {
     private EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
     private float tiempo;
     private float velocidad = 10;
+    private float posicionMama;
     private float separacion; //La separación original entre Juanito y su mamá.
-    public static final float ANCHOTOTAL = ANCHO*2;
+    private int posicionObstaculo=0;
+    public static final float ANCHOTOTAL = ANCHO*50;
 
     //Alcanzado
     private EscenaAlcanzado escenaAlcanzado;
@@ -169,6 +172,8 @@ public class PantallaJuego extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     // Continuar el juego
                     estadoJuego = EstadoJuego.CORRIENDO;
+                    Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                    Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                     // Regresa el control a la pantalla
                     Gdx.input.setInputProcessor(procesadorEntrada);
                 }
@@ -237,6 +242,7 @@ public class PantallaJuego extends Pantalla {
                 Mama.actualizar(mapa);
                 return;
             }
+            posicionMama = camara.position.x-Mama.sprite.getX();
             separacion = Juanito.sprite.getX() - Mama.sprite.getX();
             Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
             Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
@@ -244,10 +250,17 @@ public class PantallaJuego extends Pantalla {
         }
         else if (estadoJuego == EstadoJuego.CORRIENDO) // Actualizar a Juanito
         {
+            int posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
             velocidad = velocidad + 0.005f;
             puntosJugador = puntosJugador + delta;
             Juanito.actualizar(mapa);
             Mama.actualizar(mapa);
+            Mama.checaSalto(mapa);
+            if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
+            {
+                posicionObstaculo = posXJuanito+40;
+                generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
+            }
             actualizarCamara();
             colision();
             batch.begin();
@@ -270,6 +283,9 @@ public class PantallaJuego extends Pantalla {
             estadoJuego = EstadoJuego.ALCANZADO;
             Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
             Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+            Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+            Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+            eliminarObjetos();
             reacomodarPersonajes();
             if (escenaAlcanzado==null) {
                     escenaAlcanzado = new EscenaAlcanzado(vistaHUD, batch);
@@ -278,9 +294,124 @@ public class PantallaJuego extends Pantalla {
                 Gdx.input.setInputProcessor(escenaAlcanzado);
         }
     }
+    private void generaObstaculo(int tipo, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
+    {
+        TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
+        TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(0);
+        switch (tipo){
+            case 0: // MESA
+                //Primera columna
+                capa.setCell(posX,posY, obstaculos.getCell(0,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(0,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(0,26));
+                capa.setCell(posX,posY+3, obstaculos.getCell(0,27));
+                //Segunda columna
+                capa.setCell(posX+1,posY, obstaculos.getCell(1,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(1,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(1,26));
+                capa.setCell(posX+1,posY+3, obstaculos.getCell(1,27));
+                //Tercera columna
+                capa.setCell(posX+2,posY, obstaculos.getCell(2,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(2,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(2,26));
+                capa.setCell(posX+2,posY+3, obstaculos.getCell(2,27));
+                //Cuarta columna
+                capa.setCell(posX+3,posY, obstaculos.getCell(3,25));
+                capa.setCell(posX+3,posY+1, obstaculos.getCell(3,26));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(3,26));
+                capa.setCell(posX+3,posY+3, obstaculos.getCell(3,27));
+                //Quinta columna
+                capa.setCell(posX+4,posY, obstaculos.getCell(4,25));
+                capa.setCell(posX+4,posY+1, obstaculos.getCell(4,26));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(4,26));
+                capa.setCell(posX+4,posY+3, obstaculos.getCell(4,27));
+                //Sexta columna
+                capa.setCell(posX+5,posY, obstaculos.getCell(5,25));
+                capa.setCell(posX+5,posY+1, obstaculos.getCell(5,26));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(5,26));
+                capa.setCell(posX+5,posY+3, obstaculos.getCell(5,27));
+                break;
+            case 1: //SILLON 1
+                //Primera columna
+                capa.setCell(posX,posY, obstaculos.getCell(6,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(6,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(6,27));
+                //Segunda columna
+                capa.setCell(posX+1,posY, obstaculos.getCell(7,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(7,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(7,27));
+                //Tercera columna
+                capa.setCell(posX+2,posY, obstaculos.getCell(8,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(8,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(8,27));
+                //Cuarta columna
+                capa.setCell(posX+3,posY, obstaculos.getCell(9,25));
+                capa.setCell(posX+3,posY+1, obstaculos.getCell(9,26));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(9,27));
+                //Quinta columna
+                capa.setCell(posX+4,posY, obstaculos.getCell(10,25));
+                capa.setCell(posX+4,posY+1, obstaculos.getCell(10,26));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(10,27));
+                //Sexta columna
+                capa.setCell(posX+5,posY, obstaculos.getCell(11,25));
+                capa.setCell(posX+5,posY+1, obstaculos.getCell(11,26));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(11,27));
+                break;
+            case 2: // SILLON 2
+                //Primera columna
+                capa.setCell(posX,posY, obstaculos.getCell(12,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(12,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(12,27));
+                //Segunda columna
+                capa.setCell(posX+1,posY, obstaculos.getCell(13,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(13,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(13,27));
+                //Tercera columna
+                capa.setCell(posX+2,posY, obstaculos.getCell(14,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(14,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(14,27));
+                //Cuarta columna
+                capa.setCell(posX+3,posY, obstaculos.getCell(15,25));
+                capa.setCell(posX+3,posY+1, obstaculos.getCell(15,26));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(15,27));
+                //Quinta columna
+                capa.setCell(posX+4,posY, obstaculos.getCell(16,25));
+                capa.setCell(posX+4,posY+1, obstaculos.getCell(16,26));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(16,27));
+                //Sexta columna
+                capa.setCell(posX+5,posY, obstaculos.getCell(17,25));
+                capa.setCell(posX+5,posY+1, obstaculos.getCell(17,26));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(17,27));
+                break;
+            case 3: // SILLA
+                //Primera columna
+                capa.setCell(posX,posY, obstaculos.getCell(18,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(18,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(18,27));
+                capa.setCell(posX,posY+3, obstaculos.getCell(18,28));
+                //Segunda columna
+                capa.setCell(posX+1,posY, obstaculos.getCell(19,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(19,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(19,27));
+                capa.setCell(posX+1,posY+3, obstaculos.getCell(19,28));
+                break;
+        }
+    }
+
+    private void eliminarObjetos() {
+        TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
+        for (int cordX = 0; cordX <= 2000; cordX++) {
+            for (int cordY = 0; cordY <= 25; cordY++) {
+                capa.setCell(cordX,cordY, null);
+            }
+        }
+    }
 
     private void reacomodarPersonajes() {
         //Pone los personajes en su posición original con respecto a la cámara
+        Mama.sprite.setY(64);
+        Juanito.sprite.setY(64);
+        Mama.sprite.setX(camara.position.x-posicionMama);
         Juanito.sprite.setX(Mama.sprite.getX()+separacion);
     }
 
