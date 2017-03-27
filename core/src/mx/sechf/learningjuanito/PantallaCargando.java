@@ -73,7 +73,9 @@ class PantallaCargando extends Pantalla
     }
 
     private void cargarRecursosMenu() {
-
+    /*
+    Carga los recursos del menu
+    * */
     }
 
     @Override
