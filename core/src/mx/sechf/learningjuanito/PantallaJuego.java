@@ -285,17 +285,6 @@ public class PantallaJuego extends Pantalla {
 
 
     private void actualizarCamara() {
-        /*float posX = Juanito.sprite.getX();
-        // Si está en la parte 'media'
-        if (posX>=ANCHO/2 && posX<=ANCHO*10-ANCHO/2) {
-            // El personaje define el centro de la cámara
-            camara.position.set((int)posX, camara.position.y, 0);
-        } else if (posX>ANCHO*10-ANCHO/2) {    // Si está en la última mitad
-            // La cámara se queda a media pantalla antes del fin del mundo  :)
-            camara.position.set(ANCHO*10-ANCHO/2, camara.position.y, 0);
-        } else if ( posX<ANCHO/2 ) { // La primera mitad
-            camara.position.set(ANCHO/2, ALTO/2,0);
-        }*/
         if(estadoJuego == EstadoJuego.CORRIENDO)
         {
             float nuevaX = camara.position.x+velocidad;

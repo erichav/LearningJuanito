@@ -93,7 +93,7 @@ public class Personaje extends Objeto
     }
 
 
-    // Mueve el personaje a la derecha/izquierda, prueba choques con paredes
+    // Mueve el personaje a la derecha/izquierda, prueba choques con obstaculos
     private void moverHorizontal(TiledMap mapa) {
         // Obtiene la primer capa del mapa (en este caso es la única)
         TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);

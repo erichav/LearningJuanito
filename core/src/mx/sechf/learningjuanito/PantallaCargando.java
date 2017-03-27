@@ -73,13 +73,7 @@ class PantallaCargando extends Pantalla
     }
 
     private void cargarRecursosMenu() {
-       /* manager.load("menu/btnJugarMario.png", Texture.class);
-        manager.load("menu/btnJugarMarioP.png", Texture.class);
-        manager.load("menu/btnJugarRunner.png", Texture.class);
-        manager.load("menu/btnJugarRunnerP.png", Texture.class);
-        manager.load("menu/btnJugarWhackAMole.png", Texture.class);
-        manager.load("menu/btnJugarWhackAMoleP.png", Texture.class);
-        manager.load("menu/fondo.jpg", Texture.class);*/
+
     }
 
     @Override
