@@ -1,5 +1,6 @@
 package mx.sechf.learningjuanito;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -23,6 +24,7 @@ public abstract class Pantalla implements Screen
     protected OrthographicCamera camara;
     protected Viewport vista;
     protected SpriteBatch batch;
+    public Application app;
 
     // Constructor. Crea la cámara, vista y batch.
     public Pantalla() {
