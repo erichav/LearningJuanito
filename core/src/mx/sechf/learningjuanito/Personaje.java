@@ -15,7 +15,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Personaje extends Objeto
 {
-    private final float velocidad = 10; // Velocidad inicial de Juanito
+    private float velocidad = 10; // Velocidad inicial de Juanito
     private int ANCHO_PERSONAJE, ALTO_PERSONAJE;
 
     private Animation<TextureRegion> spriteAnimado;         // Animación de Juanito caminando
@@ -49,12 +49,13 @@ public class Personaje extends Objeto
         // Dibuja el personaje dependiendo del estadoMovimiento
         switch (estadoMovimiento) {
             case MOV_DERECHA:
+            case INICIANDO:
                 timerAnimacion += Gdx.graphics.getDeltaTime();
                 // Frame que se dibujará
                 TextureRegion region = spriteAnimado.getKeyFrame(timerAnimacion);
                 batch.draw(region,sprite.getX(),sprite.getY());
                 break;
-            case INICIANDO:
+            case QUIETO:
                 sprite.draw(batch); // Dibuja el sprite estático
                 break;
         }
@@ -64,39 +65,46 @@ public class Personaje extends Objeto
     public void actualizar(TiledMap mapa) {
         switch (estadoMovimiento) {
             case MOV_DERECHA:
+                verificaSalto();
                 moverHorizontal(mapa);
                 break;
             case INICIANDO:
                 moverDerecha(mapa);
+            case QUIETO:
+                verificaSalto();
+                break;
         }
     }
 
-    private void moverDerecha(TiledMap mapa) {
-        sprite.setX(sprite.getX()+velocidad);
+    private void moverDerecha(TiledMap mapa) {sprite.setX(sprite.getX()+velocidad);
+    }
+
+    private void verificaSalto() {
+        if(estadoSalto == EstadoSalto.SUBIENDO)
+        {
+            sprite.setY((int)(yInicial+20*tiempo-(0.98*tiempo*tiempo)/2));
+            tiempo++;
+            if(sprite.getY() <= yInicial)
+            {
+                sprite.setY(yInicial);
+                estadoSalto = EstadoSalto.EN_PISO;
+            }
+        }
     }
 
 
     // Mueve el personaje a la derecha/izquierda, prueba choques con paredes
     private void moverHorizontal(TiledMap mapa) {
         // Obtiene la primer capa del mapa (en este caso es la única)
-        TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(0);
+        TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
         // Ejecutar movimiento horizontal
         float nuevaX = sprite.getX();
         // ¿Quiere ir a la Derecha?
         if ( estadoMovimiento== EstadoMovimiento.MOV_DERECHA) {
-            if(estadoSalto == EstadoSalto.SUBIENDO)
-            {
-                sprite.setY((int)(yInicial+velocidad*2*tiempo-(0.98*tiempo*tiempo)/2));
-                tiempo++;
-                if(sprite.getY() <= yInicial)
-                {
-                    sprite.setY(yInicial);
-                    estadoSalto = EstadoSalto.EN_PISO;
-                }
-            }
+            velocidad = velocidad + 0.005f;
             // Obtiene el bloque del lado derecho. Asigna null si puede pasar.
-            int x = (int) ((sprite.getX() + ANCHO_PERSONAJE) / ANCHO_PERSONAJE);   // Convierte coordenadas del mundo en coordenadas del mapa
-            int y = (int) (sprite.getY() / ALTO_PERSONAJE);
+            int x = (int) ((sprite.getX() + 32) / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
+            int y = (int) (sprite.getY() / 32);
             TiledMapTileLayer.Cell celdaDerecha = capa.getCell(x, y);
             if (celdaDerecha != null) {
                 Object tipo = (String) celdaDerecha.getTile().getProperties().get("tipo");
@@ -108,8 +116,12 @@ public class Personaje extends Objeto
                 // Ejecutar movimiento horizontal
                 nuevaX += velocidad;
                 // Prueba que no salga del mundo por la derecha
-                if (nuevaX <= PantallaJuego.ANCHO*10 - sprite.getWidth()) {
+                if (nuevaX <= PantallaJuego.ANCHOTOTAL - sprite.getWidth()) {
                     sprite.setX(nuevaX);
+                }
+                else
+                {
+                    // AQUÍ VA LE CÓDIGO CUANDO JUANITO TERMINA EL NIVEL
                 }
             }
         }
@@ -162,10 +174,18 @@ public class Personaje extends Objeto
         }
     }
 
+    public boolean Colisiona(Personaje personaje) {
+        if(sprite.getX() <= (personaje.sprite.getX()+personaje.sprite.getWidth()-60))
+        {
+            return true;
+        }
+        return false;
+    }
+
     public enum EstadoMovimiento {
         INICIANDO,
         MOV_DERECHA,
-        ALCANZADO
+        QUIETO
     }
     public enum EstadoSalto {
         SUBIENDO,

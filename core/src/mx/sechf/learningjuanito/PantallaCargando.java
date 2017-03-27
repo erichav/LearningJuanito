@@ -66,6 +66,8 @@ class PantallaCargando extends Pantalla
     private void cargarRecursosNivel() {
         manager.load("Images/objects/Juanito/juanito.png", Texture.class);
         manager.load("Images/objects/Mama/mamaJuanito.png", Texture.class);
+        manager.load("Images/PantallaJuego/vida.png", Texture.class);
+        manager.load("Images/btns/btnContinuar.png", Texture.class);
         manager.load("mapaNivel1.tmx", TiledMap.class);
         manager.load("Audio/Fondo.mp3",Music.class);
     }
