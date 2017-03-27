@@ -76,6 +76,7 @@ class PantallaCargando extends Pantalla
     /*
     Carga los recursos del menu
     * */
+        manager.load("Audio/menuFondo.mp3", Music.class);
     }
 
     @Override

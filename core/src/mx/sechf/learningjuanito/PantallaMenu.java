@@ -2,6 +2,8 @@ package mx.sechf.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -37,9 +39,15 @@ public class PantallaMenu extends Pantalla {
     // Escenas
     private Stage escenaMenu;
 
+    // AssetManager
+    private AssetManager manager;
+
+    // Música
+    private Music musicaFondo;
 
     public PantallaMenu(LearningJuanito menu) {
         this.menu=menu;
+        manager = menu.getAssetManager();
     }
 
     @Override
@@ -47,6 +55,7 @@ public class PantallaMenu extends Pantalla {
         crearCamara();
         cargarTexturas();
         crearObjetos();
+        cargarMusica();
     }
 
     private void crearObjetos() {
@@ -66,6 +75,7 @@ public class PantallaMenu extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                     menu.setScreen(new PantallaDificultades(menu ));
+                    musicaFondo.stop();
             }
         });
 
@@ -80,6 +90,7 @@ public class PantallaMenu extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 menu.setScreen(new PantallaAcercaDe(menu ));
+                musicaFondo.stop();
             }
         });
 
@@ -94,6 +105,7 @@ public class PantallaMenu extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 menu.setScreen(new PantallaOpciones(menu));
+                musicaFondo.stop();
             }
         });
 
@@ -108,6 +120,7 @@ public class PantallaMenu extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 menu.setScreen(new PantallaInstrucciones(menu));
+                musicaFondo.stop();
             }
         });
 
@@ -122,6 +135,7 @@ public class PantallaMenu extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 menu.setScreen(new PantallaPuntuaciones(menu));
+                musicaFondo.stop();
             }
         });
 
@@ -155,6 +169,13 @@ public class PantallaMenu extends Pantalla {
         texturaBtnPuntuaciones = new Texture("Images/btns/btnPuntuaciones.png");
         texturaBtnSalir = new Texture("Images/btns/btnSalir.png");
 
+    }
+
+    public void cargarMusica(){
+        musicaFondo = manager.get("Audio/menuFondo.mp3");
+        musicaFondo.setVolume(0.75f);
+        musicaFondo.setLooping(true);
+        musicaFondo.play();
     }
 
     private void crearCamara() {
