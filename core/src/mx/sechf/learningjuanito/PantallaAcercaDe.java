@@ -28,6 +28,7 @@ public class PantallaAcercaDe extends Pantalla {
     private Texture texturaAcercaDe;
     private Texture texturaBtnRegresar;
     private Texture texturaBtnJugar;
+    private Texture texturaBtnNext;
 
     // Escenas
     private Stage escenaAcercaDe;
@@ -81,12 +82,31 @@ public class PantallaAcercaDe extends Pantalla {
 
         Gdx.input.setInputProcessor(escenaAcercaDe);
         Gdx.input.setCatchBackKey(true);
+
+        //boton Next
+        TextureRegionDrawable trdBtnNext = new TextureRegionDrawable
+                (new TextureRegion(texturaBtnNext));
+        ImageButton btnNext = new ImageButton(trdBtnNext);
+        btnNext.setPosition(ANCHO/2+220-btnNext.getWidth()/2,2*ALTO/12+160-btnNext.getHeight()/2);
+        escenaAcercaDe.addActor(btnNext);
+
+        //accion del boton Next
+        btnNext.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                menu.setScreen(new PantallaAcercaDe2(menu));
+            }
+        });
+
+        Gdx.input.setInputProcessor(escenaAcercaDe);
+        Gdx.input.setCatchBackKey(true);
     }
 
     private void cargarTexturas() {
         texturaAcercaDe = new Texture("Images/screens/acercade.jpg");
         texturaBtnRegresar = new Texture("Images/btns/btnMenuPrinc.png");
         texturaBtnJugar = new Texture("Images/btns/btnJugarPantallas.png");
+        texturaBtnNext = new Texture ("Images/btns/btnDerechaAcercaDe.png");
     }
 
     private void crearCamara() {

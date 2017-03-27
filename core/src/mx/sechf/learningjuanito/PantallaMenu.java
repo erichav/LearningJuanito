@@ -72,7 +72,7 @@ public class PantallaMenu extends Pantalla {
         //boton AcercaDe
         TextureRegionDrawable trdBtnAcercaDe = new TextureRegionDrawable(new TextureRegion(texturaBtnAcercaDe));
         ImageButton btnAcercaDe = new ImageButton(trdBtnAcercaDe);
-        btnAcercaDe.setPosition(12*ANCHO/13-btnAcercaDe.getWidth()/2,15*ALTO/23-btnAcercaDe.getHeight()/2);
+        btnAcercaDe.setPosition(12*ANCHO/13-20-btnAcercaDe.getWidth()/2,15*ALTO/23-20-btnAcercaDe.getHeight()/2);
         escenaMenu.addActor(btnAcercaDe);
 
         //accion del boton acercade

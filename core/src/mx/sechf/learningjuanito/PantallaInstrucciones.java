@@ -68,7 +68,7 @@ public class PantallaInstrucciones extends Pantalla {
         TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable
                 (new TextureRegion(texturaBtnJugar));
         ImageButton btnJugar = new ImageButton(trdBtnJugar);
-        btnJugar.setPosition(9*ANCHO/10-70-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
+        btnJugar.setPosition(9*ANCHO/10-60-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
         escenaInstrucciones.addActor(btnJugar);
 
         //accion del boton jugar
