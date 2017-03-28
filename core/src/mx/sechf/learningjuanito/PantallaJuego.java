@@ -295,8 +295,7 @@ public class PantallaJuego extends Pantalla {
             Gdx.input.setInputProcessor(escenaAlcanzado);
 
             // Efecto de sonido (cachetada)
-            cachetada = manager.get("Audio/Slap.mp3");
-            cachetada.setVolume(0,.10f);
+            cachetada = manager.get("Audio/Slap2.mp3");
             cachetada.play();
         }
     }
@@ -462,7 +461,7 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/btns/btnContinuar.png");
         manager.unload("mapaNivel1.tmx");
         manager.unload("Audio/Fondo.mp3");
-        manager.unload("Audio/Slap.mp3");
+        manager.unload("Audio/Slap2.mp3");
     }
 
     public enum EstadoJuego {
