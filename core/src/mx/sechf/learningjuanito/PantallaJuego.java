@@ -45,6 +45,11 @@ public class PantallaJuego extends Pantalla {
     private int posicionObstaculo=0;
     public static final float ANCHOTOTAL = ANCHO*50;
 
+    //Juego terminado
+    private EscenaGameOver escenaGameOver;
+    private EscenaGanaste escenaGanaste;
+    private Texto puntajeFinal = new Texto();
+
     //Pausa
     private EscenaPausa escenaPausa;
 
@@ -73,7 +78,6 @@ public class PantallaJuego extends Pantalla {
     //Vidas
     private int vidas = 3;
     private Texture texturaVidas;
-    private Array<Image> arrVidas;
 
     //Puntaje
     private float puntosJugador = 0;
@@ -118,26 +122,34 @@ public class PantallaJuego extends Pantalla {
         // HUD
         escenaHUD = new Stage(vistaHUD);
 
+        dibujarVidas();
+        dibujarBotonPausa();
+
         //Puntaje
         puntaje = new Texto();
         escenaHUD.addActor(puntaje);
 
-        //Vidas
-        for(int x = 1;x<=vidas;x++)
-        {
-            Image imgVida = new Image(texturaVidas);
-            imgVida.setPosition(ANCHO*(100-5*x)/100-imgVida.getWidth()/2,105*ALTO/120-imgVida.getHeight()/2);
-            escenaHUD.addActor(imgVida);
-        }
 
-
-        //ALCANZADO
+    }
+    private void dibujarBotonPausa()
+    {
+        //Boton Pausa
         Texture texturaPausa = manager.get("Images/btns/btnPausa.png");
         TextureRegionDrawable trBtnPausa = new TextureRegionDrawable(new TextureRegion(texturaPausa));
         ImageButton btnPausa = new ImageButton(trBtnPausa);
         btnPausa.setPosition(0, ALTO-btnPausa.getHeight());
         escenaHUD.addActor(btnPausa);
     }
+
+    private void dibujarVidas() {
+        for(int x = 1;x<=vidas;x++)
+        {
+            Image imgVida = new Image(texturaVidas);
+            imgVida.setPosition(ANCHO*(100-5*x)/100-imgVida.getWidth()/2,105*ALTO/120-imgVida.getHeight()/2);
+            escenaHUD.addActor(imgVida);
+        }
+    }
+
     private class EscenaAlcanzado extends Stage
     {
         public EscenaAlcanzado(Viewport vista, SpriteBatch batch) {
@@ -160,7 +172,7 @@ public class PantallaJuego extends Pantalla {
             TextureRegionDrawable trdContinuar = new TextureRegionDrawable(
                     new TextureRegion(texturabtnContinuar));
             ImageButton btnContinuar = new ImageButton(trdContinuar);
-            btnContinuar.setPosition(ANCHO/2-btnContinuar.getWidth()/2, ALTO/4);
+            btnContinuar.setPosition(ANCHO/2-btnContinuar.getWidth()/2, ALTO/5);
             btnContinuar.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -241,6 +253,94 @@ public class PantallaJuego extends Pantalla {
             });*/
         }
     }
+    private class EscenaGameOver extends Stage
+    {
+        public EscenaGameOver(Viewport vista, SpriteBatch batch) {
+            super(vista, batch);
+            Texture texturaGameOver;
+            Texture texturaBtnRegresar;
+            Texture texturaBtnJugar;
+            Texture texturaBtnOpciones;
+            texturaGameOver = manager.get("Images/screens/gameOver.jpg");
+            texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
+            texturaBtnOpciones = manager.get("Images/btns/btnOpcionesPausa.png");
+            Image imgFondo = new Image(texturaGameOver);
+            this.addActor(imgFondo);
+            // Botón Regresar
+            TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
+            ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
+            btnRegresar.setPosition(ANCHO*11/100+50-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
+            this.addActor(btnRegresar);
+
+            // Acción del botón Regresar
+            btnRegresar.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    menu.setScreen(new PantallaCargando(menu,Pantallas.MENU));
+                    musicaFondo.stop();
+                }
+            });
+            this.addActor(puntajeFinal);
+
+            // Botón Opciones
+            TextureRegionDrawable trdBtnOpciones = new TextureRegionDrawable(new TextureRegion(texturaBtnOpciones));
+            ImageButton btnOpciones = new ImageButton(trdBtnOpciones);
+            btnOpciones.setPosition(85*ANCHO/100-btnOpciones.getWidth()/2,2*ALTO/12-btnOpciones.getHeight()/2);
+            this.addActor(btnOpciones);
+
+            // Acción del botón opciones
+            btnOpciones.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    menu.setScreen(new PantallaOpciones(menu));
+                }
+            });
+        }
+    }
+    private class EscenaGanaste extends Stage
+    {
+        public EscenaGanaste(Viewport vista, SpriteBatch batch) {
+            super(vista, batch);
+            Texture texturaGanaste;
+            Texture texturaBtnRegresar;
+            Texture texturaBtnJugar;
+            Texture texturaBtnOpciones;
+            texturaGanaste = manager.get("Images/screens/ganaste.jpg");
+            texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
+            texturaBtnOpciones = manager.get("Images/btns/btnOpcionesPausa.png");
+            Image imgFondo = new Image(texturaGanaste);
+            this.addActor(imgFondo);
+            // Botón Regresar
+            TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
+            ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
+            btnRegresar.setPosition(ANCHO*11/100+50-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
+            this.addActor(btnRegresar);
+
+            // Acción del botón Regresar
+            btnRegresar.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    menu.setScreen(new PantallaCargando(menu,Pantallas.MENU));
+                    musicaFondo.stop();
+                }
+            });
+            this.addActor(puntajeFinal);
+
+            // Botón Opciones
+            TextureRegionDrawable trdBtnOpciones = new TextureRegionDrawable(new TextureRegion(texturaBtnOpciones));
+            ImageButton btnOpciones = new ImageButton(trdBtnOpciones);
+            btnOpciones.setPosition(85*ANCHO/100-btnOpciones.getWidth()/2,2*ALTO/12-btnOpciones.getHeight()/2);
+            this.addActor(btnOpciones);
+
+            // Acción del botón opciones
+            btnOpciones.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    menu.setScreen(new PantallaOpciones(menu));
+                }
+            });
+        }
+    }
 
     private void cargarPersonajes() {
         Juanito = new Personaje(texturaJuanito,90,180,-200,64);
@@ -249,7 +349,7 @@ public class PantallaJuego extends Pantalla {
 
     private void cargarMapa() {
         batch = new SpriteBatch();
-        mapa = manager.get("mapaNivel1.tmx");
+        mapa = manager.get("Mapa/mapaNivel1.tmx");
         musicaFondo = manager.get("Audio/Fondo.mp3");
         musicaFondo.setLooping(true);
         musicaFondo.setVolume(0.35f);
@@ -309,7 +409,7 @@ public class PantallaJuego extends Pantalla {
             estadoJuego = EstadoJuego.CORRIENDO; //Cuando termine la animación de inicio, se cambia a CORRIENDO
         } else if (estadoJuego == EstadoJuego.CORRIENDO){ // Actualizar a Juanito{
             int posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
-            velocidad = velocidad + 0.005f;
+            velocidad = velocidad + 0.002f;
             puntosJugador = puntosJugador + delta;
             Juanito.actualizar(mapa);
             Mama.actualizar(mapa);
@@ -318,6 +418,7 @@ public class PantallaJuego extends Pantalla {
             {
                 posicionObstaculo = posXJuanito+40;
                 generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
+                generaItem((int)((Math.random()*10)%4),posicionObstaculo,4);
             }
             actualizarCamara();
             colision();
@@ -337,6 +438,19 @@ public class PantallaJuego extends Pantalla {
             }
             Gdx.input.setInputProcessor(escenaPausa);
             escenaPausa.draw();
+        } else if (estadoJuego == EstadoJuego.PERDIDO)
+        {
+            escenaGameOver.draw();
+            batch.begin();
+            puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int)(puntosJugador*10)), ANCHO/2,ALTO/3);
+            batch.end();
+        }
+        else if (estadoJuego == EstadoJuego.TERMINADO)
+        {
+            escenaGanaste.draw();
+            batch.begin();
+            puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int)(puntosJugador*10)), ANCHO/2,ALTO/3);
+            batch.end();
         }
 
     }
@@ -344,26 +458,47 @@ public class PantallaJuego extends Pantalla {
     private void colision() {
         if(Juanito.Colisiona(Mama))
         {
-            estadoJuego = EstadoJuego.ALCANZADO;
-            Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
-            Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
-            Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
-            Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
-            eliminarObjetos();
-            reacomodarPersonajes();
-            if (escenaAlcanzado==null) {
-                escenaAlcanzado = new EscenaAlcanzado(vistaHUD, batch);
+            if(vidas>0)
+            {
+                vidas--;
+                escenaHUD.clear();
+                //Vidas
+                dibujarVidas();
+                dibujarBotonPausa();
+                estadoJuego = EstadoJuego.ALCANZADO;
+                Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+                Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+                eliminarObjetos();
+                reacomodarPersonajes();
+                if (escenaAlcanzado==null) {
+                    escenaAlcanzado = new EscenaAlcanzado(vistaHUD, batch);
+                    actualizarCamara();
+                }
                 musicaFondo.stop();
-                actualizarCamara();
-            }
-            Gdx.input.setInputProcessor(escenaAlcanzado);
+                Gdx.input.setInputProcessor(escenaAlcanzado);
 
-            // Efecto de sonido (cachetada)
-            cachetada = manager.get("Audio/Slap2.mp3");
-            cachetada.play();
+                // Efecto de sonido (cachetada)
+                cachetada = manager.get("Audio/Slap2.mp3");
+                cachetada.play();
+            } else {
+                gameOver();
+            }
+
         }
     }
 
+    private void generaItem(int num, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
+    {
+        TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(3);
+        TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(0);
+        for(int y=0;y<=3;y++)
+        {
+            capa.setCell(posX,posY+y, obstaculos.getCell(24+(2*num),25+y));
+            capa.setCell(posX+1,posY+y, obstaculos.getCell(25+(2*num),25+y));
+        }
+    }
     private void generaObstaculo(int tipo, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
     {
         TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
@@ -373,106 +508,122 @@ public class PantallaJuego extends Pantalla {
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(0,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(0,26));
-                capa.setCell(posX,posY+2, obstaculos.getCell(0,26));
-                capa.setCell(posX,posY+3, obstaculos.getCell(0,27));
+                capa.setCell(posX,posY+2, obstaculos.getCell(0,27));
                 //Segunda columna
                 capa.setCell(posX+1,posY, obstaculos.getCell(1,25));
                 capa.setCell(posX+1,posY+1, obstaculos.getCell(1,26));
-                capa.setCell(posX+1,posY+2, obstaculos.getCell(1,26));
-                capa.setCell(posX+1,posY+3, obstaculos.getCell(1,27));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(1,27));
                 //Tercera columna
                 capa.setCell(posX+2,posY, obstaculos.getCell(2,25));
                 capa.setCell(posX+2,posY+1, obstaculos.getCell(2,26));
-                capa.setCell(posX+2,posY+2, obstaculos.getCell(2,26));
-                capa.setCell(posX+2,posY+3, obstaculos.getCell(2,27));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(2,27));
                 //Cuarta columna
                 capa.setCell(posX+3,posY, obstaculos.getCell(3,25));
                 capa.setCell(posX+3,posY+1, obstaculos.getCell(3,26));
-                capa.setCell(posX+3,posY+2, obstaculos.getCell(3,26));
-                capa.setCell(posX+3,posY+3, obstaculos.getCell(3,27));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(3,27));
                 //Quinta columna
                 capa.setCell(posX+4,posY, obstaculos.getCell(4,25));
                 capa.setCell(posX+4,posY+1, obstaculos.getCell(4,26));
-                capa.setCell(posX+4,posY+2, obstaculos.getCell(4,26));
-                capa.setCell(posX+4,posY+3, obstaculos.getCell(4,27));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(4,27));
                 //Sexta columna
                 capa.setCell(posX+5,posY, obstaculos.getCell(5,25));
                 capa.setCell(posX+5,posY+1, obstaculos.getCell(5,26));
-                capa.setCell(posX+5,posY+2, obstaculos.getCell(5,26));
-                capa.setCell(posX+5,posY+3, obstaculos.getCell(5,27));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(5,27));
+                //Séptima columna
+                capa.setCell(posX+6,posY, obstaculos.getCell(6,25));
+                capa.setCell(posX+6,posY+1, obstaculos.getCell(6,26));
+                capa.setCell(posX+6,posY+2, obstaculos.getCell(6,27));
                 break;
             case 1: //SILLON 1
                 //Primera columna
-                capa.setCell(posX,posY, obstaculos.getCell(6,25));
-                capa.setCell(posX,posY+1, obstaculos.getCell(6,26));
-                capa.setCell(posX,posY+2, obstaculos.getCell(6,27));
+                capa.setCell(posX,posY, obstaculos.getCell(7,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(7,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(7,27));
                 //Segunda columna
-                capa.setCell(posX+1,posY, obstaculos.getCell(7,25));
-                capa.setCell(posX+1,posY+1, obstaculos.getCell(7,26));
-                capa.setCell(posX+1,posY+2, obstaculos.getCell(7,27));
+                capa.setCell(posX+1,posY, obstaculos.getCell(8,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(8,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(8,27));
                 //Tercera columna
-                capa.setCell(posX+2,posY, obstaculos.getCell(8,25));
-                capa.setCell(posX+2,posY+1, obstaculos.getCell(8,26));
-                capa.setCell(posX+2,posY+2, obstaculos.getCell(8,27));
+                capa.setCell(posX+2,posY, obstaculos.getCell(9,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(9,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(9,27));
                 //Cuarta columna
-                capa.setCell(posX+3,posY, obstaculos.getCell(9,25));
-                capa.setCell(posX+3,posY+1, obstaculos.getCell(9,26));
-                capa.setCell(posX+3,posY+2, obstaculos.getCell(9,27));
+                capa.setCell(posX+3,posY, obstaculos.getCell(10,25));
+                capa.setCell(posX+3,posY+1, obstaculos.getCell(10,26));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(10,27));
                 //Quinta columna
-                capa.setCell(posX+4,posY, obstaculos.getCell(10,25));
-                capa.setCell(posX+4,posY+1, obstaculos.getCell(10,26));
-                capa.setCell(posX+4,posY+2, obstaculos.getCell(10,27));
+                capa.setCell(posX+4,posY, obstaculos.getCell(11,25));
+                capa.setCell(posX+4,posY+1, obstaculos.getCell(11,26));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(11,27));
                 //Sexta columna
-                capa.setCell(posX+5,posY, obstaculos.getCell(11,25));
-                capa.setCell(posX+5,posY+1, obstaculos.getCell(11,26));
-                capa.setCell(posX+5,posY+2, obstaculos.getCell(11,27));
+                capa.setCell(posX+5,posY, obstaculos.getCell(12,25));
+                capa.setCell(posX+5,posY+1, obstaculos.getCell(12,26));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(12,27));
+                //Séptima columna
+                capa.setCell(posX+6,posY, obstaculos.getCell(13,25));
+                capa.setCell(posX+6,posY+1, obstaculos.getCell(13,26));
+                capa.setCell(posX+6,posY+2, obstaculos.getCell(13,27));
                 break;
             case 2: // SILLON 2
                 //Primera columna
-                capa.setCell(posX,posY, obstaculos.getCell(12,25));
-                capa.setCell(posX,posY+1, obstaculos.getCell(12,26));
-                capa.setCell(posX,posY+2, obstaculos.getCell(12,27));
+                capa.setCell(posX,posY, obstaculos.getCell(14,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(14,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(14,27));
                 //Segunda columna
-                capa.setCell(posX+1,posY, obstaculos.getCell(13,25));
-                capa.setCell(posX+1,posY+1, obstaculos.getCell(13,26));
-                capa.setCell(posX+1,posY+2, obstaculos.getCell(13,27));
+                capa.setCell(posX+1,posY, obstaculos.getCell(15,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(15,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(15,27));
                 //Tercera columna
-                capa.setCell(posX+2,posY, obstaculos.getCell(14,25));
-                capa.setCell(posX+2,posY+1, obstaculos.getCell(14,26));
-                capa.setCell(posX+2,posY+2, obstaculos.getCell(14,27));
+                capa.setCell(posX+2,posY, obstaculos.getCell(16,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(16,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(16,27));
                 //Cuarta columna
-                capa.setCell(posX+3,posY, obstaculos.getCell(15,25));
-                capa.setCell(posX+3,posY+1, obstaculos.getCell(15,26));
-                capa.setCell(posX+3,posY+2, obstaculos.getCell(15,27));
+                capa.setCell(posX+3,posY, obstaculos.getCell(17,25));
+                capa.setCell(posX+3,posY+1, obstaculos.getCell(17,26));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(17,27));
                 //Quinta columna
-                capa.setCell(posX+4,posY, obstaculos.getCell(16,25));
-                capa.setCell(posX+4,posY+1, obstaculos.getCell(16,26));
-                capa.setCell(posX+4,posY+2, obstaculos.getCell(16,27));
+                capa.setCell(posX+4,posY, obstaculos.getCell(18,25));
+                capa.setCell(posX+4,posY+1, obstaculos.getCell(18,26));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(18,27));
                 //Sexta columna
-                capa.setCell(posX+5,posY, obstaculos.getCell(17,25));
-                capa.setCell(posX+5,posY+1, obstaculos.getCell(17,26));
-                capa.setCell(posX+5,posY+2, obstaculos.getCell(17,27));
+                capa.setCell(posX+5,posY, obstaculos.getCell(19,25));
+                capa.setCell(posX+5,posY+1, obstaculos.getCell(19,26));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(19,27));
+                //Séptima columna
+                capa.setCell(posX+6,posY, obstaculos.getCell(20,25));
+                capa.setCell(posX+6,posY+1, obstaculos.getCell(20,26));
+                capa.setCell(posX+6,posY+2, obstaculos.getCell(20,27));
                 break;
             case 3: // SILLA
                 //Primera columna
-                capa.setCell(posX,posY, obstaculos.getCell(18,25));
-                capa.setCell(posX,posY+1, obstaculos.getCell(18,26));
-                capa.setCell(posX,posY+2, obstaculos.getCell(18,27));
-                capa.setCell(posX,posY+3, obstaculos.getCell(18,28));
+                capa.setCell(posX,posY, obstaculos.getCell(21,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(21,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(21,27));
+                capa.setCell(posX,posY+3, obstaculos.getCell(21,28));
+                capa.setCell(posX,posY+4, obstaculos.getCell(21,29));
                 //Segunda columna
-                capa.setCell(posX+1,posY, obstaculos.getCell(19,25));
-                capa.setCell(posX+1,posY+1, obstaculos.getCell(19,26));
-                capa.setCell(posX+1,posY+2, obstaculos.getCell(19,27));
-                capa.setCell(posX+1,posY+3, obstaculos.getCell(19,28));
+                capa.setCell(posX+1,posY, obstaculos.getCell(22,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(22,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(22,27));
+                capa.setCell(posX+1,posY+3, obstaculos.getCell(22,28));
+                capa.setCell(posX+1,posY+4, obstaculos.getCell(22,29));
+                //Segunda columna
+                capa.setCell(posX+2,posY, obstaculos.getCell(23,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(23,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(23,27));
+                capa.setCell(posX+2,posY+3, obstaculos.getCell(23,28));
+                capa.setCell(posX+2,posY+4, obstaculos.getCell(23,29));
                 break;
         }
     }
 
     private void eliminarObjetos() {
-        TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
+        TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(2);
+        TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(3);
         for (int cordX = 0; cordX <= 2000; cordX++) {
             for (int cordY = 0; cordY <= 25; cordY++) {
-                capa.setCell(cordX,cordY, null);
+                obstaculos.setCell(cordX,cordY, null);
+                items.setCell(cordX,cordY, null);
             }
         }
     }
@@ -493,8 +644,41 @@ public class PantallaJuego extends Pantalla {
             {
                 camara.position.set(nuevaX,camara.position.y,0);
             }
+            else
+            {
+                ganaste();
+            }
         }
         camara.update();
+    }
+
+    private void gameOver() {
+        estadoJuego = EstadoJuego.PERDIDO;
+        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+        Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+        Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+        Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+        eliminarObjetos();
+        if (escenaGameOver==null) {
+            escenaGameOver = new EscenaGameOver(vistaHUD, batch);
+            musicaFondo.stop();
+            actualizarCamara();
+        }
+        Gdx.input.setInputProcessor(escenaGameOver);
+    }
+    private void ganaste() {
+        estadoJuego = EstadoJuego.TERMINADO;
+        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+        Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+        Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+        Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+        eliminarObjetos();
+        if (escenaGanaste==null) {
+            escenaGanaste = new EscenaGanaste(vistaHUD, batch);
+            musicaFondo.stop();
+            actualizarCamara();
+        }
+        Gdx.input.setInputProcessor(escenaGanaste);
     }
 
     @Override
@@ -527,7 +711,9 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/btns/btnMenuPrinc.png");
         manager.unload("Images/btns/btnJugarPausa.png");
         manager.unload("Images/btns/btnOpcionesPausa.png");
-        manager.unload("mapaNivel1.tmx");
+        manager.unload("Images/screens/gameOver.jpg");
+        manager.unload("Images/screens/ganaste.jpg");
+        manager.unload("Mapa/mapaNivel1.tmx");
         manager.unload("Audio/Fondo.mp3");
         manager.unload("Audio/Slap2.mp3");
     }
@@ -537,7 +723,13 @@ public class PantallaJuego extends Pantalla {
         CORRIENDO,
         PAUSADO,
         ALCANZADO,
-        TERMINADO
+        PERDIDO, TERMINADO
+    }
+    public enum Evento {
+        NULL,
+        PARES,
+        NONES,
+        MULTIPLOSDEDOS
     }
 
     private class Procesador implements InputProcessor{

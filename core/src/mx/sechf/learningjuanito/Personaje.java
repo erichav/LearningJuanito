@@ -121,7 +121,7 @@ public class Personaje extends Objeto
         float nuevaX = sprite.getX();
         // ¿Quiere ir a la Derecha?
         if ( estadoMovimiento== EstadoMovimiento.MOV_DERECHA) {
-            velocidad = velocidad + 0.005f;
+            velocidad = velocidad + 0.002f;
             // Obtiene el bloque del lado derecho. Asigna null si puede pasar.
             int x = (int) ((sprite.getX() + 32) / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
             int y = (int) ((sprite.getY() + 32) / 32);
@@ -199,7 +199,7 @@ public class Personaje extends Objeto
     }
 
     public boolean Colisiona(Personaje personaje) {
-        if(sprite.getX() <= (personaje.sprite.getX()+personaje.sprite.getWidth()-60))
+        if(sprite.getX() <= (personaje.sprite.getX()+personaje.sprite.getWidth()-40))
         {
             return true;
         }
