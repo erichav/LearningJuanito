@@ -68,6 +68,10 @@ class PantallaCargando extends Pantalla
         manager.load("Images/objects/Mama/mamaJuanito.png", Texture.class);
         manager.load("Images/PantallaJuego/vida.png", Texture.class);
         manager.load("Images/btns/btnContinuar.png", Texture.class);
+        manager.load("Images/screens/pausa.jpg", Texture.class);
+        manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
+        manager.load("Images/btns/btnJugarPausa.png", Texture.class);
+        manager.load("Images/btns/btnOpcionesPausa.png", Texture.class);
         manager.load("mapaNivel1.tmx", TiledMap.class);
         manager.load("Audio/Fondo.mp3",Music.class);
         manager.load("Images/btns/btnPausa.png", Texture.class);

@@ -45,6 +45,9 @@ public class PantallaJuego extends Pantalla {
     private int posicionObstaculo=0;
     public static final float ANCHOTOTAL = ANCHO*50;
 
+    //Pausa
+    private EscenaPausa escenaPausa;
+
     //Alcanzado
     private EscenaAlcanzado escenaAlcanzado;
     Texto chanclazo = new Texto();
@@ -153,12 +156,12 @@ public class PantallaJuego extends Pantalla {
             this.addActor(chanclazo);
 
             // Continuar
-            Texture texturabtnReintentar = manager.get("Images/btns/btnContinuar.png");
-            TextureRegionDrawable trdReintentar = new TextureRegionDrawable(
-                    new TextureRegion(texturabtnReintentar));
-            ImageButton btnReintentar = new ImageButton(trdReintentar);
-            btnReintentar.setPosition(ANCHO/2-btnReintentar.getWidth()/2, ALTO/4);
-            btnReintentar.addListener(new ClickListener(){
+            Texture texturabtnContinuar = manager.get("Images/btns/btnContinuar.png");
+            TextureRegionDrawable trdContinuar = new TextureRegionDrawable(
+                    new TextureRegion(texturabtnContinuar));
+            ImageButton btnContinuar = new ImageButton(trdContinuar);
+            btnContinuar.setPosition(ANCHO/2-btnContinuar.getWidth()/2, ALTO/4);
+            btnContinuar.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     // Continuar el juego
@@ -171,7 +174,71 @@ public class PantallaJuego extends Pantalla {
                     musicaFondo.play();
                 }
             });
-            this.addActor(btnReintentar);
+            this.addActor(btnContinuar);
+        }
+    }
+
+    private class EscenaPausa extends Stage
+    {
+        public EscenaPausa(Viewport vista, SpriteBatch batch) {
+            super(vista, batch);
+            Texture texturaPausa;
+            Texture texturaBtnRegresar;
+            Texture texturaBtnJugar;
+            Texture texturaBtnOpciones;
+            texturaPausa = manager.get("Images/screens/pausa.jpg");
+            texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
+            texturaBtnJugar = manager.get("Images/btns/btnJugarPausa.png");
+            texturaBtnOpciones = manager.get("Images/btns/btnOpcionesPausa.png");
+            Image imgFondo = new Image(texturaPausa);
+            this.addActor(imgFondo);
+            // Botón Regresar
+            TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
+            ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
+            btnRegresar.setPosition(ANCHO*11/100+50-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
+            this.addActor(btnRegresar);
+
+            // Acción del botón Regresar
+            btnRegresar.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    menu.setScreen(new PantallaCargando(menu,Pantallas.MENU));
+                    musicaFondo.stop();
+                }
+            });
+            // Botón Jugar
+            TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable(new TextureRegion(texturaBtnJugar));
+            ImageButton btnJugar = new ImageButton(trdBtnJugar);
+            btnJugar.setPosition(ANCHO/2-30-btnJugar.getWidth()/2,2*ALTO/12+90-btnJugar.getHeight()/2);
+            this.addActor(btnJugar);
+
+            // Acción del botón jugar
+            btnJugar.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // Continuar el juego
+                    estadoJuego = EstadoJuego.CORRIENDO;
+                    Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                    Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                    musicaFondo.play();
+                    // Regresa el control a la pantalla
+                    Gdx.input.setInputProcessor(procesadorEntrada);
+                }
+            });
+
+            // Botón Opciones
+            TextureRegionDrawable trdBtnOpciones = new TextureRegionDrawable(new TextureRegion(texturaBtnOpciones));
+            ImageButton btnOpciones = new ImageButton(trdBtnOpciones);
+            btnOpciones.setPosition(85*ANCHO/100-btnOpciones.getWidth()/2,2*ALTO/12-btnOpciones.getHeight()/2);
+            this.addActor(btnOpciones);
+
+            /*// Acción del botón opciones
+            btnOpciones.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    menu.setScreen(new PantallaOpciones(menu));
+                }
+            });*/
         }
     }
 
@@ -219,10 +286,7 @@ public class PantallaJuego extends Pantalla {
         // HUD
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
-        if(estadoJuego==EstadoJuego.PAUSADO){
-            generaPantallaPausa();
-        }
-        else if(estadoJuego == EstadoJuego.INICIANDO) {//Aquí se marca toda la animación de inicio, desde que aparece Juanito y su mamá hasta que lo empieza a perseguir
+        if(estadoJuego == EstadoJuego.INICIANDO) {//Aquí se marca toda la animación de inicio, desde que aparece Juanito y su mamá hasta que lo empieza a perseguir
             if (tiempo < 2)
             {
                 return;
@@ -263,19 +327,18 @@ public class PantallaJuego extends Pantalla {
         } else if (estadoJuego == EstadoJuego.ALCANZADO) {
             escenaAlcanzado.draw();
             batch.begin();
-            chanclazo.mostrarMensaje(batch, "            CHANCLAZO\nHas perdido una vida", ANCHO/2,ALTO*2/3);
+            chanclazo.mostrarMensaje(batch, "            CHANCLAZO\n\nHas perdido una vida", ANCHO/2,ALTO*2/3);
             batch.end();
-            musicaFondo.stop();
+        } else if(estadoJuego==EstadoJuego.PAUSADO)
+        {
+            if (escenaPausa==null) {
+                escenaPausa = new EscenaPausa(vistaHUD, batch);
+                actualizarCamara();
+            }
+            Gdx.input.setInputProcessor(escenaPausa);
+            escenaPausa.draw();
         }
 
-    }
-
-    private void generaPantallaPausa() {
-        if(this.panPausa == null) {
-            this.panPausa = new PantallaPausa(menu, this);
-        }
-        menu.setScreen(panPausa);
-        //Gdx.input.setInputProcessor(panPausa);
     }
 
     private void colision() {
@@ -289,7 +352,8 @@ public class PantallaJuego extends Pantalla {
             eliminarObjetos();
             reacomodarPersonajes();
             if (escenaAlcanzado==null) {
-                    escenaAlcanzado = new EscenaAlcanzado(vistaHUD, batch);
+                escenaAlcanzado = new EscenaAlcanzado(vistaHUD, batch);
+                musicaFondo.stop();
                 actualizarCamara();
             }
             Gdx.input.setInputProcessor(escenaAlcanzado);
@@ -459,6 +523,10 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/objects/Mama/mamaJuanito.png");
         manager.unload("Images/PantallaJuego/vida.png");
         manager.unload("Images/btns/btnContinuar.png");
+        manager.unload("Images/screens/pausa.jpg");
+        manager.unload("Images/btns/btnMenuPrinc.png");
+        manager.unload("Images/btns/btnJugarPausa.png");
+        manager.unload("Images/btns/btnOpcionesPausa.png");
         manager.unload("mapaNivel1.tmx");
         manager.unload("Audio/Fondo.mp3");
         manager.unload("Audio/Slap2.mp3");
@@ -498,8 +566,12 @@ public class PantallaJuego extends Pantalla {
             Vector3 v = new Vector3();
             v.set(screenX, screenY, 0);
             Gdx.app.log("x: " + v.x, "y: " + v.y);
-            if(v.x<65 && v.y < 53){
-                estadoJuego = EstadoJuego.PAUSADO;
+            if(v.x<200 && v.y < 200){
+                if(!(estadoJuego == EstadoJuego.INICIANDO))
+                {
+                    estadoJuego = EstadoJuego.PAUSADO;
+                    musicaFondo.pause();
+                }
             }else if(estadoJuego == EstadoJuego.CORRIENDO) {
                 Juanito.saltar();
             }
