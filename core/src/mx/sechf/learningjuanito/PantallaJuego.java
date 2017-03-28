@@ -206,62 +206,61 @@ public class PantallaJuego extends Pantalla {
         batch.setProjectionMatrix(camara.combined);
         rendererMapa.setView(camara);
         rendererMapa.render();
-
+        batch.begin();
+        Juanito.dibujar(batch);
+        Mama.dibujar(batch);
+        batch.end();
         // HUD
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
         if(estadoJuego==EstadoJuego.PAUSADO){
             generaPantallaPausa();
-        }else {
-            batch.begin();
-            Juanito.dibujar(batch);
-            Mama.dibujar(batch);
-            batch.end();
-            if(estadoJuego == EstadoJuego.INICIANDO) {//Aquí se marca toda la animación de inicio, desde que aparece Juanito y su mamá hasta que lo empieza a perseguir
-                if (tiempo < 2)
-                {
-                    return;
-                }
-                else if (tiempo < 3.2)
-                {
-                    Juanito.actualizar(mapa);
-                    return;
-                }
-                else if (tiempo < 3.55)
-                {
-                    Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
-                    Mama.actualizar(mapa);
-                    return;
-                }
-                posicionMama = camara.position.x-Mama.sprite.getX();
-                separacion = Juanito.sprite.getX() - Mama.sprite.getX();
-                Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
-                Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
-                estadoJuego = EstadoJuego.CORRIENDO; //Cuando termine la animación de inicio, se cambia a CORRIENDO
-            } else if (estadoJuego == EstadoJuego.CORRIENDO){ // Actualizar a Juanito{
-                int posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
-                velocidad = velocidad + 0.005f;
-                puntosJugador = puntosJugador + delta;
-                Juanito.actualizar(mapa);
-                Mama.actualizar(mapa);
-                Mama.checaSalto(mapa);
-                if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
-                {
-                    posicionObstaculo = posXJuanito+40;
-                    generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
-                }
-                actualizarCamara();
-                colision();
-                batch.begin();
-                puntaje.mostrarMensaje(batch, "Puntaje: " + Integer.toString((int)(puntosJugador*10)), ANCHO*85/100,118*ALTO/120);
-                batch.end();
-            } else if (estadoJuego == EstadoJuego.ALCANZADO) {
-                escenaAlcanzado.draw();
-                batch.begin();
-                chanclazo.mostrarMensaje(batch, "            CHANCLAZO\nHas perdido una vida", ANCHO/2,ALTO*2/3);
-                batch.end();
-            }
         }
+        else if(estadoJuego == EstadoJuego.INICIANDO) {//Aquí se marca toda la animación de inicio, desde que aparece Juanito y su mamá hasta que lo empieza a perseguir
+            if (tiempo < 2)
+            {
+                return;
+            }
+            else if (tiempo < 3.2)
+            {
+                Juanito.actualizar(mapa);
+                return;
+            }
+            else if (tiempo < 3.55)
+            {
+                Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                Mama.actualizar(mapa);
+                return;
+            }
+            posicionMama = camara.position.x-Mama.sprite.getX();
+            separacion = Juanito.sprite.getX() - Mama.sprite.getX();
+            Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+            Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+            estadoJuego = EstadoJuego.CORRIENDO; //Cuando termine la animación de inicio, se cambia a CORRIENDO
+        } else if (estadoJuego == EstadoJuego.CORRIENDO){ // Actualizar a Juanito{
+            int posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
+            velocidad = velocidad + 0.005f;
+            puntosJugador = puntosJugador + delta;
+            Juanito.actualizar(mapa);
+            Mama.actualizar(mapa);
+            Mama.checaSalto(mapa);
+            if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
+            {
+                posicionObstaculo = posXJuanito+40;
+                generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
+            }
+            actualizarCamara();
+            colision();
+            batch.begin();
+            puntaje.mostrarMensaje(batch, "Puntaje: " + Integer.toString((int)(puntosJugador*10)), ANCHO*85/100,118*ALTO/120);
+            batch.end();
+        } else if (estadoJuego == EstadoJuego.ALCANZADO) {
+            escenaAlcanzado.draw();
+            batch.begin();
+            chanclazo.mostrarMensaje(batch, "            CHANCLAZO\nHas perdido una vida", ANCHO/2,ALTO*2/3);
+            batch.end();
+        }
+
     }
 
     private void generaPantallaPausa() {
