@@ -43,7 +43,7 @@ class PantallaLogo extends Pantalla
     public void render(float delta) {
 
         // Dibujar
-        borrarPantalla(0,0,0.75f);
+        borrarPantalla(0.2f,0.9f,2.3f);
 
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
