@@ -3,12 +3,9 @@ package mx.sechf.learningjuanito;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -25,11 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import java.sql.Time;
 
 /**
  * Created by Erick Chávez on 15/02/2017.
@@ -38,7 +31,11 @@ public class PantallaJuego extends Pantalla {
 
     private final LearningJuanito menu;
     public EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
+    public Minijuego minijuego = Minijuego.OBSTACULOS;
+    private String instruccionMinijuego = "NO DEJES QUE TE ATRAPE!";
     private float tiempo;
+    private float tiempoMinijuego = 5;
+    private int ordenItems;
     private float velocidad = 10;
     private float posicionMama;
     private float separacion; //La separación original entre Juanito y su mamá.
@@ -94,6 +91,7 @@ public class PantallaJuego extends Pantalla {
     private Viewport vistaHUD;
     // El HUD lo manejamos con una escena (opcional)
     private Stage escenaHUD;
+    private Texto mensajeMinijuego = new Texto();
 
     private PantallaPausa panPausa;
 
@@ -124,13 +122,30 @@ public class PantallaJuego extends Pantalla {
 
         dibujarVidas();
         dibujarBotonPausa();
+        crearRectangulo();
 
         //Puntaje
         puntaje = new Texto();
         escenaHUD.addActor(puntaje);
 
+        //Instrucciones de Minijuegos
+        escenaHUD.addActor(mensajeMinijuego);
+
 
     }
+
+    private void crearRectangulo() {
+        // Crear rectángulo transparente
+        Pixmap pixmap = new Pixmap((int)(ANCHO*0.5f), (int)(ALTO*0.1f), Pixmap.Format.RGBA8888 );
+        pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.65f );
+        pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
+        Texture texturaRectangulo = new Texture( pixmap );
+        pixmap.dispose();
+        Image imgRectangulo = new Image(texturaRectangulo);
+        imgRectangulo.setPosition((ANCHO-pixmap.getWidth())/2, ((ALTO*31/20)-pixmap.getHeight())/2);
+        escenaHUD.addActor(imgRectangulo);
+    }
+
     private void dibujarBotonPausa()
     {
         //Boton Pausa
@@ -387,6 +402,9 @@ public class PantallaJuego extends Pantalla {
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
         if(estadoJuego == EstadoJuego.INICIANDO) {//Aquí se marca toda la animación de inicio, desde que aparece Juanito y su mamá hasta que lo empieza a perseguir
+            batch.begin();
+            mensajeMinijuego.mostrarMensaje(batch, instruccionMinijuego,ANCHO/2,4*ALTO/5);
+            batch.end();
             if (tiempo < 2)
             {
                 return;
@@ -409,21 +427,121 @@ public class PantallaJuego extends Pantalla {
             estadoJuego = EstadoJuego.CORRIENDO; //Cuando termine la animación de inicio, se cambia a CORRIENDO
         } else if (estadoJuego == EstadoJuego.CORRIENDO){ // Actualizar a Juanito{
             int posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
+            int posYJuanito = (int) (Juanito.sprite.getY() / 32);
             velocidad = velocidad + 0.002f;
             puntosJugador = puntosJugador + delta;
             Juanito.actualizar(mapa);
             Mama.actualizar(mapa);
             Mama.checaSalto(mapa);
-            if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
+            if(Juanito.recolectarItems(mapa))
             {
-                posicionObstaculo = posXJuanito+40;
-                generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
-                generaItem((int)((Math.random()*10)%4),posicionObstaculo,4);
+                if(ordenItems == 1)
+                {
+                    if(posYJuanito >= 4){
+                        puntosJugador+=10;
+                    }
+                    else{
+                        puntosJugador-=10;
+                        if(puntosJugador<0)
+                        {
+                            puntosJugador = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    if(posYJuanito >= 4){
+                        puntosJugador-=10;
+                        if(puntosJugador<0)
+                        {
+                            puntosJugador = 0;
+                        }
+                    }
+                    else{
+                        puntosJugador+=10;
+                    }
+                }
+            }
+            switch (minijuego)
+            {
+                case OBSTACULOS:
+                    if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
+                    {
+                        instruccionMinijuego = "EVITA LOS OBSTACULOS!";
+                        posicionObstaculo = posXJuanito+40;
+                        generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
+                        cambiaMinijuego();
+                    }
+                    break;
+                case PARES:
+                    if(posicionObstaculo<posXJuanito)
+                    {
+                        instruccionMinijuego = "ATRAPA LOS PARES!";
+                        ordenItems = (int)(Math.random()*2)+1;
+                        posicionObstaculo = posXJuanito+40;
+                        int par = generaMultiplo(2);
+                        int impar =  generaNoMultiplo(2);
+                        if(ordenItems == 1)
+                        {
+                            generaItem(par,posicionObstaculo,8);
+                            generaItem(impar,posicionObstaculo,1);
+                        }
+                        else
+                        {
+                            generaItem(impar,posicionObstaculo,8);
+                            generaItem(par,posicionObstaculo,1);
+                        }
+                        cambiaMinijuego();
+                    }
+                    break;
+                case NONES:
+                    if(posicionObstaculo<posXJuanito)
+                    {
+                        instruccionMinijuego = "ATRAPA LOS NONES!";
+                        ordenItems = (int)(Math.random()*2)+1;
+                        posicionObstaculo = posXJuanito+40;
+                        int par = generaMultiplo(2);
+                        int impar =  generaNoMultiplo(2);
+                        if(ordenItems == 1)
+                        {
+                            generaItem(impar,posicionObstaculo,8);
+                            generaItem(par,posicionObstaculo,1);
+                        }
+                        else
+                        {
+                            generaItem(par,posicionObstaculo,8);
+                            generaItem(impar,posicionObstaculo,1);
+                        }
+                        cambiaMinijuego();
+                    }
+                    break;
+                case MULTIPLOSDETRES:
+                    if(posicionObstaculo<posXJuanito)
+                    {
+                        instruccionMinijuego = "ATRAPA LOS MULTIPLOS DE 3!";
+                        ordenItems = (int)(Math.random()*2)+1;
+                        posicionObstaculo = posXJuanito+40;
+                        int multiplo = generaMultiplo(3);
+                        int nomultiplo = generaNoMultiplo(3);
+                        if(ordenItems == 1)
+                        {
+                            generaItem(multiplo,posicionObstaculo,8);
+                            generaItem(nomultiplo,posicionObstaculo,1);
+                        }
+                        else
+                        {
+                            generaItem(multiplo,posicionObstaculo,8);
+                            generaItem(nomultiplo,posicionObstaculo,1);
+                        }
+                        cambiaMinijuego();
+                    }
+                    break;
             }
             actualizarCamara();
             colision();
             batch.begin();
             puntaje.mostrarMensaje(batch, "Puntaje: " + Integer.toString((int)(puntosJugador*10)), ANCHO*85/100,118*ALTO/120);
+            mensajeMinijuego.mostrarMensaje(batch, instruccionMinijuego,ANCHO/2,4*ALTO/5);
             batch.end();
         } else if (estadoJuego == EstadoJuego.ALCANZADO) {
             escenaAlcanzado.draw();
@@ -455,6 +573,44 @@ public class PantallaJuego extends Pantalla {
 
     }
 
+    private void cambiaMinijuego() {
+        tiempoMinijuego--;
+        if(tiempoMinijuego==0)
+        {
+            switch ((int)(Math.random()*4))
+            {
+                case 0:
+                    minijuego = Minijuego.OBSTACULOS;
+                    break;
+                case 1:
+                    minijuego = Minijuego.PARES;
+                    break;
+                case 2:
+                    minijuego = Minijuego.NONES;
+                    break;
+                case 3:
+                    minijuego = Minijuego.MULTIPLOSDETRES;
+                    break;
+            }
+            tiempoMinijuego=5;
+        }
+    }
+
+    private int generaMultiplo(int x) {
+        int num;
+        do{
+            num = (int)(Math.random()*9)+1;
+        }while(num%x!=0);
+        return num;
+    }
+    private int generaNoMultiplo(int x) {
+        int num;
+        do{
+            num = (int)(Math.random()*9)+1;
+        }while(num%x==0);
+        return num;
+    }
+
     private void colision() {
         if(Juanito.Colisiona(Mama))
         {
@@ -465,6 +621,7 @@ public class PantallaJuego extends Pantalla {
                 //Vidas
                 dibujarVidas();
                 dibujarBotonPausa();
+                crearRectangulo();
                 estadoJuego = EstadoJuego.ALCANZADO;
                 Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                 Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
@@ -725,11 +882,11 @@ public class PantallaJuego extends Pantalla {
         ALCANZADO,
         PERDIDO, TERMINADO
     }
-    public enum Evento {
-        NULL,
+    public enum Minijuego {
+        OBSTACULOS,
         PARES,
         NONES,
-        MULTIPLOSDEDOS
+        MULTIPLOSDETRES
     }
 
     private class Procesador implements InputProcessor{

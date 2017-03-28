@@ -147,32 +147,38 @@ public class Personaje extends Objeto
         }
     }
     // Revisa si toca un numero
-    public boolean recolectarObjetos(TiledMap mapa) {
-        // Revisar si toca una moneda (pies)
-        TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(1);
-        int x = (int)(sprite.getX()/ ANCHO_PERSONAJE)+1;
-        int y = (int)(sprite.getY()/ ALTO_PERSONAJE);
+    public boolean recolectarItems(TiledMap mapa) {
+        TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(3);
+        int x = (int)(sprite.getX()/ 32)+1;
+        int y = (int)(sprite.getY()/ 32);
         TiledMapTileLayer.Cell celda = capa.getCell(x,y);
         if (celda!=null ) {
             Object tipo = celda.getTile().getProperties().get("tipo");
-            if ( "numero".equals(tipo) ) {
-                capa.setCell(x,y,null);    // Borra la moneda del mapa
-                //capa.setCell(x,y,capa.getCell(0,4)); // Cuadro azul en lugar de la moneda
+            if ( "item".equals(tipo) ) {
+                eliminarObjetos(mapa);
                 return true;
             }
         }
-        x = (int)(sprite.getX()/ ANCHO_PERSONAJE)+1;
-        y = (int)(sprite.getY()/ ALTO_PERSONAJE)+1;
+        x = (int)(sprite.getX()/ 32)+1;
+        y = (int)(sprite.getY()/ 32)+1;
         celda = capa.getCell(x,y);
         if (celda!=null ) {
             Object tipo = celda.getTile().getProperties().get("tipo");
-            if ( "numero".equals(tipo) ) {
-                capa.setCell(x,y,null);    // Borra la moneda del mapa
-                //capa.setCell(x,y,capa.getCell(0,4)); // Cuadro azul en lugar de la moneda
+            if ( "item".equals(tipo) ) {
+                eliminarObjetos(mapa);
                 return true;
             }
         }
         return false;
+    }
+
+    private void eliminarObjetos(TiledMap mapa) {
+        TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(3);
+        for (int cordX = 0; cordX <= 2000; cordX++) {
+            for (int cordY = 0; cordY <= 25; cordY++) {
+                items.setCell(cordX,cordY, null);
+            }
+        }
     }
 
     // Accesor de estadoMovimiento
