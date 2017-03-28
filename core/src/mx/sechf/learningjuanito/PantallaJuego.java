@@ -64,6 +64,9 @@ public class PantallaJuego extends Pantalla {
     //Música
     private Music musicaFondo; //Sonidos largos
 
+    // Efecto de Sonido
+    private Sound cachetada;
+
     //Vidas
     private int vidas = 3;
     private Texture texturaVidas;
@@ -164,6 +167,8 @@ public class PantallaJuego extends Pantalla {
                     Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                     // Regresa el control a la pantalla
                     Gdx.input.setInputProcessor(procesadorEntrada);
+                    // Reiniciar música juego
+                    musicaFondo.play();
                 }
             });
             this.addActor(btnReintentar);
@@ -180,6 +185,7 @@ public class PantallaJuego extends Pantalla {
         mapa = manager.get("mapaNivel1.tmx");
         musicaFondo = manager.get("Audio/Fondo.mp3");
         musicaFondo.setLooping(true);
+        musicaFondo.setVolume(0.35f);
         musicaFondo.play();
         rendererMapa = new OrthogonalTiledMapRenderer(mapa, batch);
         rendererMapa.setView(camara);
@@ -259,6 +265,7 @@ public class PantallaJuego extends Pantalla {
             batch.begin();
             chanclazo.mostrarMensaje(batch, "            CHANCLAZO\nHas perdido una vida", ANCHO/2,ALTO*2/3);
             batch.end();
+            musicaFondo.stop();
         }
 
     }
@@ -285,9 +292,15 @@ public class PantallaJuego extends Pantalla {
                     escenaAlcanzado = new EscenaAlcanzado(vistaHUD, batch);
                 actualizarCamara();
             }
-                Gdx.input.setInputProcessor(escenaAlcanzado);
+            Gdx.input.setInputProcessor(escenaAlcanzado);
+
+            // Efecto de sonido (cachetada)
+            cachetada = manager.get("Audio/Slap.mp3");
+            cachetada.setVolume(0,.10f);
+            cachetada.play();
         }
     }
+
     private void generaObstaculo(int tipo, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
     {
         TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
@@ -449,6 +462,7 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/btns/btnContinuar.png");
         manager.unload("mapaNivel1.tmx");
         manager.unload("Audio/Fondo.mp3");
+        manager.unload("Audio/Slap.mp3");
     }
 
     public enum EstadoJuego {
