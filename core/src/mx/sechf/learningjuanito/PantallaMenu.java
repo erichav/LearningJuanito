@@ -105,7 +105,7 @@ public class PantallaMenu extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 menu.setScreen(new PantallaOpciones(menu));
-                musicaFondo.stop();
+                //musicaFondo.stop();
             }
         });
 

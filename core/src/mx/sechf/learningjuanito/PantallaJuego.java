@@ -18,6 +18,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -36,7 +37,7 @@ import java.sql.Time;
 public class PantallaJuego extends Pantalla {
 
     private final LearningJuanito menu;
-    private EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
+    public EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
     private float tiempo;
     private float velocidad = 10;
     private float posicionMama;
@@ -84,6 +85,8 @@ public class PantallaJuego extends Pantalla {
     // El HUD lo manejamos con una escena (opcional)
     private Stage escenaHUD;
 
+    private PantallaPausa panPausa;
+
     public PantallaJuego(LearningJuanito menu) { this.menu=menu; manager = menu.getAssetManager();}
 
     @Override
@@ -122,27 +125,12 @@ public class PantallaJuego extends Pantalla {
         }
 
 
-        /*// ALCANZADO
-        Texture texturaPausa = manager.get("comun/btnPausa.png");
+        //ALCANZADO
+        Texture texturaPausa = manager.get("Images/btns/btnPausa.png");
         TextureRegionDrawable trBtnPausa = new TextureRegionDrawable(new TextureRegion(texturaPausa));
         ImageButton btnPausa = new ImageButton(trBtnPausa);
-        btnPausa.setPosition(ANCHO-btnPausa.getWidth(), ALTO-btnPausa.getHeight());
-        btnPausa.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // Se pausa el juego
-                estado = estado==EstadoJuego.PAUSADO?EstadoJuego.JUGANDO:EstadoJuego.PAUSADO;
-                if (estado==EstadoJuego.PAUSADO) {
-                    // Activar escenaPausa y pasarle el control
-                    if (escenaPausa==null) {
-                        escenaPausa = new EscenaPausa(vistaHUD, batch);
-                    }
-                    Gdx.input.setInputProcessor(escenaPausa);
-                }
-                return true;
-            }
-        });
-        escenaHUD.addActor(btnPausa);*/
+        btnPausa.setPosition(0, ALTO-btnPausa.getHeight());
+        escenaHUD.addActor(btnPausa);
     }
     private class EscenaAlcanzado extends Stage
     {
@@ -218,63 +206,70 @@ public class PantallaJuego extends Pantalla {
         batch.setProjectionMatrix(camara.combined);
         rendererMapa.setView(camara);
         rendererMapa.render();
-        batch.begin();
-        Juanito.dibujar(batch);
-        Mama.dibujar(batch);
-        batch.end();
+
         // HUD
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
-        if(estadoJuego == EstadoJuego.INICIANDO)
-        {//Aquí se marca toda la animación de inicio, desde que aparece Juanito y su mamá hasta que lo empieza a perseguir
-            if (tiempo < 2)
-            {
-                return;
-            }
-            else if (tiempo < 3.2)
-            {
+        if(estadoJuego==EstadoJuego.PAUSADO){
+            generaPantallaPausa();
+        }else {
+            batch.begin();
+            Juanito.dibujar(batch);
+            Mama.dibujar(batch);
+            batch.end();
+            if(estadoJuego == EstadoJuego.INICIANDO) {//Aquí se marca toda la animación de inicio, desde que aparece Juanito y su mamá hasta que lo empieza a perseguir
+                if (tiempo < 2)
+                {
+                    return;
+                }
+                else if (tiempo < 3.2)
+                {
+                    Juanito.actualizar(mapa);
+                    return;
+                }
+                else if (tiempo < 3.55)
+                {
+                    Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                    Mama.actualizar(mapa);
+                    return;
+                }
+                posicionMama = camara.position.x-Mama.sprite.getX();
+                separacion = Juanito.sprite.getX() - Mama.sprite.getX();
+                Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                estadoJuego = EstadoJuego.CORRIENDO; //Cuando termine la animación de inicio, se cambia a CORRIENDO
+            } else if (estadoJuego == EstadoJuego.CORRIENDO){ // Actualizar a Juanito{
+                int posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
+                velocidad = velocidad + 0.005f;
+                puntosJugador = puntosJugador + delta;
                 Juanito.actualizar(mapa);
-                return;
-            }
-            else if (tiempo < 3.55)
-            {
-                Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                 Mama.actualizar(mapa);
-                return;
+                Mama.checaSalto(mapa);
+                if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
+                {
+                    posicionObstaculo = posXJuanito+40;
+                    generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
+                }
+                actualizarCamara();
+                colision();
+                batch.begin();
+                puntaje.mostrarMensaje(batch, "Puntaje: " + Integer.toString((int)(puntosJugador*10)), ANCHO*85/100,118*ALTO/120);
+                batch.end();
+            } else if (estadoJuego == EstadoJuego.ALCANZADO) {
+                escenaAlcanzado.draw();
+                batch.begin();
+                chanclazo.mostrarMensaje(batch, "            CHANCLAZO\nHas perdido una vida", ANCHO/2,ALTO*2/3);
+                batch.end();
             }
-            posicionMama = camara.position.x-Mama.sprite.getX();
-            separacion = Juanito.sprite.getX() - Mama.sprite.getX();
-            Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
-            Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
-            estadoJuego = EstadoJuego.CORRIENDO; //Cuando termine la animación de inicio, se cambia a CORRIENDO
         }
-        else if (estadoJuego == EstadoJuego.CORRIENDO) // Actualizar a Juanito
-        {
-            int posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
-            velocidad = velocidad + 0.005f;
-            puntosJugador = puntosJugador + delta;
-            Juanito.actualizar(mapa);
-            Mama.actualizar(mapa);
-            Mama.checaSalto(mapa);
-            if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
-            {
-                posicionObstaculo = posXJuanito+40;
-                generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
-            }
-            actualizarCamara();
-            colision();
-            batch.begin();
-            puntaje.mostrarMensaje(batch, "Puntaje: " + Integer.toString((int)(puntosJugador*10)), ANCHO*85/100,118*ALTO/120);
-            batch.end();
-        }
-        else if (estadoJuego == EstadoJuego.ALCANZADO)
-        {
-            escenaAlcanzado.draw();
-            batch.begin();
-            chanclazo.mostrarMensaje(batch, "            CHANCLAZO\nHas perdido una vida", ANCHO/2,ALTO*2/3);
-            batch.end();
-        }
+    }
 
+    private void generaPantallaPausa() {
+        if(this.panPausa == null) {
+            this.panPausa = new PantallaPausa(menu, this);
+        }
+        menu.setScreen(panPausa);
+        //Gdx.input.setInputProcessor(panPausa);
     }
 
     private void colision() {
@@ -415,7 +410,6 @@ public class PantallaJuego extends Pantalla {
         Juanito.sprite.setX(Mama.sprite.getX()+separacion);
     }
 
-
     private void actualizarCamara() {
         if(estadoJuego == EstadoJuego.CORRIENDO)
         {
@@ -427,7 +421,6 @@ public class PantallaJuego extends Pantalla {
         }
         camara.update();
     }
-
 
     @Override
     public void resize(int width, int height) {
@@ -463,7 +456,8 @@ public class PantallaJuego extends Pantalla {
         INICIANDO,
         CORRIENDO,
         PAUSADO,
-        ALCANZADO
+        ALCANZADO,
+        TERMINADO
     }
 
     private class Procesador implements InputProcessor{
@@ -489,8 +483,12 @@ public class PantallaJuego extends Pantalla {
 
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            if(estadoJuego == EstadoJuego.CORRIENDO)
-            {
+            Vector3 v = new Vector3();
+            v.set(screenX, screenY, 0);
+            Gdx.app.log("x: " + v.x, "y: " + v.y);
+            if(v.x<65 && v.y < 53){
+                estadoJuego = EstadoJuego.PAUSADO;
+            }else if(estadoJuego == EstadoJuego.CORRIENDO) {
                 Juanito.saltar();
             }
             return true;

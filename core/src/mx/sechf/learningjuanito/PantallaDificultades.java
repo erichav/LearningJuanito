@@ -29,6 +29,7 @@ public class PantallaDificultades extends Pantalla {
     private Texture texturaBtnPrincipiante;
     private Texture texturaBtnIntermedio;
     private Texture texturaBtnExperto;
+    private Texture texturaBtnMenu;
 
     // Escenas
     private Stage escenaDificultades;
@@ -93,6 +94,20 @@ public class PantallaDificultades extends Pantalla {
                 menu.setScreen(new PantallaCargando(menu, Pantallas.NIVEL_EXPERTO));
             }
         });
+
+        //boton Menu
+        TextureRegionDrawable trdBtnMenu = new TextureRegionDrawable(new TextureRegion(texturaBtnMenu));
+        ImageButton btnMenu = new ImageButton(trdBtnMenu);
+        btnMenu.setPosition(ANCHO/2-btnMenu.getWidth()/2,5*ALTO/12+10-btnMenu.getHeight()/2);
+        escenaDificultades.addActor(btnMenu);
+
+        // accion btn menu
+        btnMenu.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                menu.setScreen(new PantallaMenu(menu));
+            }
+        });
     }
 
     private void cargarTexturas() {
@@ -100,6 +115,7 @@ public class PantallaDificultades extends Pantalla {
         texturaBtnPrincipiante = new Texture("Images/btns/btnPrincipiante.png");
         texturaBtnIntermedio = new Texture("Images/btns/btnIntermedio.png");
         texturaBtnExperto = new Texture("Images/btns/btnExperto.png");
+        texturaBtnMenu = new Texture("Images/btns/btnRegresarMenu.png");
     }
 
     private void crearCamara() {

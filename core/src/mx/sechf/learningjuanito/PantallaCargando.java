@@ -70,6 +70,7 @@ class PantallaCargando extends Pantalla
         manager.load("Images/btns/btnContinuar.png", Texture.class);
         manager.load("mapaNivel1.tmx", TiledMap.class);
         manager.load("Audio/Fondo.mp3",Music.class);
+        manager.load("Images/btns/btnPausa.png", Texture.class);
     }
 
     private void cargarRecursosMenu() {

@@ -32,20 +32,8 @@ public class PantallaOpciones extends Pantalla {
     private Texture texturaBtnSonidoOn;
     private Texture texturaBtnEfectoOn;
 
-    // Preferencias
-    Preferences sonido = app.getPreferences("Preferencias sonido");
-
     // Escenas
     private Stage escenaOpciones;
-
-    //botones
-    private ImageButton musicButton;
-    private TextureRegionDrawable musicOn;
-    private ImageButton efectButton;
-    private TextureRegionDrawable efectOn;
-
-    //musica
-    private Music musica;
 
     public PantallaOpciones(LearningJuanito menu) {
         this.app = app;
@@ -58,13 +46,6 @@ public class PantallaOpciones extends Pantalla {
         crearCamara();
         cargarTexturas();
         crearObjetos();
-        cargarMusica();
-    }
-
-    private void cargarMusica() {
-        musica = manager.get("Audio/Fondo.mp3");
-        musica.setLooping(true);
-
     }
 
     private void crearObjetos() {
@@ -103,48 +84,32 @@ public class PantallaOpciones extends Pantalla {
             }
         });
 
-        musicOn = new TextureRegionDrawable(new TextureRegion(texturaBtnSonidoOn));
-        musicButton = new ImageButton(musicOn);
-        musicButton.setPosition(ANCHO/2+180-musicButton.getWidth()/2,5*ALTO/12+110-musicButton.getHeight()/2);
-        escenaOpciones.addActor(musicButton);
 
-        musicButton.addListener(new ClickListener(){
+        //boton Musica
+        TextureRegionDrawable trdBtnMusic = new TextureRegionDrawable
+                (new TextureRegion(texturaBtnSonidoOn));
+        ImageButton btnMusic = new ImageButton(trdBtnMusic);
+        btnMusic.setPosition(ANCHO/2+220-btnMusic.getWidth()/2,ALTO/2+60-btnMusic.getHeight()/2);
+        escenaOpciones.addActor(btnMusic);
+
+        //accion del boton musica
+        btnJugar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(sonido.getBoolean("musicaOn")){
-                    sonido.putBoolean("musicaOn", false);
-                }
-                else{
-                    sonido.putBoolean("musicaOn", true);
-                }
-                sonido.flush();
-                cambiarTexturasMusica();
             }
         });
 
-        efectButton.remove();
-        if(sonido.getBoolean("efectOn")){
-            texturaBtnEfectoOn = manager.get("Images/btns/btnEfectoOn.png");
-        }
-        else{
-            texturaBtnEfectoOn = manager.get("Images/btns/btnEfectoOff.png");
-        }
-        efectOn = new TextureRegionDrawable(new TextureRegion(texturaBtnSonidoOn));
-        efectButton = new ImageButton(efectOn);
-        efectButton.setPosition(ANCHO/2+180-efectButton.getWidth()/2,5*ALTO/12+110-efectButton.getHeight()/2);
-        escenaOpciones.addActor(efectButton);
+        //boton Efecto
+        TextureRegionDrawable trdBtnEfecto = new TextureRegionDrawable
+                (new TextureRegion(texturaBtnEfectoOn));
+        ImageButton btnEfect = new ImageButton(trdBtnEfecto);
+        btnEfect.setPosition(ANCHO/2+220-btnEfect.getWidth()/2,ALTO/2-130-btnEfect.getHeight()/2);
+        escenaOpciones.addActor(btnEfect);
 
-        musicButton.addListener(new ClickListener(){
+        //accion del boton musica
+        btnJugar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(sonido.getBoolean("efectOn")){
-                    sonido.putBoolean("efectOff", false);
-                }
-                else{
-                    sonido.putBoolean("efectOn", true);
-                }
-                sonido.flush();
-                cambiarTexturasEfectos();
             }
         });
 
@@ -153,77 +118,11 @@ public class PantallaOpciones extends Pantalla {
     }
 
     private void cargarTexturas() {
-        texturaOpciones = manager.get("Images/screens/opciones.jpg");
-        texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
-        texturaBtnJugar = manager.get("Images/btns/btnJugarPantallas.png");
-        if(sonido.getBoolean("musicaOn")){
-            texturaBtnSonidoOn = manager.get("Images/btns/btnSoundOn.png");
-        }
-        else{
-            texturaBtnSonidoOn = manager.get("Images/btns/btnSoundOff.png");
-        }
-        if(sonido.getBoolean("efectoOn")){
-            texturaBtnEfectoOn = manager.get("Images/btns/btnEfectoOn.png");
-        }
-        else{
-            texturaBtnEfectoOn = manager.get("Images/btns/btnEfectoOff.png");
-        }
-    }
-
-    private void cambiarTexturasMusica(){
-        musicButton.remove();
-        if(sonido.getBoolean("musicaOn")){
-            texturaBtnSonidoOn = manager.get("Images/btns/btnSoundOn.png");
-        }
-        else{
-            texturaBtnSonidoOn = manager.get("Images/btns/btnSoundOff.png");
-        }
-        musicOn = new TextureRegionDrawable(new TextureRegion(texturaBtnSonidoOn));
-        musicButton = new ImageButton(musicOn);
-        musicButton.setPosition(ANCHO/2+180-musicButton.getWidth()/2,5*ALTO/12+110-musicButton.getHeight()/2);
-        escenaOpciones.addActor(musicButton);
-
-        musicButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if(sonido.getBoolean("musicaOn")){
-                    sonido.putBoolean("musicaOn", false);
-                }
-                else{
-                    sonido.putBoolean("musicaOn", true);
-                }
-                sonido.flush();
-                cambiarTexturasMusica();
-            }
-        });
-    }
-
-    private void cambiarTexturasEfectos(){
-        efectButton.remove();
-        if(sonido.getBoolean("efectOn")){
-            texturaBtnEfectoOn = manager.get("Images/btns/btnEfectoOn.png");
-        }
-        else{
-            texturaBtnEfectoOn = manager.get("Images/btns/btnEfectoOff.png");
-        }
-        efectOn = new TextureRegionDrawable(new TextureRegion(texturaBtnSonidoOn));
-        efectButton = new ImageButton(efectOn);
-        efectButton.setPosition(ANCHO/2+180-efectButton.getWidth()/2,5*ALTO/12+110-efectButton.getHeight()/2);
-        escenaOpciones.addActor(efectButton);
-
-        musicButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if(sonido.getBoolean("efectOn")){
-                    sonido.putBoolean("efectOff", false);
-                }
-                else{
-                    sonido.putBoolean("efectOn", true);
-                }
-                sonido.flush();
-                cambiarTexturasEfectos();
-            }
-        });
+        texturaOpciones = new Texture("Images/screens/opciones.jpg");
+        texturaBtnRegresar = new Texture("Images/btns/btnMenuPrinc.png");
+        texturaBtnJugar = new Texture("Images/btns/btnJugarPantallas.png");
+        texturaBtnSonidoOn = new Texture("Images/btns/btnSoundOn.png");
+        texturaBtnEfectoOn = new Texture("Images/btns/btnEfectoOn.png");
     }
 
     private void crearCamara() {
@@ -240,13 +139,6 @@ public class PantallaOpciones extends Pantalla {
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
             menu.setScreen(new PantallaMenu(menu));
         }
-        if(sonido.getBoolean("musicON")){
-            musica.play();
-        }
-        else{
-            musica.stop();
-        }
-
     }
 
     @Override
@@ -271,13 +163,6 @@ public class PantallaOpciones extends Pantalla {
 
     @Override
     public void dispose() {
-        /*manager.load("Images/screens/opciones.jpg", Texture.class);
-        manager.load("Images/btns/btnSoundOff.png", Texture.class);
-        manager.load("Images/btns/btnSoundOn.png", Texture.class);
-        manager.load("Images/btns/btnEfectoOff.png", Texture.class);
-        manager.load("Images/btns/btnEfectoOn.png", Texture.class);
-        manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
-        manager.load("Images/btns/btnJugarPantallas.png", Texture.class);*/
 
     }
 }

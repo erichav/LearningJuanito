@@ -34,8 +34,11 @@ public class PantallaPausa extends Pantalla {
     // Escenas
     private Stage escenaPausa;
 
-    public PantallaPausa(LearningJuanito menu) {
+    private PantallaJuego juego;
+
+    public PantallaPausa(LearningJuanito menu, PantallaJuego regreso) {
         this.menu = menu;
+        this.juego = regreso;
     }
 
     @Override
@@ -75,7 +78,8 @@ public class PantallaPausa extends Pantalla {
         btnJugar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                menu.setScreen(new PantallaJuego(menu));
+                menu.setScreen(juego);
+                juego.estadoJuego= PantallaJuego.EstadoJuego.CORRIENDO;
             }
         });
 
@@ -85,7 +89,7 @@ public class PantallaPausa extends Pantalla {
         btnOpciones.setPosition(85*ANCHO/100-btnOpciones.getWidth()/2,2*ALTO/12-btnOpciones.getHeight()/2);
         escenaPausa.addActor(btnOpciones);
 
-        // Acción del botón jugar
+        // Acción del botón opciones
         btnOpciones.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
