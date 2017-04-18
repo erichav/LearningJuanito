@@ -2,10 +2,10 @@ package mx.sechf.learningjuanito;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import mx.sechf.learningjuanito.LearningJuanito;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -19,5 +19,6 @@ public class AndroidLauncher extends AndroidApplication {
 				| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 				| View.SYSTEM_UI_FLAG_FULLSCREEN
 				| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 }

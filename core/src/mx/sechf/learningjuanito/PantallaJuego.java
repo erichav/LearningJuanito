@@ -31,11 +31,13 @@ public class PantallaJuego extends Pantalla {
 
     private final LearningJuanito menu;
     public EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
-    public Minijuego minijuego = Minijuego.OBSTACULOS;
+    public Minijuego minijuego = Minijuego.INSTRUCCIONES;
     private String instruccionMinijuego = "NO DEJES QUE TE ATRAPE!";
     private float tiempo;
     private float tiempoMinijuego = 5;
+    private float tiempoInstrucciones = 3;
     private int ordenItems;
+    private int siguienteJuego = (int) (Math.random() * 4);
     private float velocidad = 10;
     private float posicionMama;
     private float separacion; //La separación original entre Juanito y su mamá.
@@ -92,6 +94,8 @@ public class PantallaJuego extends Pantalla {
     // El HUD lo manejamos con una escena (opcional)
     private Stage escenaHUD;
     private Texto mensajeMinijuego = new Texto();
+    Image imgRectangulo;
+    ImageButton btnPausa;
 
     private PantallaPausa panPausa;
 
@@ -119,10 +123,11 @@ public class PantallaJuego extends Pantalla {
 
         // HUD
         escenaHUD = new Stage(vistaHUD);
-
+        crearObjetos();
+        //escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
         dibujarVidas();
-        dibujarBotonPausa();
-        crearRectangulo();
+        escenaHUD.addActor(btnPausa);
+        escenaHUD.addActor(imgRectangulo);
 
         //Puntaje
         puntaje = new Texto();
@@ -134,26 +139,21 @@ public class PantallaJuego extends Pantalla {
 
     }
 
-    private void crearRectangulo() {
+    private void crearObjetos() {
         // Crear rectángulo transparente
         Pixmap pixmap = new Pixmap((int)(ANCHO*0.5f), (int)(ALTO*0.1f), Pixmap.Format.RGBA8888 );
         pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.65f );
         pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
         Texture texturaRectangulo = new Texture( pixmap );
         pixmap.dispose();
-        Image imgRectangulo = new Image(texturaRectangulo);
+        imgRectangulo = new Image(texturaRectangulo);
         imgRectangulo.setPosition((ANCHO-pixmap.getWidth())/2, ((ALTO*31/20)-pixmap.getHeight())/2);
-        escenaHUD.addActor(imgRectangulo);
-    }
 
-    private void dibujarBotonPausa()
-    {
-        //Boton Pausa
+        // Boton Pausa
         Texture texturaPausa = manager.get("Images/btns/btnPausa.png");
         TextureRegionDrawable trBtnPausa = new TextureRegionDrawable(new TextureRegion(texturaPausa));
-        ImageButton btnPausa = new ImageButton(trBtnPausa);
+        btnPausa = new ImageButton(trBtnPausa);
         btnPausa.setPosition(0, ALTO-btnPausa.getHeight());
-        escenaHUD.addActor(btnPausa);
     }
 
     private void dibujarVidas() {
@@ -464,76 +464,125 @@ public class PantallaJuego extends Pantalla {
             }
             switch (minijuego)
             {
+                case INSTRUCCIONES:
+                    // HAY QUE MOSTRAR LAS INSTRUCCIONES
+                        switch (siguienteJuego) {
+                            case 0:
+                                instruccionMinijuego = "SALTA LOS OBSTACULOS!";
+                                break;
+                            case 1:
+                                instruccionMinijuego = "ATRAPA LOS PARES!";
+                                break;
+                            case 2:
+                                instruccionMinijuego = "ATRAPA LOS NONES!";
+                                break;
+                            case 3:
+                                instruccionMinijuego = "ATRAPA LOS MULTIPLOS DE 3!";
+                                break;
+                    }
+                    // TERMINA CAMBIO INSTRUCCIONES
+                    if(tiempoInstrucciones<=0) {
+                        tiempoMinijuego = 5;
+                        instruccionMinijuego = "";
+                        escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
+                        cambiaMinijuego(siguienteJuego);
+                    }
+                    tiempoInstrucciones-=delta;
+                    break;
                 case OBSTACULOS:
                     if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
                     {
-                        instruccionMinijuego = "EVITA LOS OBSTACULOS!";
-                        posicionObstaculo = posXJuanito+40;
-                        generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
-                        cambiaMinijuego();
+                        if(tiempoMinijuego==0)
+                        {
+                            mostrarInstrucciones();
+                        }
+                        else
+                        {
+                            posicionObstaculo = posXJuanito+40;
+                            generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
+                            tiempoMinijuego--;
+                        }
                     }
                     break;
                 case PARES:
                     if(posicionObstaculo<posXJuanito)
                     {
-                        instruccionMinijuego = "ATRAPA LOS PARES!";
-                        ordenItems = (int)(Math.random()*2)+1;
-                        posicionObstaculo = posXJuanito+40;
-                        int par = generaMultiplo(2);
-                        int impar =  generaNoMultiplo(2);
-                        if(ordenItems == 1)
+                        if(tiempoMinijuego==0)
                         {
-                            generaItem(par,posicionObstaculo,8);
-                            generaItem(impar,posicionObstaculo,1);
+                            mostrarInstrucciones();
                         }
                         else
                         {
-                            generaItem(impar,posicionObstaculo,8);
-                            generaItem(par,posicionObstaculo,1);
+                            ordenItems = (int)(Math.random()*2)+1;
+                            posicionObstaculo = posXJuanito+40;
+                            int par = generaMultiplo(2);
+                            int impar =  generaNoMultiplo(2);
+                            if(ordenItems == 1)
+                            {
+                                generaItem(par,posicionObstaculo,8);
+                                generaItem(impar,posicionObstaculo,1);
+                            }
+                            else
+                            {
+                                generaItem(impar,posicionObstaculo,8);
+                                generaItem(par,posicionObstaculo,1);
+                            }
+                            tiempoMinijuego--;
                         }
-                        cambiaMinijuego();
                     }
                     break;
                 case NONES:
                     if(posicionObstaculo<posXJuanito)
                     {
-                        instruccionMinijuego = "ATRAPA LOS NONES!";
-                        ordenItems = (int)(Math.random()*2)+1;
-                        posicionObstaculo = posXJuanito+40;
-                        int par = generaMultiplo(2);
-                        int impar =  generaNoMultiplo(2);
-                        if(ordenItems == 1)
+                        if(tiempoMinijuego==0)
                         {
-                            generaItem(impar,posicionObstaculo,8);
-                            generaItem(par,posicionObstaculo,1);
+                            mostrarInstrucciones();
                         }
                         else
                         {
-                            generaItem(par,posicionObstaculo,8);
-                            generaItem(impar,posicionObstaculo,1);
+                            ordenItems = (int)(Math.random()*2)+1;
+                            posicionObstaculo = posXJuanito+40;
+                            int par = generaMultiplo(2);
+                            int impar =  generaNoMultiplo(2);
+                            if(ordenItems == 1)
+                            {
+                                generaItem(impar,posicionObstaculo,8);
+                                generaItem(par,posicionObstaculo,1);
+                            }
+                            else
+                            {
+                                generaItem(par,posicionObstaculo,8);
+                                generaItem(impar,posicionObstaculo,1);
+                            }
+                            tiempoMinijuego--;
                         }
-                        cambiaMinijuego();
                     }
                     break;
                 case MULTIPLOSDETRES:
                     if(posicionObstaculo<posXJuanito)
                     {
-                        instruccionMinijuego = "ATRAPA LOS MULTIPLOS DE 3!";
-                        ordenItems = (int)(Math.random()*2)+1;
-                        posicionObstaculo = posXJuanito+40;
-                        int multiplo = generaMultiplo(3);
-                        int nomultiplo = generaNoMultiplo(3);
-                        if(ordenItems == 1)
+                        if(tiempoMinijuego==0)
                         {
-                            generaItem(multiplo,posicionObstaculo,8);
-                            generaItem(nomultiplo,posicionObstaculo,1);
+                            mostrarInstrucciones();
                         }
                         else
                         {
-                            generaItem(multiplo,posicionObstaculo,8);
-                            generaItem(nomultiplo,posicionObstaculo,1);
+                            ordenItems = (int)(Math.random()*2)+1;
+                            posicionObstaculo = posXJuanito+40;
+                            int multiplo = generaMultiplo(3);
+                            int nomultiplo = generaNoMultiplo(3);
+                            if(ordenItems == 1)
+                            {
+                                generaItem(multiplo,posicionObstaculo,8);
+                                generaItem(nomultiplo,posicionObstaculo,1);
+                            }
+                            else
+                            {
+                                generaItem(nomultiplo,posicionObstaculo,8);
+                                generaItem(multiplo,posicionObstaculo,1);
+                            }
+                            tiempoMinijuego--;
                         }
-                        cambiaMinijuego();
                     }
                     break;
             }
@@ -573,26 +622,28 @@ public class PantallaJuego extends Pantalla {
 
     }
 
-    private void cambiaMinijuego() {
-        tiempoMinijuego--;
-        if(tiempoMinijuego==0)
-        {
-            switch ((int)(Math.random()*4))
-            {
-                case 0:
-                    minijuego = Minijuego.OBSTACULOS;
-                    break;
-                case 1:
-                    minijuego = Minijuego.PARES;
-                    break;
-                case 2:
-                    minijuego = Minijuego.NONES;
-                    break;
-                case 3:
-                    minijuego = Minijuego.MULTIPLOSDETRES;
-                    break;
-            }
-            tiempoMinijuego=5;
+    private void mostrarInstrucciones() {
+        tiempoInstrucciones = 6;
+        escenaHUD.addActor(imgRectangulo);
+        siguienteJuego = (int) (Math.random() * 4);
+        minijuego = Minijuego.INSTRUCCIONES;
+    }
+
+    private void cambiaMinijuego(int siguiente) {
+        tiempoMinijuego = 5;
+        switch (siguiente) {
+            case 0:
+                minijuego = Minijuego.OBSTACULOS;
+                break;
+            case 1:
+                minijuego = Minijuego.PARES;
+                break;
+            case 2:
+                minijuego = Minijuego.NONES;
+                break;
+            case 3:
+                minijuego = Minijuego.MULTIPLOSDETRES;
+                break;
         }
     }
 
@@ -620,8 +671,7 @@ public class PantallaJuego extends Pantalla {
                 escenaHUD.clear();
                 //Vidas
                 dibujarVidas();
-                dibujarBotonPausa();
-                crearRectangulo();
+                escenaHUD.addActor(btnPausa);
                 estadoJuego = EstadoJuego.ALCANZADO;
                 Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                 Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
@@ -886,7 +936,8 @@ public class PantallaJuego extends Pantalla {
         OBSTACULOS,
         PARES,
         NONES,
-        MULTIPLOSDETRES
+        MULTIPLOSDETRES,
+        INSTRUCCIONES
     }
 
     private class Procesador implements InputProcessor{
