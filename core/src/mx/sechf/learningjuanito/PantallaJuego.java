@@ -847,6 +847,31 @@ public class PantallaJuego extends Pantalla {
             }
         }
     }
+    //ELIMINAR NUMEROS
+    private void eliminarNumeroSuperior() {
+        TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(2);
+        TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(3);
+        for (int cx = 0; cx <= 2000; cx++)
+        {
+            for (int cy = 8; cy <= 15; cy++)
+            {
+                obstaculos.setCell(cx,cy, null);
+                items.setCell(cx,cy, null);
+            }
+        }
+    }
+    private void eliminarNumeroInferior() {
+        TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(2);
+        TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(3);
+        for (int cx = 0; cx <= 2000; cx++)
+        {
+            for (int cy = 0; cy <= 7; cy++)
+            {
+                obstaculos.setCell(cx,cy, null);
+                items.setCell(cx,cy, null);
+            }
+        }
+    }
 
     private void reacomodarPersonajes() {
         //Pone los personajes en su posición original con respecto a la cámara
@@ -880,7 +905,9 @@ public class PantallaJuego extends Pantalla {
         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         eliminarObjetos();
         musicaFondo.stop();
-    }
+        }
+
+
     private void ganaste() {
         estadoJuego = EstadoJuego.TERMINADO;
         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
