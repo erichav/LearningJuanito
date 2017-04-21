@@ -401,71 +401,49 @@ public class PantallaJuego extends Pantalla {
         // HUD
         batch.setProjectionMatrix(camaraHUD.combined);
         escenaHUD.draw();
-        if(estadoJuego == EstadoJuego.INICIANDO) {//Aquí se marca toda la animación de inicio, desde que aparece Juanito y su mamá hasta que lo empieza a perseguir
-            batch.begin();
-            mensajeMinijuego.mostrarMensaje(batch, instruccionMinijuego,ANCHO/2,4*ALTO/5);
-            batch.end();
-            if (tiempo < 2)
-            {
-                return;
-            }
-            else if (tiempo < 3.2)
-            {
+        switch(estadoJuego)
+        {
+            case CORRIENDO:
+                int posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
+                int posYJuanito = (int) (Juanito.sprite.getY() / 32);
+                velocidad = velocidad + 0.001f;
+                puntosJugador = puntosJugador + delta;
                 Juanito.actualizar(mapa);
-                return;
-            }
-            else if (tiempo < 3.55)
-            {
-                Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                 Mama.actualizar(mapa);
-                return;
-            }
-            posicionMama = camara.position.x-Mama.sprite.getX();
-            separacion = Juanito.sprite.getX() - Mama.sprite.getX();
-            Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
-            Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
-            estadoJuego = EstadoJuego.CORRIENDO; //Cuando termine la animación de inicio, se cambia a CORRIENDO
-        } else if (estadoJuego == EstadoJuego.CORRIENDO){ // Actualizar a Juanito{
-            int posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
-            int posYJuanito = (int) (Juanito.sprite.getY() / 32);
-            velocidad = velocidad + 0.002f;
-            puntosJugador = puntosJugador + delta;
-            Juanito.actualizar(mapa);
-            Mama.actualizar(mapa);
-            Mama.checaSalto(mapa);
-            if(Juanito.recolectarItems(mapa))
-            {
-                if(ordenItems == 1)
+                Mama.checaSalto(mapa);
+                if(Juanito.recolectarItems(mapa))
                 {
-                    if(posYJuanito >= 4){
-                        puntosJugador+=10;
+                    if(ordenItems == 1)
+                    {
+                        if(posYJuanito >= 4){
+                            puntosJugador+=10;
+                        }
+                        else{
+                            puntosJugador-=10;
+                            if(puntosJugador<0)
+                            {
+                                puntosJugador = 0;
+                            }
+                        }
                     }
-                    else{
-                        puntosJugador-=10;
-                        if(puntosJugador<0)
-                        {
-                            puntosJugador = 0;
+                    else
+                    {
+                        if(posYJuanito >= 4){
+                            puntosJugador-=10;
+                            if(puntosJugador<0)
+                            {
+                                puntosJugador = 0;
+                            }
+                        }
+                        else{
+                            puntosJugador+=10;
                         }
                     }
                 }
-                else
+                switch (minijuego)
                 {
-                    if(posYJuanito >= 4){
-                        puntosJugador-=10;
-                        if(puntosJugador<0)
-                        {
-                            puntosJugador = 0;
-                        }
-                    }
-                    else{
-                        puntosJugador+=10;
-                    }
-                }
-            }
-            switch (minijuego)
-            {
-                case INSTRUCCIONES:
-                    // HAY QUE MOSTRAR LAS INSTRUCCIONES
+                    case INSTRUCCIONES:
+                        // HAY QUE MOSTRAR LAS INSTRUCCIONES
                         switch (siguienteJuego) {
                             case 0:
                                 instruccionMinijuego = "SALTA LOS OBSTACULOS!";
@@ -479,147 +457,187 @@ public class PantallaJuego extends Pantalla {
                             case 3:
                                 instruccionMinijuego = "ATRAPA LOS MULTIPLOS DE 3!";
                                 break;
-                    }
-                    // TERMINA CAMBIO INSTRUCCIONES
-                    if(tiempoInstrucciones<=0) {
-                        tiempoMinijuego = 5;
-                        instruccionMinijuego = "";
-                        escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
-                        cambiaMinijuego(siguienteJuego);
-                    }
-                    tiempoInstrucciones-=delta;
-                    break;
-                case OBSTACULOS:
-                    if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
-                    {
-                        if(tiempoMinijuego==0)
-                        {
-                            mostrarInstrucciones();
                         }
-                        else
-                        {
-                            posicionObstaculo = posXJuanito+40;
-                            generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
-                            tiempoMinijuego--;
+                        // TERMINA CAMBIO INSTRUCCIONES
+                        if(tiempoInstrucciones<=0) {
+                            tiempoMinijuego = 5;
+                            instruccionMinijuego = "";
+                            escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
+                            cambiaMinijuego(siguienteJuego);
                         }
-                    }
-                    break;
-                case PARES:
-                    if(posicionObstaculo<posXJuanito)
-                    {
-                        if(tiempoMinijuego==0)
+                        tiempoInstrucciones-=delta;
+                        break;
+                    case OBSTACULOS:
+                        if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
                         {
-                            mostrarInstrucciones();
-                        }
-                        else
-                        {
-                            ordenItems = (int)(Math.random()*2)+1;
-                            posicionObstaculo = posXJuanito+40;
-                            int par = generaMultiplo(2);
-                            int impar =  generaNoMultiplo(2);
-                            if(ordenItems == 1)
+                            if(tiempoMinijuego==0)
                             {
-                                generaItem(par,posicionObstaculo,8);
-                                generaItem(impar,posicionObstaculo,1);
+                                mostrarInstrucciones();
                             }
                             else
                             {
-                                generaItem(impar,posicionObstaculo,8);
-                                generaItem(par,posicionObstaculo,1);
+                                posicionObstaculo = posXJuanito+40;
+                                generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
+                                tiempoMinijuego--;
                             }
-                            tiempoMinijuego--;
                         }
-                    }
-                    break;
-                case NONES:
-                    if(posicionObstaculo<posXJuanito)
-                    {
-                        if(tiempoMinijuego==0)
+                        break;
+                    case PARES:
+                        if(posicionObstaculo<posXJuanito)
                         {
-                            mostrarInstrucciones();
-                        }
-                        else
-                        {
-                            ordenItems = (int)(Math.random()*2)+1;
-                            posicionObstaculo = posXJuanito+40;
-                            int par = generaMultiplo(2);
-                            int impar =  generaNoMultiplo(2);
-                            if(ordenItems == 1)
+                            if(tiempoMinijuego==0)
                             {
-                                generaItem(impar,posicionObstaculo,8);
-                                generaItem(par,posicionObstaculo,1);
+                                mostrarInstrucciones();
                             }
                             else
                             {
-                                generaItem(par,posicionObstaculo,8);
-                                generaItem(impar,posicionObstaculo,1);
+                                ordenItems = (int)(Math.random()*2)+1;
+                                posicionObstaculo = posXJuanito+40;
+                                int par = generaMultiplo(2);
+                                int impar =  generaNoMultiplo(2);
+                                if(ordenItems == 1)
+                                {
+                                    generaItem(par,posicionObstaculo,8);
+                                    generaItem(impar,posicionObstaculo,1);
+                                }
+                                else
+                                {
+                                    generaItem(impar,posicionObstaculo,8);
+                                    generaItem(par,posicionObstaculo,1);
+                                }
+                                tiempoMinijuego--;
                             }
-                            tiempoMinijuego--;
                         }
-                    }
-                    break;
-                case MULTIPLOSDETRES:
-                    if(posicionObstaculo<posXJuanito)
-                    {
-                        if(tiempoMinijuego==0)
+                        break;
+                    case NONES:
+                        if(posicionObstaculo<posXJuanito)
                         {
-                            mostrarInstrucciones();
-                        }
-                        else
-                        {
-                            ordenItems = (int)(Math.random()*2)+1;
-                            posicionObstaculo = posXJuanito+40;
-                            int multiplo = generaMultiplo(3);
-                            int nomultiplo = generaNoMultiplo(3);
-                            if(ordenItems == 1)
+                            if(tiempoMinijuego==0)
                             {
-                                generaItem(multiplo,posicionObstaculo,8);
-                                generaItem(nomultiplo,posicionObstaculo,1);
+                                mostrarInstrucciones();
                             }
                             else
                             {
-                                generaItem(nomultiplo,posicionObstaculo,8);
-                                generaItem(multiplo,posicionObstaculo,1);
+                                ordenItems = (int)(Math.random()*2)+1;
+                                posicionObstaculo = posXJuanito+40;
+                                int par = generaMultiplo(2);
+                                int impar =  generaNoMultiplo(2);
+                                if(ordenItems == 1)
+                                {
+                                    generaItem(impar,posicionObstaculo,8);
+                                    generaItem(par,posicionObstaculo,1);
+                                }
+                                else
+                                {
+                                    generaItem(par,posicionObstaculo,8);
+                                    generaItem(impar,posicionObstaculo,1);
+                                }
+                                tiempoMinijuego--;
                             }
-                            tiempoMinijuego--;
                         }
-                    }
-                    break;
-            }
-            actualizarCamara();
-            colision();
-            batch.begin();
-            puntaje.mostrarMensaje(batch, "Puntaje: " + Integer.toString((int)(puntosJugador*10)), ANCHO*85/100,118*ALTO/120);
-            mensajeMinijuego.mostrarMensaje(batch, instruccionMinijuego,ANCHO/2,4*ALTO/5);
-            batch.end();
-        } else if (estadoJuego == EstadoJuego.ALCANZADO) {
-            escenaAlcanzado.draw();
-            batch.begin();
-            chanclazo.mostrarMensaje(batch, "            CHANCLAZO\n\nHas perdido una vida", ANCHO/2,ALTO*2/3);
-            batch.end();
-        } else if(estadoJuego==EstadoJuego.PAUSADO)
-        {
-            if (escenaPausa==null) {
-                escenaPausa = new EscenaPausa(vistaHUD, batch);
+                        break;
+                    case MULTIPLOSDETRES:
+                        if(posicionObstaculo<posXJuanito)
+                        {
+                            if(tiempoMinijuego==0)
+                            {
+                                mostrarInstrucciones();
+                            }
+                            else
+                            {
+                                ordenItems = (int)(Math.random()*2)+1;
+                                posicionObstaculo = posXJuanito+40;
+                                int multiplo = generaMultiplo(3);
+                                int nomultiplo = generaNoMultiplo(3);
+                                if(ordenItems == 1)
+                                {
+                                    generaItem(multiplo,posicionObstaculo,8);
+                                    generaItem(nomultiplo,posicionObstaculo,1);
+                                }
+                                else
+                                {
+                                    generaItem(nomultiplo,posicionObstaculo,8);
+                                    generaItem(multiplo,posicionObstaculo,1);
+                                }
+                                tiempoMinijuego--;
+                            }
+                        }
+                        break;
+                }
                 actualizarCamara();
-            }
-            Gdx.input.setInputProcessor(escenaPausa);
-            escenaPausa.draw();
-        } else if (estadoJuego == EstadoJuego.PERDIDO)
-        {
-            escenaGameOver.draw();
-            batch.begin();
-            puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int)(puntosJugador*10)), ANCHO/2,ALTO/3);
-            batch.end();
+                colision();
+                batch.begin();
+                puntaje.mostrarMensaje(batch, "Puntaje: " + Integer.toString((int)(puntosJugador*10)), ANCHO*85/100,118*ALTO/120);
+                mensajeMinijuego.mostrarMensaje(batch, instruccionMinijuego,ANCHO/2,4*ALTO/5);
+                batch.end();
+                break;
+            case INICIANDO:
+                batch.begin();
+                mensajeMinijuego.mostrarMensaje(batch, instruccionMinijuego,ANCHO/2,4*ALTO/5);
+                batch.end();
+                if (tiempo < 2)
+                {
+                    return;
+                }
+                else if (tiempo < 3.2)
+                {
+                    Juanito.actualizar(mapa);
+                    return;
+                }
+                else if (tiempo < 3.55)
+                {
+                    Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                    Mama.actualizar(mapa);
+                    return;
+                }
+                posicionMama = camara.position.x-Mama.sprite.getX();
+                separacion = Juanito.sprite.getX() - Mama.sprite.getX();
+                Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                estadoJuego = EstadoJuego.CORRIENDO; //Cuando termine la animación de inicio, se cambia a CORRIENDO
+                break;
+            case ALCANZADO:
+                if (escenaAlcanzado==null) {
+                    escenaAlcanzado = new EscenaAlcanzado(vistaHUD, batch);
+                    actualizarCamara();
+                }
+                Gdx.input.setInputProcessor(escenaAlcanzado);
+                escenaAlcanzado.draw();
+                batch.begin();
+                chanclazo.mostrarMensaje(batch, "            CHANCLAZO\n\nHas perdido una vida", ANCHO/2,ALTO*2/3);
+                batch.end();
+                break;
+            case PAUSADO:
+                if (escenaPausa==null) {
+                    escenaPausa = new EscenaPausa(vistaHUD, batch);
+                    actualizarCamara();
+                }
+                Gdx.input.setInputProcessor(escenaPausa);
+                escenaPausa.draw();
+                break;
+            case PERDIDO:
+                if (escenaGameOver==null) {
+                    escenaGameOver = new EscenaGameOver(vistaHUD, batch);
+                    actualizarCamara();
+                }
+                Gdx.input.setInputProcessor(escenaGameOver);
+                escenaGameOver.draw();
+                batch.begin();
+                puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int)(puntosJugador*10)), ANCHO/2,ALTO/3);
+                batch.end();
+                break;
+            case TERMINADO:
+                if (escenaGanaste==null) {
+                    escenaGanaste = new EscenaGanaste(vistaHUD, batch);
+                    actualizarCamara();
+                }
+                Gdx.input.setInputProcessor(escenaGanaste);
+                escenaGanaste.draw();
+                batch.begin();
+                puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int)(puntosJugador*10)), ANCHO/2,ALTO/3);
+                batch.end();
+                break;
         }
-        else if (estadoJuego == EstadoJuego.TERMINADO)
-        {
-            escenaGanaste.draw();
-            batch.begin();
-            puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int)(puntosJugador*10)), ANCHO/2,ALTO/3);
-            batch.end();
-        }
-
     }
 
     private void mostrarInstrucciones() {
@@ -679,12 +697,7 @@ public class PantallaJuego extends Pantalla {
                 Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                 eliminarObjetos();
                 reacomodarPersonajes();
-                if (escenaAlcanzado==null) {
-                    escenaAlcanzado = new EscenaAlcanzado(vistaHUD, batch);
-                    actualizarCamara();
-                }
                 musicaFondo.stop();
-                Gdx.input.setInputProcessor(escenaAlcanzado);
 
                 // Efecto de sonido (cachetada)
                 cachetada = manager.get("Audio/Slap2.mp3");
@@ -866,12 +879,7 @@ public class PantallaJuego extends Pantalla {
         Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         eliminarObjetos();
-        if (escenaGameOver==null) {
-            escenaGameOver = new EscenaGameOver(vistaHUD, batch);
-            musicaFondo.stop();
-            actualizarCamara();
-        }
-        Gdx.input.setInputProcessor(escenaGameOver);
+        musicaFondo.stop();
     }
     private void ganaste() {
         estadoJuego = EstadoJuego.TERMINADO;
@@ -880,12 +888,7 @@ public class PantallaJuego extends Pantalla {
         Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         eliminarObjetos();
-        if (escenaGanaste==null) {
-            escenaGanaste = new EscenaGanaste(vistaHUD, batch);
-            musicaFondo.stop();
-            actualizarCamara();
-        }
-        Gdx.input.setInputProcessor(escenaGanaste);
+        musicaFondo.stop();
     }
 
     @Override
