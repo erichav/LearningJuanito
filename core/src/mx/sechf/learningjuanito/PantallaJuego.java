@@ -417,12 +417,14 @@ public class PantallaJuego extends Pantalla {
                     {
                         if(posYJuanito >= 4){
                             puntosJugador+=10;
+                            eliminarNumeroSuperior();
                         }
                         else{
                             puntosJugador-=10;
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
+                                eliminarNumeroInferior();
                             }
                         }
                     }
@@ -433,10 +435,12 @@ public class PantallaJuego extends Pantalla {
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
+                                eliminarNumeroSuperior();
                             }
                         }
                         else{
                             puntosJugador+=10;
+                            eliminarNumeroInferior();
                         }
                     }
                 }

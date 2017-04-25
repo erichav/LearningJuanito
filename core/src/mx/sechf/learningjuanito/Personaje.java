@@ -155,7 +155,6 @@ public class Personaje extends Objeto
         if (celda!=null ) {
             Object tipo = celda.getTile().getProperties().get("tipo");
             if ( "item".equals(tipo) ) {
-                eliminarObjetos(mapa);
                 return true;
             }
         }
@@ -165,7 +164,6 @@ public class Personaje extends Objeto
         if (celda!=null ) {
             Object tipo = celda.getTile().getProperties().get("tipo");
             if ( "item".equals(tipo) ) {
-                eliminarObjetos(mapa);
                 return true;
             }
         }
