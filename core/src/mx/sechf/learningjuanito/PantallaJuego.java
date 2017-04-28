@@ -3,6 +3,7 @@ package mx.sechf.learningjuanito;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -41,7 +42,7 @@ public class PantallaJuego extends Pantalla {
     private float velocidad = 10;
     private float posicionMama;
     private float separacion; //La separación original entre Juanito y su mamá.
-    private int posicionObstaculo=0;
+    private int posicionObjeto =0;
     public static final float ANCHOTOTAL = ANCHO*50;
 
     //Juego terminado
@@ -349,7 +350,6 @@ public class PantallaJuego extends Pantalla {
             super(vista, batch);
             Texture texturaGanaste;
             Texture texturaBtnRegresar;
-            Texture texturaBtnJugar;
             Texture texturaBtnOpciones;
             texturaGanaste = manager.get("Images/screens/ganaste.jpg");
             texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
@@ -385,6 +385,23 @@ public class PantallaJuego extends Pantalla {
                     menu.setScreen(new PantallaOpciones(menu));
                 }
             });
+            if(Gdx.app.getPreferences("marcador").getInteger("puntaje4",0)<(puntosJugador*10))
+            {
+                Input.TextInputListener listener = new Input.TextInputListener() {
+                    @Override
+                    public void input(String text) {// Guarda el mejor marcador con el nombre del jugador
+                        Preferences preferencias = Gdx.app.getPreferences("marcador");
+                        // AQUI HAY QUE HACER EL ORDENAMIENTO DE PUNTAJES
+                        /*preferencias.putString("nombre", text);
+                        preferencias.flush();
+                        */
+                    }
+                    @Override
+                    public void canceled() {
+                    }
+                };
+                Gdx.input.getTextInput(listener, "Nuevo record, nombre:", "", "");
+            }
         }
     }
 
@@ -506,7 +523,7 @@ public class PantallaJuego extends Pantalla {
                         tiempoInstrucciones-=delta;
                         break;
                     case OBSTACULOS:
-                        if(Math.random()>0.5&&posicionObstaculo<posXJuanito)
+                        if(Math.random()>0.5&& posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
                             {
@@ -514,14 +531,14 @@ public class PantallaJuego extends Pantalla {
                             }
                             else
                             {
-                                posicionObstaculo = posXJuanito+40;
-                                generaObstaculo((int)((Math.random()*10)%4),posicionObstaculo,2);
+                                posicionObjeto = posXJuanito+40;
+                                generaObstaculo((int)((Math.random()*10)%4), posicionObjeto,1);
                                 tiempoMinijuego--;
                             }
                         }
                         break;
                     case PARES:
-                        if(posicionObstaculo<posXJuanito)
+                        if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
                             {
@@ -530,25 +547,25 @@ public class PantallaJuego extends Pantalla {
                             else
                             {
                                 ordenItems = (int)(Math.random()*2)+1;
-                                posicionObstaculo = posXJuanito+40;
+                                posicionObjeto = posXJuanito+40;
                                 int par = generaMultiplo(2);
                                 int impar =  generaNoMultiplo(2);
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(par,posicionObstaculo,8);
-                                    generaItem(impar,posicionObstaculo,1);
+                                    generaItem(par, posicionObjeto,8);
+                                    generaItem(impar, posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem(impar,posicionObstaculo,8);
-                                    generaItem(par,posicionObstaculo,1);
+                                    generaItem(impar, posicionObjeto,8);
+                                    generaItem(par, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
                         }
                         break;
                     case NONES:
-                        if(posicionObstaculo<posXJuanito)
+                        if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
                             {
@@ -557,25 +574,25 @@ public class PantallaJuego extends Pantalla {
                             else
                             {
                                 ordenItems = (int)(Math.random()*2)+1;
-                                posicionObstaculo = posXJuanito+40;
+                                posicionObjeto = posXJuanito+40;
                                 int par = generaMultiplo(2);
                                 int impar =  generaNoMultiplo(2);
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(impar,posicionObstaculo,8);
-                                    generaItem(par,posicionObstaculo,1);
+                                    generaItem(impar, posicionObjeto,8);
+                                    generaItem(par, posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem(par,posicionObstaculo,8);
-                                    generaItem(impar,posicionObstaculo,1);
+                                    generaItem(par, posicionObjeto,8);
+                                    generaItem(impar, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
                         }
                         break;
                     case MULTIPLOSDETRES:
-                        if(posicionObstaculo<posXJuanito)
+                        if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
                             {
@@ -584,18 +601,18 @@ public class PantallaJuego extends Pantalla {
                             else
                             {
                                 ordenItems = (int)(Math.random()*2)+1;
-                                posicionObstaculo = posXJuanito+40;
+                                posicionObjeto = posXJuanito+40;
                                 int multiplo = generaMultiplo(3);
                                 int nomultiplo = generaNoMultiplo(3);
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(multiplo,posicionObstaculo,8);
-                                    generaItem(nomultiplo,posicionObstaculo,1);
+                                    generaItem(multiplo, posicionObjeto,8);
+                                    generaItem(nomultiplo, posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem(nomultiplo,posicionObstaculo,8);
-                                    generaItem(multiplo,posicionObstaculo,1);
+                                    generaItem(nomultiplo, posicionObjeto,8);
+                                    generaItem(multiplo, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
