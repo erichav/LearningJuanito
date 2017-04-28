@@ -81,7 +81,11 @@ public class PantallaJuego extends Pantalla {
     //Puntaje
     private float puntosJugador = 0;
     private Texto puntaje;
-
+    //dialogos
+    private Texture texturadialo;
+    private Texture texturadialogoJuanito;
+    private Texture texturadialogoMama;
+    private  int contadorDialogo=0;
     // AssetManager
     private AssetManager manager;
 
@@ -165,6 +169,33 @@ public class PantallaJuego extends Pantalla {
         }
     }
 
+    private void dibujardialogo(){
+        Image imgDialogo;
+        switch(contadorDialogo){
+            case 1:
+                imgDialogo = new Image(texturadialogoMama);
+                imgDialogo .setPosition(15*ANCHO/50-imgDialogo.getWidth()/2,70*ALTO/100-imgDialogo.getHeight()/2);
+                escenaHUD.addActor(imgDialogo );
+                break;
+            case 2:
+                escenaHUD.clear();
+                dibujarVidas();
+                //crearRectangulo();
+                imgDialogo = new Image(texturadialogoJuanito);
+                imgDialogo .setPosition(20*ANCHO/50-imgDialogo.getWidth()/2,60*ALTO/100-imgDialogo.getHeight()/2);
+                escenaHUD.addActor(imgDialogo );
+                break;
+            case 3:
+                escenaHUD.clear();
+                dibujarVidas();
+                //crearRectangulo();
+                imgDialogo = new Image(texturadialo);
+                imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
+                escenaHUD.addActor(imgDialogo );
+                break;
+            default:break;
+        }
+    }
     private class EscenaAlcanzado extends Stage
     {
         public EscenaAlcanzado(Viewport vista, SpriteBatch batch) {
@@ -378,6 +409,9 @@ public class PantallaJuego extends Pantalla {
         texturaJuanito = manager.get("Images/objects/Juanito/juanito.png");
         texturaMama = manager.get("Images/objects/Mama/mamaJuanito.png");
         texturaVidas = manager.get("Images/PantallaJuego/vida.png");
+        texturadialo = manager.get("Images/dialogos/dialo.png");
+        texturadialogoJuanito = manager.get("Images/dialogos/dialogoJuanito.png");
+        texturadialogoMama = manager.get("Images/dialogos/dialogoMama1.png");
     }
 
     private void crearCamara() {
@@ -954,6 +988,9 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/btns/btnOpcionesPausa.png");
         manager.unload("Images/screens/gameOver.jpg");
         manager.unload("Images/screens/ganaste.jpg");
+        manager.unload("Images/dialogos/dialo.png");
+        manager.unload("Images/dialogos/dialogoJuanito.png");
+        manager.unload("Images/dialogos/dialogoMama1.png");
         manager.unload("Mapa/mapaNivel1.tmx");
         manager.unload("Audio/Fondo.mp3");
         manager.unload("Audio/Slap2.mp3");
