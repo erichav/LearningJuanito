@@ -517,7 +517,7 @@ public class PantallaJuego extends Pantalla {
                         if(tiempoInstrucciones<=0) {
                             tiempoMinijuego = 5;
                             instruccionMinijuego = "";
-                            escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
+                            //escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
                             cambiaMinijuego(siguienteJuego);
                         }
                         tiempoInstrucciones-=delta;
@@ -627,24 +627,45 @@ public class PantallaJuego extends Pantalla {
                 batch.end();
                 break;
             case INICIANDO:
-                batch.begin();
-                mensajeMinijuego.mostrarMensaje(batch, instruccionMinijuego,ANCHO/2,4*ALTO/5);
-                batch.end();
+                escenaHUD.clear();
                 if (tiempo < 2)
                 {
+                    contadorDialogo=1;
+                    dibujardialogo();
                     return;
                 }
                 else if (tiempo < 3.2)
                 {
+                    //instruccionMinijuego = "PERO YO QUIERO JUGAR CON MI CONSOLA";
                     Juanito.actualizar(mapa);
                     return;
                 }
                 else if (tiempo < 3.55)
                 {
-                    Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                     Mama.actualizar(mapa);
+                    Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                    return;
+                }else if(tiempo<5){
+                    contadorDialogo=2;
+                    dibujardialogo();
+                    Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                    return;}
+                else if(tiempo<8)
+                {
+                    //instruccionMinijuego = "¡SI TE ALCANZO,TE VOY A METER UN CHANCLAZO!";
+                    Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                    contadorDialogo=3;
+                    dibujardialogo();
                     return;
                 }
+                //escenaHUD.clear();
+                dibujarVidas();
+                crearObjetos();
+                escenaHUD.addActor(imgRectangulo);
+                escenaHUD.addActor(btnPausa);
+                batch.begin();
+                mensajeMinijuego.mostrarMensaje(batch, instruccionMinijuego,ANCHO/2,4*ALTO/5);
+                batch.end();
                 posicionMama = camara.position.x-Mama.sprite.getX();
                 separacion = Juanito.sprite.getX() - Mama.sprite.getX();
                 Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
