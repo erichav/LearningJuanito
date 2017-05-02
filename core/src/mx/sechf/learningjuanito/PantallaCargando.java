@@ -21,7 +21,6 @@ class PantallaCargando extends Pantalla
 
     // AssetManager
     private AssetManager manager;
-
     private LearningJuanito juego;
     private Pantallas siguientePantalla;
     private int avance; // % de carga
@@ -75,10 +74,15 @@ class PantallaCargando extends Pantalla
         manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
         manager.load("Images/btns/btnJugarPausa.png", Texture.class);
         manager.load("Images/btns/btnOpcionesPausa.png", Texture.class);
+        manager.load("Images/btns/btnRegresar.png", Texture.class);
+        manager.load("Images/btns/btnSoundOn.png", Texture.class);
+        manager.load("Images/btns/btnSoundOff.png", Texture.class);
+        manager.load("Images/btns/btnEfectoOn.png", Texture.class);
+        manager.load("Images/btns/btnEfectoOff.png", Texture.class);
         manager.load("Images/screens/gameOver.jpg", Texture.class);
         manager.load("Images/screens/ganaste.jpg", Texture.class);
+        manager.load("Images/screens/opciones.jpg", Texture.class);
         manager.load("Mapa/mapaNivel1.tmx", TiledMap.class);
-        manager.load("Audio/Fondo.mp3",Music.class);
         manager.load("Images/btns/btnPausa.png", Texture.class);
         manager.load("Audio/Slap2.mp3", Sound.class);
     }
@@ -88,6 +92,7 @@ class PantallaCargando extends Pantalla
     Carga los recursos del menu
     * */
         manager.load("Audio/menuFondo.mp3", Music.class);
+        manager.load("Audio/Fondo.mp3",Music.class);
     }
 
     @Override

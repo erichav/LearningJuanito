@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -52,6 +51,7 @@ public class PantallaJuego extends Pantalla {
 
     //Pausa
     private EscenaPausa escenaPausa;
+    private EscenaOpciones escenaOpciones;
 
     //Alcanzado
     private EscenaAlcanzado escenaAlcanzado;
@@ -68,9 +68,6 @@ public class PantallaJuego extends Pantalla {
     //Mama
     private Personaje Mama;
     private Texture texturaMama;
-
-    //Música
-    private Music musicaFondo; //Sonidos largos
 
     // Efecto de Sonido
     private Sound cachetada;
@@ -112,12 +109,24 @@ public class PantallaJuego extends Pantalla {
         crearCamara();
         cargarTexturas();
         cargarPersonajes();
+        playMusic();
         cargarMapa();
         cargarHUD();
         batch = new SpriteBatch();
 
         Gdx.input.setInputProcessor(procesadorEntrada);
         Gdx.input.setCatchBackKey(true);
+    }
+
+    private void playMusic() {
+        if(menu.isMusicOn())
+        {
+            menu.musicaFondo.play();
+        }
+        else
+        {
+            menu.musicaFondo.pause();
+        }
     }
 
     private void cargarHUD() {
@@ -142,6 +151,20 @@ public class PantallaJuego extends Pantalla {
         escenaHUD.addActor(mensajeMinijuego);
 
 
+    }
+    public void cargarMusica(){
+        menu.musicaFondo.stop();
+        menu.musicaFondo = manager.get("Audio/menuFondo.mp3");
+        menu.musicaFondo.setVolume(0.75f);
+        menu.musicaFondo.setLooping(true);
+        if(menu.isMusicOn())
+        {
+            menu.musicaFondo.play();
+        }
+        else
+        {
+            menu.musicaFondo.pause();
+        }
     }
 
     private void crearObjetos() {
@@ -230,7 +253,10 @@ public class PantallaJuego extends Pantalla {
                     // Regresa el control a la pantalla
                     Gdx.input.setInputProcessor(procesadorEntrada);
                     // Reiniciar música juego
-                    musicaFondo.play();
+                    if(menu.isMusicOn())
+                    {
+                        menu.musicaFondo.play();
+                    }
                 }
             });
             this.addActor(btnContinuar);
@@ -261,8 +287,8 @@ public class PantallaJuego extends Pantalla {
             btnRegresar.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    menu.setScreen(new PantallaCargando(menu,Pantallas.MENU));
-                    musicaFondo.stop();
+                    cargarMusica();
+                    menu.setScreen(new PantallaMenu(menu));
                 }
             });
             // Botón Jugar
@@ -279,7 +305,10 @@ public class PantallaJuego extends Pantalla {
                     estadoJuego = EstadoJuego.CORRIENDO;
                     Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                     Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
-                    musicaFondo.play();
+                    if(menu.isMusicOn())
+                    {
+                        menu.musicaFondo.play();
+                    }
                     // Regresa el control a la pantalla
                     Gdx.input.setInputProcessor(procesadorEntrada);
                 }
@@ -291,13 +320,118 @@ public class PantallaJuego extends Pantalla {
             btnOpciones.setPosition(85*ANCHO/100-btnOpciones.getWidth()/2,2*ALTO/12-btnOpciones.getHeight()/2);
             this.addActor(btnOpciones);
 
-            /*// Acción del botón opciones
+            // Acción del botón opciones
             btnOpciones.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    menu.setScreen(new PantallaOpciones(menu));
+                    estadoJuego = EstadoJuego.OPCIONES;
                 }
-            });*/
+            });
+        }
+    }
+    private class EscenaOpciones extends Stage
+    {
+        public EscenaOpciones(Viewport vista, SpriteBatch batch) {
+            super(vista, batch);
+            Texture texturaOpciones;
+            Texture texturaBtnRegresar;
+            Texture texturaBtnMusica;
+            Texture texturaBtnEfecto;
+            texturaOpciones = manager.get("Images/screens/opciones.jpg");
+            texturaBtnRegresar = manager.get("Images/btns/btnRegresar.png");
+            if(menu.isMusicOn()) //AQUI VERIFICAMOS SI LA MUSICA ESTÁ ACTIVADO
+            {
+                texturaBtnMusica = manager.get("Images/btns/btnSoundOn.png");
+            }
+            else
+            {
+                texturaBtnMusica = manager.get("Images/btns/btnSoundOff.png");
+            }
+            if(menu.isEffectsOn()) // AQUI VERIFICAMOS SI LOS EFECTOS DE SONIDO ESTÁN ACTIVADOS
+            {
+
+                texturaBtnEfecto = manager.get("Images/btns/btnEfectoOn.png");
+            }
+            else
+            {
+                texturaBtnEfecto = manager.get("Images/btns/btnEfectoOff.png");
+            }
+            Image imgFondo = new Image(texturaOpciones);
+            this.addActor(imgFondo);
+            // Botón Regresar
+            TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
+            ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
+            btnRegresar.setPosition(ANCHO*11/100+50-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
+            this.addActor(btnRegresar);
+
+            // Acción del botón Regresar
+            btnRegresar.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    estadoJuego = EstadoJuego.PAUSADO;
+                }
+            });
+            //boton Musica
+            TextureRegionDrawable trdBtnMusic = new TextureRegionDrawable
+                    (new TextureRegion(texturaBtnMusica));
+            final ImageButton btnMusic = new ImageButton(trdBtnMusic);
+            btnMusic.setPosition(ANCHO/2+220-btnMusic.getWidth()/2,ALTO/2+60-btnMusic.getHeight()/2);
+            this.addActor(btnMusic);
+
+            //accion del boton musica
+            btnMusic.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Texture texturaBtnMusica;
+                    escenaOpciones.getActors().get(escenaOpciones.getActors().indexOf(btnMusic,false)).remove();
+                    if(menu.isMusicOn()) //AQUI VERIFICAMOS SI LA MUSICA ESTÁ ACTIVADO
+                    {
+                        texturaBtnMusica = manager.get("Images/btns/btnSoundOff.png");
+
+                    }
+                    else
+                    {
+                        texturaBtnMusica = manager.get("Images/btns/btnSoundOn.png");
+                    }
+                    TextureRegionDrawable trdBtnMusic = new TextureRegionDrawable
+                            (new TextureRegion(texturaBtnMusica));
+                    ImageButton btnMusic = new ImageButton(trdBtnMusic);
+                    btnMusic.setPosition(ANCHO/2+220-btnMusic.getWidth()/2,ALTO/2+60-btnMusic.getHeight()/2);
+                    escenaOpciones.addActor(btnMusic);
+                    menu.turnMusicOn();
+                }
+            });
+
+            //boton Efecto
+            TextureRegionDrawable trdBtnEfecto = new TextureRegionDrawable
+                    (new TextureRegion(texturaBtnEfecto));
+            final ImageButton btnEfect = new ImageButton(trdBtnEfecto);
+            btnEfect.setPosition(ANCHO/2+220-btnEfect.getWidth()/2,ALTO/2-130-btnEfect.getHeight()/2);
+            this.addActor(btnEfect);
+
+            //accion del boton musica
+            btnEfect.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Texture texturaBtnEfecto;
+                    escenaOpciones.getActors().get(escenaOpciones.getActors().indexOf(btnEfect,false)).remove();
+                    if(menu.isEffectsOn()) //AQUI VERIFICAMOS SI EFECTO ESTÁ ACTIVADO
+                    {
+                        texturaBtnEfecto = manager.get("Images/btns/btnEfectoOff.png");
+
+                    }
+                    else
+                    {
+                        texturaBtnEfecto = manager.get("Images/btns/btnEfectoOn.png");
+                    }
+                    TextureRegionDrawable trdBtnEfecto = new TextureRegionDrawable
+                            (new TextureRegion(texturaBtnEfecto));
+                    final ImageButton btnEfect = new ImageButton(trdBtnEfecto);
+                    btnEfect.setPosition(ANCHO/2+220-btnEfect.getWidth()/2,ALTO/2-130-btnEfect.getHeight()/2);
+                    escenaOpciones.addActor(btnEfect);
+                    menu.turnEffectsOn();
+                }
+            });
         }
     }
     private class EscenaGameOver extends Stage
@@ -323,8 +457,8 @@ public class PantallaJuego extends Pantalla {
             btnRegresar.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    menu.setScreen(new PantallaCargando(menu,Pantallas.MENU));
-                    musicaFondo.stop();
+                    cargarMusica();
+                    menu.setScreen(new PantallaMenu(menu));
                 }
             });
             this.addActor(puntajeFinal);
@@ -366,8 +500,8 @@ public class PantallaJuego extends Pantalla {
             btnRegresar.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    menu.setScreen(new PantallaCargando(menu,Pantallas.MENU));
-                    musicaFondo.stop();
+                    cargarMusica();
+                    menu.setScreen(new PantallaMenu(menu));
                 }
             });
             this.addActor(puntajeFinal);
@@ -390,33 +524,99 @@ public class PantallaJuego extends Pantalla {
                 Input.TextInputListener listener = new Input.TextInputListener() {
                     @Override
                     public void input(String text) {// Guarda el mejor marcador con el nombre del jugador
-                        Preferences preferencias = Gdx.app.getPreferences("marcador");
-                        // AQUI HAY QUE HACER EL ORDENAMIENTO DE PUNTAJES
-                        /*preferencias.putString("nombre", text);
-                        preferencias.flush();
-                        */
+                        Preferences preferences = Gdx.app.getPreferences("marcador");
+                        // Obtengo los puntajes actuales
+                        Marcador puntaje[] = new Marcador[4];
+                        puntaje[0].setPuntaje((int)(puntosJugador*10));
+                        puntaje[0].setNombre(text);
+                        puntaje[1].setPuntaje(Gdx.app.getPreferences("marcador").getInteger("puntaje3",0));
+                        puntaje[1].setNombre(Gdx.app.getPreferences("marcador").getString("nombre3","Vacio"));
+                        puntaje[2].setPuntaje(Gdx.app.getPreferences("marcador").getInteger("puntaje2",0));
+                        puntaje[2].setNombre(Gdx.app.getPreferences("marcador").getString("nombre2","Vacio"));
+                        puntaje[3].setPuntaje(Gdx.app.getPreferences("marcador").getInteger("puntaje1",0));
+                        puntaje[3].setNombre(Gdx.app.getPreferences("marcador").getString("nombre1","Vacio"));
+                        ordenaBurbuja(puntaje);
+                        preferences.putInteger("puntaje4",puntaje[0].getPuntaje());
+                        preferences.putString("nombre4",puntaje[0].getNombre());
+                        preferences.putInteger("puntaje3",puntaje[1].getPuntaje());
+                        preferences.putString("nombre3",puntaje[1].getNombre());
+                        preferences.putInteger("puntaje2",puntaje[2].getPuntaje());
+                        preferences.putString("nombre2",puntaje[2].getNombre());
+                        preferences.putInteger("puntaje1",puntaje[3].getPuntaje());
+                        preferences.putString("nombre1",puntaje[3].getNombre());
+                        preferences.flush();
                     }
+
                     @Override
                     public void canceled() {
+
                     }
                 };
-                Gdx.input.getTextInput(listener, "Nuevo record, nombre:", "", "");
+                Gdx.input.getTextInput(listener, "Nuevo record, ingresa tu nombre:", "", "");
             }
         }
     }
+    class Marcador{
+        int puntaje;
+        String nombre;
+        public Marcador()
+        {
+            this.puntaje=0;
+            this.nombre = "";
+        }
+        public Marcador(int puntaje, String nombre)
+        {
+            this.puntaje = puntaje;
+            this.nombre = nombre;
+        }
+        public java.lang.String getNombre()
+        {
+            return this.nombre;
+        }
+        public int getPuntaje()
+        {
+            return this.puntaje;
+        }
+        public void setNombre(String nombre)
+        {
+            this.nombre = nombre;
+        }
+        public void setPuntaje(int puntaje)
+        {
+            this.puntaje=puntaje;
+        }
+    }
+
+    private Marcador[] ordenaBurbuja(Marcador[] puntaje) {
+        int N=puntaje.length;
+        int i, j, temp;
+        java.lang.String nombreTemp;
+        for(i=N-1;i>0;i--)
+        {
+            for(j=0;j<i;j++)
+            {
+                if(puntaje[j].getPuntaje()>puntaje[j+1].getPuntaje())
+                {
+                    temp=puntaje[j].getPuntaje();
+                    nombreTemp=puntaje[j].getNombre();
+                    puntaje[j].setPuntaje(puntaje[j+1].getPuntaje());
+                    puntaje[j].setNombre(puntaje[j+1].getNombre());
+                    puntaje[j+1].setPuntaje(temp);
+                    puntaje[j+1].setNombre(nombreTemp);
+                }
+            }
+        }
+        return puntaje;
+    }
 
     private void cargarPersonajes() {
-        Juanito = new Personaje(texturaJuanito,90,180,-200,64);
-        Mama = new Personaje(texturaMama,120,240,-200,64);
+        Juanito = new Personaje(texturaJuanito,90,180,-200,32);
+        Mama = new Personaje(texturaMama,120,240,-200,32);
     }
 
     private void cargarMapa() {
         batch = new SpriteBatch();
         mapa = manager.get("Mapa/mapaNivel1.tmx");
-        musicaFondo = manager.get("Audio/Fondo.mp3");
-        musicaFondo.setLooping(true);
-        musicaFondo.setVolume(0.35f);
-        musicaFondo.play();
         rendererMapa = new OrthogonalTiledMapRenderer(mapa, batch);
         rendererMapa.setView(camara);
     }
@@ -517,7 +717,7 @@ public class PantallaJuego extends Pantalla {
                         if(tiempoInstrucciones<=0) {
                             tiempoMinijuego = 5;
                             instruccionMinijuego = "";
-                            //escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
+                            escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
                             cambiaMinijuego(siguienteJuego);
                         }
                         tiempoInstrucciones-=delta;
@@ -683,6 +883,15 @@ public class PantallaJuego extends Pantalla {
                 chanclazo.mostrarMensaje(batch, "            CHANCLAZO\n\nHas perdido una vida", ANCHO/2,ALTO*2/3);
                 batch.end();
                 break;
+            case OPCIONES:
+                if(escenaOpciones==null)
+                {
+                    escenaOpciones = new EscenaOpciones(vista,batch);
+                    actualizarCamara();
+                }
+                Gdx.input.setInputProcessor(escenaOpciones);
+                escenaOpciones.draw();
+                break;
             case PAUSADO:
                 if (escenaPausa==null) {
                     escenaPausa = new EscenaPausa(vistaHUD, batch);
@@ -773,7 +982,7 @@ public class PantallaJuego extends Pantalla {
                 Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                 eliminarObjetos();
                 reacomodarPersonajes();
-                musicaFondo.stop();
+                menu.musicaFondo.stop();
 
                 // Efecto de sonido (cachetada)
                 cachetada = manager.get("Audio/Slap2.mp3");
@@ -980,7 +1189,7 @@ public class PantallaJuego extends Pantalla {
         Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         eliminarObjetos();
-        musicaFondo.stop();
+        menu.musicaFondo.stop();
         }
 
 
@@ -991,7 +1200,7 @@ public class PantallaJuego extends Pantalla {
         Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         eliminarObjetos();
-        musicaFondo.stop();
+        menu.musicaFondo.stop();
     }
 
     @Override
@@ -1026,11 +1235,16 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/btns/btnOpcionesPausa.png");
         manager.unload("Images/screens/gameOver.jpg");
         manager.unload("Images/screens/ganaste.jpg");
+        manager.unload("Images/screens/opciones.jpg");
+        manager.unload("Images/btns/btnRegresar.png");
+        manager.unload("Images/btns/btnSoundOn.png");
+        manager.unload("Images/btns/btnSoundOff.png");
+        manager.unload("Images/btns/btnEfectoOn.png");
+        manager.unload("Images/btns/btnEfectoOff.png");
         manager.unload("Images/dialogos/dialo.png");
         manager.unload("Images/dialogos/dialogoJuanito.png");
         manager.unload("Images/dialogos/dialogoMama1.png");
         manager.unload("Mapa/mapaNivel1.tmx");
-        manager.unload("Audio/Fondo.mp3");
         manager.unload("Audio/Slap2.mp3");
     }
 
@@ -1039,7 +1253,7 @@ public class PantallaJuego extends Pantalla {
         CORRIENDO,
         PAUSADO,
         ALCANZADO,
-        PERDIDO, TERMINADO
+        PERDIDO, OPCIONES, TERMINADO
     }
     public enum Minijuego {
         OBSTACULOS,
@@ -1054,7 +1268,7 @@ public class PantallaJuego extends Pantalla {
         public boolean keyDown(int keycode) {
             if(keycode == Input.Keys.BACK)
             {
-                musicaFondo.stop();
+                cargarMusica();
                 menu.setScreen(new PantallaMenu(menu));
             }
             return true;
@@ -1079,7 +1293,7 @@ public class PantallaJuego extends Pantalla {
                 if(!(estadoJuego == EstadoJuego.INICIANDO))
                 {
                     estadoJuego = EstadoJuego.PAUSADO;
-                    musicaFondo.pause();
+                    menu.musicaFondo.pause();
                 }
             }else if(estadoJuego == EstadoJuego.CORRIENDO) {
                 Juanito.saltar();

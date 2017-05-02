@@ -2,8 +2,7 @@ package mx.sechf.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by Erick Chávez on 15/02/2017.
@@ -33,7 +31,11 @@ public class PantallaDificultades extends Pantalla {
 
     // Escenas
     private Stage escenaDificultades;
-    public PantallaDificultades(LearningJuanito menu) { this.menu=menu; }
+
+    private AssetManager manager;
+
+    public PantallaDificultades(LearningJuanito menu) { this.menu=menu;
+    this.manager = menu.getAssetManager();}
 
     @Override
     public void show() {
@@ -61,6 +63,7 @@ public class PantallaDificultades extends Pantalla {
         btnPrincipiante.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                cargarMusica();
                 menu.setScreen(new PantallaCargando(menu, Pantallas.NIVEL_PRINCIPIANTE));
             }
         });
@@ -76,6 +79,7 @@ public class PantallaDificultades extends Pantalla {
         btnIntermedio.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                cargarMusica();
                 menu.setScreen(new PantallaCargando(menu, Pantallas.NIVEL_INTERMEDIO));
             }
         });
@@ -91,6 +95,7 @@ public class PantallaDificultades extends Pantalla {
         btnExperto.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                cargarMusica();
                 menu.setScreen(new PantallaCargando(menu, Pantallas.NIVEL_EXPERTO));
             }
         });
@@ -108,6 +113,13 @@ public class PantallaDificultades extends Pantalla {
                 menu.setScreen(new PantallaMenu(menu));
             }
         });
+    }
+
+    public void cargarMusica(){
+        menu.musicaFondo.stop();
+        menu.musicaFondo = manager.get("Audio/Fondo.mp3");
+        menu.musicaFondo.setVolume(0.75f);
+        menu.musicaFondo.setLooping(true);
     }
 
     private void cargarTexturas() {

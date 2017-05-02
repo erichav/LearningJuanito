@@ -2,8 +2,7 @@ package mx.sechf.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by Erick Chávez on 15/02/2017.
@@ -31,6 +29,12 @@ public class PantallaPuntuaciones extends Pantalla {
 
     // Escenas
     private Stage escenaPuntuaciones;
+
+    //Puntajes
+    private Texto puntajes = new Texto();
+    private Texto nombres = new Texto();
+    private String cadenaPuntajes;
+    private String cadenaNombres;
 
     public PantallaPuntuaciones(LearningJuanito menu) {
         this.menu=menu;
@@ -48,6 +52,12 @@ public class PantallaPuntuaciones extends Pantalla {
         escenaPuntuaciones = new Stage(vista,batch);
         Image imgFondo = new Image(texturaPuntuaciones);
         escenaPuntuaciones.addActor(imgFondo);
+        cadenaNombres = cargarNombres();
+        cadenaPuntajes = cargarPuntajes();
+        puntajes.setColor(Color.BLACK);
+        nombres.setColor(Color.BLACK);
+        escenaPuntuaciones.addActor(puntajes);
+        escenaPuntuaciones.addActor(nombres);
 
         //botonRegresar
         TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable
@@ -83,6 +93,23 @@ public class PantallaPuntuaciones extends Pantalla {
         Gdx.input.setCatchBackKey(true);
     }
 
+    private String cargarNombres() {
+        String s = "";
+        s+=Gdx.app.getPreferences("marcador").getString("nombre1","Vacio")+"\n\n";
+        s+=Gdx.app.getPreferences("marcador").getString("nombre2","Vacio")+"\n\n";
+        s+=Gdx.app.getPreferences("marcador").getString("nombre3","Vacio")+"\n\n";
+        s+=Gdx.app.getPreferences("marcador").getString("nombre4","Vacio");
+        return s;
+    }
+    private String cargarPuntajes() {
+        String s = "";
+        s+=Gdx.app.getPreferences("marcador").getInteger("puntaje1",0)+"\n\n";
+        s+=Gdx.app.getPreferences("marcador").getInteger("puntaje2",0)+"\n\n";
+        s+=Gdx.app.getPreferences("marcador").getInteger("puntaje3",0)+"\n\n";
+        s+=Gdx.app.getPreferences("marcador").getInteger("puntaje4",0);
+        return s;
+    }
+
     private void cargarTexturas() {
         texturaPuntuaciones = new Texture("Images/screens/puntuaciones.jpg");
         texturaBtnRegresar = new Texture("Images/btns/btnMenuPrinc.png");
@@ -100,6 +127,10 @@ public class PantallaPuntuaciones extends Pantalla {
     public void render(float delta) {
         borrarPantalla();
         escenaPuntuaciones.draw();
+        batch.begin();
+        nombres.mostrarMensaje(batch,cadenaNombres,ANCHO*13/40,ALTO*2/3);
+        puntajes.mostrarMensaje(batch,cadenaPuntajes,ANCHO*25/40,ALTO*2/3);
+        batch.end();
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
             menu.setScreen(new PantallaMenu(menu));
         }

@@ -39,6 +39,12 @@ class PantallaLogo extends Pantalla
         spriteLogo.setScale(escala, 1);
     }
 
+    public void cargarMusica(){
+        juego.musicaFondo = Gdx.audio.newMusic(Gdx.files.internal("Audio/menuFondo.mp3"));
+        juego.musicaFondo.setVolume(0.75f);
+        juego.musicaFondo.setLooping(true);
+        juego.musicaFondo.play();
+    }
     @Override
     public void render(float delta) {
 
@@ -57,6 +63,7 @@ class PantallaLogo extends Pantalla
             // Cambia a la pantalla del MENU
             //juego.setScreen(new PantallaMenu(juego));
             // AHORA cambia a la pantalla "Cargando..." y después al menú
+            cargarMusica();
             juego.setScreen(new PantallaCargando(juego, Pantallas.MENU));
         }
     }
