@@ -78,7 +78,11 @@ class PantallaCargando extends Pantalla
         manager.load("Images/screens/ganaste.jpg", Texture.class);
         manager.load("Mapa/mapaNivel1.tmx", TiledMap.class);
         manager.load("Images/btns/btnPausa.png", Texture.class);
-        manager.load("Audio/Slap2.mp3", Sound.class);
+        manager.load("Images/PantallaJuego/correcto.png", Texture.class);
+        manager.load("Images/PantallaJuego/incorrecto.png", Texture.class);
+        manager.load("Audio/Slap.mp3", Sound.class);
+        manager.load("Audio/Correcto.wav", Sound.class);
+        manager.load("Audio/Incorrecto.mp3", Sound.class);
     }
 
     private void cargarRecursosMenu() {

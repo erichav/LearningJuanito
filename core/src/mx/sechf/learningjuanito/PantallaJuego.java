@@ -35,9 +35,11 @@ public class PantallaJuego extends Pantalla {
     private String instruccionMinijuego = "NO DEJES QUE TE ATRAPE!";
     private float tiempo;
     private float tiempoMinijuego = 5;
-    private float tiempoInstrucciones = 3;
+    private float tiempoInstrucciones = 4;
     private int ordenItems;
-    private int siguienteJuego = (int) (Math.random() * 4);
+    private int siguienteJuego = 0;
+    private int posXJuanito;
+    private int posYJuanito;
     private float velocidad = 10;
     private float posicionMama;
     private float separacion; //La separación original entre Juanito y su mamá.
@@ -71,6 +73,15 @@ public class PantallaJuego extends Pantalla {
 
     // Efecto de Sonido
     private Sound cachetada;
+
+    // Retroalimentación de items
+    private Texture texturaRespuestaCorrecta;
+    private Texture texturaRespuestaIncorrecta;
+    private Sound sonidoRespuestaCorrecta;
+    private Sound sonidoRespuestaIncorrecta;
+    private float tiempoRetroalimentacion = 0;
+    private boolean retroalimenta = false;
+    private Image retroalimentacion;
 
     //Vidas
     private int vidas = 3;
@@ -108,6 +119,7 @@ public class PantallaJuego extends Pantalla {
         tiempo =0;
         crearCamara();
         cargarTexturas();
+        cargarSonidos();
         cargarPersonajes();
         playMusic();
         cargarMapa();
@@ -116,6 +128,12 @@ public class PantallaJuego extends Pantalla {
 
         Gdx.input.setInputProcessor(procesadorEntrada);
         Gdx.input.setCatchBackKey(true);
+    }
+
+    private void cargarSonidos() {
+        cachetada = manager.get("Audio/Slap.mp3",Sound.class);
+        sonidoRespuestaCorrecta=manager.get("Audio/Correcto.wav",Sound.class);
+        sonidoRespuestaIncorrecta=manager.get("Audio/Incorrecto.mp3",Sound.class);
     }
 
     private void playMusic() {
@@ -139,7 +157,6 @@ public class PantallaJuego extends Pantalla {
         escenaHUD = new Stage(vistaHUD);
         crearObjetos();
         //escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
-        dibujarVidas();
         escenaHUD.addActor(btnPausa);
         escenaHUD.addActor(imgRectangulo);
 
@@ -174,6 +191,8 @@ public class PantallaJuego extends Pantalla {
         pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
         Texture texturaRectangulo = new Texture( pixmap );
         pixmap.dispose();
+        retroalimentacion = new Image(texturaRespuestaCorrecta);
+        retroalimentacion.setPosition(ALTO/2,ANCHO/2-30);
         imgRectangulo = new Image(texturaRectangulo);
         imgRectangulo.setPosition((ANCHO-pixmap.getWidth())/2, ((ALTO*31/20)-pixmap.getHeight())/2);
 
@@ -203,7 +222,6 @@ public class PantallaJuego extends Pantalla {
                 break;
             case 2:
                 escenaHUD.clear();
-                dibujarVidas();
                 //crearRectangulo();
                 imgDialogo = new Image(texturadialogoJuanito);
                 imgDialogo .setPosition(20*ANCHO/50-imgDialogo.getWidth()/2,60*ALTO/100-imgDialogo.getHeight()/2);
@@ -211,7 +229,6 @@ public class PantallaJuego extends Pantalla {
                 break;
             case 3:
                 escenaHUD.clear();
-                dibujarVidas();
                 //crearRectangulo();
                 imgDialogo = new Image(texturadialo);
                 imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
@@ -497,14 +514,10 @@ public class PantallaJuego extends Pantalla {
                         Preferences preferences = Gdx.app.getPreferences("marcador");
                         // Obtengo los puntajes actuales
                         Marcador puntaje[] = new Marcador[4];
-                        puntaje[0].setPuntaje((int)(puntosJugador*10));
-                        puntaje[0].setNombre(text);
-                        puntaje[1].setPuntaje(Gdx.app.getPreferences("marcador").getInteger("puntaje3",0));
-                        puntaje[1].setNombre(Gdx.app.getPreferences("marcador").getString("nombre3","Vacio"));
-                        puntaje[2].setPuntaje(Gdx.app.getPreferences("marcador").getInteger("puntaje2",0));
-                        puntaje[2].setNombre(Gdx.app.getPreferences("marcador").getString("nombre2","Vacio"));
-                        puntaje[3].setPuntaje(Gdx.app.getPreferences("marcador").getInteger("puntaje1",0));
-                        puntaje[3].setNombre(Gdx.app.getPreferences("marcador").getString("nombre1","Vacio"));
+                        puntaje[0]= new Marcador(text,(int)(puntosJugador*10));
+                        puntaje[1]= new Marcador(preferences.getString("nombre3","Vacio"),preferences.getInteger("puntaje3",0));
+                        puntaje[2]= new Marcador(preferences.getString("nombre2","Vacio"),preferences.getInteger("puntaje2",0));
+                        puntaje[3]= new Marcador(preferences.getString("nombre1","Vacio"),preferences.getInteger("puntaje1",0));
                         ordenaBurbuja(puntaje);
                         preferences.putInteger("puntaje4",puntaje[0].getPuntaje());
                         preferences.putString("nombre4",puntaje[0].getNombre());
@@ -534,7 +547,7 @@ public class PantallaJuego extends Pantalla {
             this.puntaje=0;
             this.nombre = "";
         }
-        public Marcador(int puntaje, String nombre)
+        public Marcador(String nombre,int puntaje)
         {
             this.puntaje = puntaje;
             this.nombre = nombre;
@@ -599,6 +612,8 @@ public class PantallaJuego extends Pantalla {
         texturadialo = manager.get("Images/dialogos/dialo.png");
         texturadialogoJuanito = manager.get("Images/dialogos/dialogoJuanito.png");
         texturadialogoMama = manager.get("Images/dialogos/dialogoMama1.png");
+        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/correcto.png");
+        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/incorrecto.png");
     }
 
     private void crearCamara() {
@@ -625,8 +640,8 @@ public class PantallaJuego extends Pantalla {
         switch(estadoJuego)
         {
             case CORRIENDO:
-                int posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
-                int posYJuanito = (int) (Juanito.sprite.getY() / 32);
+                posXJuanito = (int) ((Juanito.sprite.getX() + 32) / 32);
+                posYJuanito = (int) (Juanito.sprite.getY() / 32);
                 velocidad = velocidad + 0.001f;
                 puntosJugador = puntosJugador + delta;
                 Juanito.actualizar(mapa);
@@ -639,14 +654,27 @@ public class PantallaJuego extends Pantalla {
                         if(posYJuanito >= 4){
                             puntosJugador+=10;
                             eliminarNumeroSuperior();
+                            if(menu.isEffectsOn())
+                            {
+                                sonidoRespuestaCorrecta.play();
+                            }
+                            retroalimentar();
+                            retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaRespuestaCorrecta)));
+                            escenaHUD.addActor(retroalimentacion);
                         }
                         else{
                             puntosJugador-=10;
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
-                                eliminarNumeroInferior();
                             }
+                            eliminarNumeroInferior();if(menu.isEffectsOn())
+                            {
+                                sonidoRespuestaIncorrecta.play();
+                            }
+                            retroalimentar();
+                            retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaRespuestaIncorrecta)));
+                            escenaHUD.addActor(retroalimentacion);
                         }
                     }
                     else
@@ -656,12 +684,25 @@ public class PantallaJuego extends Pantalla {
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
-                                eliminarNumeroSuperior();
                             }
+                            eliminarNumeroSuperior();if(menu.isEffectsOn())
+                            {
+                                sonidoRespuestaIncorrecta.play();
+                            }
+                            retroalimentar();
+                            retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaRespuestaIncorrecta)));
+                            escenaHUD.addActor(retroalimentacion);
                         }
                         else{
                             puntosJugador+=10;
                             eliminarNumeroInferior();
+                            if(menu.isEffectsOn())
+                            {
+                                sonidoRespuestaCorrecta.play();
+                            }
+                            retroalimentar();
+                            retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaRespuestaCorrecta)));
+                            escenaHUD.addActor(retroalimentacion);
                         }
                     }
                 }
@@ -671,16 +712,16 @@ public class PantallaJuego extends Pantalla {
                         // HAY QUE MOSTRAR LAS INSTRUCCIONES
                         switch (siguienteJuego) {
                             case 0:
-                                instruccionMinijuego = "SALTA LOS OBSTACULOS!";
+                                instruccionMinijuego = "¡SALTA LOS OBSTACULOS!";
                                 break;
                             case 1:
-                                instruccionMinijuego = "ATRAPA LOS PARES!";
+                                instruccionMinijuego = "¡ATRAPA LOS PARES!";
                                 break;
                             case 2:
-                                instruccionMinijuego = "ATRAPA LOS NONES!";
+                                instruccionMinijuego = "¡ATRAPA LOS NONES!";
                                 break;
                             case 3:
-                                instruccionMinijuego = "ATRAPA LOS MULTIPLOS DE 3!";
+                                instruccionMinijuego = "¡ATRAPA LOS MULTIPLOS DE 3!";
                                 break;
                         }
                         // TERMINA CAMBIO INSTRUCCIONES
@@ -790,6 +831,15 @@ public class PantallaJuego extends Pantalla {
                         break;
                 }
                 actualizarCamara();
+                if(retroalimenta)
+                {
+                    tiempoRetroalimentacion-=delta;
+                    if(tiempoRetroalimentacion<=0)
+                    {
+                        escenaHUD.getActors().get(escenaHUD.getActors().indexOf(retroalimentacion,false)).remove();
+                        retroalimenta=false;
+                    }
+                }
                 colision();
                 batch.begin();
                 puntaje.mostrarMensaje(batch, "Puntaje: " + Integer.toString((int)(puntosJugador*10)), ANCHO*85/100,118*ALTO/120);
@@ -895,10 +945,18 @@ public class PantallaJuego extends Pantalla {
         }
     }
 
+    private void retroalimentar() {
+        tiempoRetroalimentacion = 2;
+        retroalimenta = true;
+    }
+
     private void mostrarInstrucciones() {
-        tiempoInstrucciones = 6;
+        tiempoInstrucciones = 4;
         escenaHUD.addActor(imgRectangulo);
-        siguienteJuego = (int) (Math.random() * 4);
+        int juegoAnt = siguienteJuego;
+        do {
+            siguienteJuego = (int) (Math.random() * 4);
+        }while(siguienteJuego==juegoAnt);
         minijuego = Minijuego.INSTRUCCIONES;
     }
 
@@ -923,14 +981,14 @@ public class PantallaJuego extends Pantalla {
     private int generaMultiplo(int x) {
         int num;
         do{
-            num = (int)(Math.random()*9)+1;
+            num = (int)(Math.random()*8)+1;
         }while(num%x!=0);
         return num;
     }
     private int generaNoMultiplo(int x) {
         int num;
         do{
-            num = (int)(Math.random()*9)+1;
+            num = (int)(Math.random()*8)+1;
         }while(num%x==0);
         return num;
     }
@@ -955,8 +1013,10 @@ public class PantallaJuego extends Pantalla {
                 menu.musicaFondo.stop();
 
                 // Efecto de sonido (cachetada)
-                cachetada = manager.get("Audio/Slap2.mp3");
-                cachetada.play();
+                if(menu.isEffectsOn())
+                {
+                    cachetada.play();
+                }
             } else {
                 gameOver();
             }
@@ -967,11 +1027,11 @@ public class PantallaJuego extends Pantalla {
     private void generaItem(int num, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
     {
         TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(3);
-        TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(0);
+        TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(0);
         for(int y=0;y<=3;y++)
         {
-            capa.setCell(posX,posY+y, obstaculos.getCell(24+(2*num),25+y));
-            capa.setCell(posX+1,posY+y, obstaculos.getCell(25+(2*num),25+y));
+            capa.setCell(posX,posY+y, items.getCell(24+(2*num),25+y));
+            capa.setCell(posX+1,posY+y, items.getCell(25+(2*num),25+y));
         }
     }
     private void generaObstaculo(int tipo, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
