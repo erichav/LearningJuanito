@@ -656,7 +656,7 @@ public class PantallaJuego extends Pantalla {
                             eliminarNumeroSuperior();
                             if(menu.isEffectsOn())
                             {
-                                sonidoRespuestaCorrecta.play();
+                                sonidoRespuestaCorrecta.setVolume(sonidoRespuestaCorrecta.play(),0.5f);
                             }
                             retroalimentar();
                             retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaRespuestaCorrecta)));
@@ -670,7 +670,7 @@ public class PantallaJuego extends Pantalla {
                             }
                             eliminarNumeroInferior();if(menu.isEffectsOn())
                             {
-                                sonidoRespuestaIncorrecta.play();
+                                sonidoRespuestaIncorrecta.setVolume(sonidoRespuestaIncorrecta.play(),0.5f);
                             }
                             retroalimentar();
                             retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaRespuestaIncorrecta)));
@@ -687,7 +687,7 @@ public class PantallaJuego extends Pantalla {
                             }
                             eliminarNumeroSuperior();if(menu.isEffectsOn())
                             {
-                                sonidoRespuestaIncorrecta.play();
+                                sonidoRespuestaIncorrecta.setVolume(sonidoRespuestaIncorrecta.play(),0.5f);
                             }
                             retroalimentar();
                             retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaRespuestaIncorrecta)));
@@ -698,7 +698,7 @@ public class PantallaJuego extends Pantalla {
                             eliminarNumeroInferior();
                             if(menu.isEffectsOn())
                             {
-                                sonidoRespuestaCorrecta.play();
+                                sonidoRespuestaCorrecta.setVolume(sonidoRespuestaCorrecta.play(),0.5f);
                             }
                             retroalimentar();
                             retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaRespuestaCorrecta)));
@@ -1259,23 +1259,22 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/objects/Mama/mamaJuanito.png");
         manager.unload("Images/PantallaJuego/vida.png");
         manager.unload("Images/btns/btnContinuar.png");
+        manager.unload("Images/dialogos/dialo.png");
+        manager.unload("Images/dialogos/dialogoJuanito.png");
+        manager.unload("Images/dialogos/dialogoMama1.png");
         manager.unload("Images/screens/pausa.jpg");
         manager.unload("Images/btns/btnMenuPrinc.png");
         manager.unload("Images/btns/btnJugarPausa.png");
         manager.unload("Images/btns/btnOpcionesPausa.png");
         manager.unload("Images/screens/gameOver.jpg");
         manager.unload("Images/screens/ganaste.jpg");
-        manager.unload("Images/screens/opciones.jpg");
-        manager.unload("Images/btns/btnRegresar.png");
-        manager.unload("Images/btns/btnSoundOn.png");
-        manager.unload("Images/btns/btnSoundOff.png");
-        manager.unload("Images/btns/btnEfectoOn.png");
-        manager.unload("Images/btns/btnEfectoOff.png");
-        manager.unload("Images/dialogos/dialo.png");
-        manager.unload("Images/dialogos/dialogoJuanito.png");
-        manager.unload("Images/dialogos/dialogoMama1.png");
         manager.unload("Mapa/mapaNivel1.tmx");
-        manager.unload("Audio/Slap2.mp3");
+        manager.unload("Images/btns/btnPausa.png");
+        manager.unload("Images/PantallaJuego/correcto.png");
+        manager.unload("Images/PantallaJuego/incorrecto.png");
+        manager.unload("Audio/Slap.mp3");
+        manager.unload("Audio/Correcto.wav");
+        manager.unload("Audio/Incorrecto.mp3");
     }
 
     public enum EstadoJuego {

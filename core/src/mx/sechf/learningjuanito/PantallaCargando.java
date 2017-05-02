@@ -51,18 +51,18 @@ class PantallaCargando extends Pantalla
                 cargarRecursosMenu();
                 break;
             case NIVEL_PRINCIPIANTE:
-                cargarRecursosNivel();
+                cargarRecursosNivel1();
                 break;
             case NIVEL_INTERMEDIO:
-                cargarRecursosNivel();
+                cargarRecursosNivel2();
                 break;
             case NIVEL_EXPERTO:
-                cargarRecursosNivel();
+                cargarRecursosNivel1();
                 break;
         }
     }
 
-    private void cargarRecursosNivel() {
+    private void cargarRecursosNivel1() {
         manager.load("Images/objects/Juanito/juanito.png", Texture.class);
         manager.load("Images/objects/Mama/mamaJuanito.png", Texture.class);
         manager.load("Images/PantallaJuego/vida.png", Texture.class);
@@ -77,6 +77,27 @@ class PantallaCargando extends Pantalla
         manager.load("Images/screens/gameOver.jpg", Texture.class);
         manager.load("Images/screens/ganaste.jpg", Texture.class);
         manager.load("Mapa/mapaNivel1.tmx", TiledMap.class);
+        manager.load("Images/btns/btnPausa.png", Texture.class);
+        manager.load("Images/PantallaJuego/correcto.png", Texture.class);
+        manager.load("Images/PantallaJuego/incorrecto.png", Texture.class);
+        manager.load("Audio/Slap.mp3", Sound.class);
+        manager.load("Audio/Correcto.wav", Sound.class);
+        manager.load("Audio/Incorrecto.mp3", Sound.class);
+    }
+    private void cargarRecursosNivel2() {
+        manager.load("Images/objects/Juanito/juanito.png", Texture.class);
+        manager.load("Images/objects/Mama/mamaJuanito.png", Texture.class);
+        manager.load("Images/PantallaJuego/vida.png", Texture.class);
+        manager.load("Images/btns/btnContinuar.png", Texture.class);
+        manager.load("Images/dialogos/dialo.png", Texture.class);
+        manager.load("Images/dialogos/dialogoJuanito.png", Texture.class);
+        manager.load("Images/dialogos/dialogoMama1.png", Texture.class);
+        manager.load("Images/screens/pausa.jpg", Texture.class);
+        manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
+        manager.load("Images/btns/btnJugarPausa.png", Texture.class);
+        manager.load("Images/btns/btnOpcionesPausa.png", Texture.class);
+        manager.load("Images/screens/gameOver.jpg", Texture.class);
+        manager.load("Images/screens/ganaste.jpg", Texture.class);
         manager.load("Mapa/mapaNivel2.tmx", TiledMap.class);
         manager.load("Images/btns/btnPausa.png", Texture.class);
         manager.load("Images/PantallaJuego/correcto.png", Texture.class);
