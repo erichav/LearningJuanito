@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by Erick Chávez on 03/02/2017.
@@ -34,6 +35,10 @@ public class PantallaMenu extends Pantalla {
 
     // Escenas
     private Stage escenaMenu;
+
+    //Escena Opciones
+    private boolean showOptions = false;
+    private EscenaOpciones escenaOpciones;
 
     // AssetManager
     private AssetManager manager;
@@ -95,7 +100,12 @@ public class PantallaMenu extends Pantalla {
         btnOpciones.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                menu.setScreen(new PantallaOpciones(menu));
+                if(escenaOpciones==null)
+                {
+                    escenaOpciones = new EscenaOpciones(vista,batch);
+                }
+                Gdx.input.setInputProcessor(escenaOpciones);
+                showOptions = true;
             }
         });
 
@@ -166,10 +176,106 @@ public class PantallaMenu extends Pantalla {
         vista = new StretchViewport(ANCHO,ALTO,camara);
     }
 
+    private class EscenaOpciones extends Stage
+    {
+        public EscenaOpciones(Viewport vista, final SpriteBatch batch) {
+            super(vista, batch);
+            Texture texturaOpciones;
+            Texture texturaBtnRegresar;
+            Texture texturaBtnMusica;
+            Texture texturaBtnMusicaChecked;
+            Texture texturaBtnEfecto;
+            Texture texturaBtnEfectoChecked;
+            texturaOpciones = manager.get("Images/screens/opciones.jpg");
+            texturaBtnRegresar = manager.get("Images/btns/btnRegresar.png");
+            texturaBtnMusica = manager.get("Images/btns/btnSoundOn.png");
+            texturaBtnMusicaChecked = manager.get("Images/btns/btnSoundOff.png");
+            texturaBtnEfecto = manager.get("Images/btns/btnEfectoOn.png");
+            texturaBtnEfectoChecked = manager.get("Images/btns/btnEfectoOff.png");
+            Image imgFondo = new Image(texturaOpciones);
+            this.addActor(imgFondo);
+            // Botón Regresar
+            TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable(new TextureRegion(texturaBtnRegresar));
+            ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
+            btnRegresar.setPosition(ANCHO*11/100+50-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
+            this.addActor(btnRegresar);
+
+            // Acción del botón Regresar
+            btnRegresar.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    showOptions = false;
+                    Gdx.input.setInputProcessor(escenaMenu);
+                }
+            });
+            //boton Musica
+            TextureRegionDrawable trdBtnMusic = new TextureRegionDrawable
+                    (new TextureRegion(texturaBtnMusica));
+            TextureRegionDrawable trdBtnMusicChecked = new TextureRegionDrawable
+                    (new TextureRegion(texturaBtnMusicaChecked));
+            final ImageButton btnMusic = new ImageButton(trdBtnMusic, trdBtnMusic, trdBtnMusicChecked);
+            btnMusic.setPosition(ANCHO/2+220-btnMusic.getWidth()/2,ALTO/2+60-btnMusic.getHeight()/2);
+            if(!menu.isMusicOn())
+            {
+                btnMusic.setChecked(true);
+            }
+            this.addActor(btnMusic);
+
+            //accion del boton musica
+            final ClickListener btnMusicListener = new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    menu.turnMusicOn();
+                    cargarMusica();
+                }
+            };
+            btnMusic.addListener(btnMusicListener);
+
+            //boton Efecto
+            TextureRegionDrawable trdBtnEfecto = new TextureRegionDrawable
+                    (new TextureRegion(texturaBtnEfecto));
+            TextureRegionDrawable trdBtnEfectoChecked = new TextureRegionDrawable
+                    (new TextureRegion(texturaBtnEfectoChecked));
+            final ImageButton btnEfect = new ImageButton(trdBtnEfecto, trdBtnEfecto, trdBtnEfectoChecked);
+            btnEfect.setPosition(ANCHO/2+220-btnEfect.getWidth()/2,ALTO/2-130-btnEfect.getHeight()/2);
+            if(!menu.isEffectsOn())
+            {
+                btnEfect.setChecked(true);
+            }
+            this.addActor(btnEfect);
+
+            //accion del boton musica
+            btnEfect.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    menu.turnEffectsOn();
+                }
+            });
+        }
+    }
+
+    private void cargarMusica() {
+        if(menu.isMusicOn())
+        {
+            menu.musicaFondo.play();
+        }
+        else
+        {
+            menu.musicaFondo.pause();
+        }
+    }
+
     @Override
     public void render(float delta) {
         borrarPantalla();
-        escenaMenu.draw();
+        if(showOptions)
+        {
+            escenaOpciones.draw();
+        }
+        else
+        {
+            escenaMenu.draw();
+        }
         // Teclado
 
     }
