@@ -77,6 +77,7 @@ class PantallaCargando extends Pantalla
         manager.load("Images/screens/gameOver.jpg", Texture.class);
         manager.load("Images/screens/ganaste.jpg", Texture.class);
         manager.load("Mapa/mapaNivel1.tmx", TiledMap.class);
+        manager.load("Mapa/mapaNivel2.tmx", TiledMap.class);
         manager.load("Images/btns/btnPausa.png", Texture.class);
         manager.load("Images/PantallaJuego/correcto.png", Texture.class);
         manager.load("Images/PantallaJuego/incorrecto.png", Texture.class);
@@ -127,7 +128,7 @@ class PantallaCargando extends Pantalla
                     juego.setScreen(new PantallaJuego(juego));   // 100% de carga
                     break;
                 case NIVEL_INTERMEDIO:
-                    juego.setScreen(new PantallaJuego(juego));   // 100% de carga
+                    juego.setScreen(new PantallaJuegoNivel2(juego));   // 100% de carga
                     break;
                 case NIVEL_EXPERTO:
                     juego.setScreen(new PantallaJuego(juego));   // 100% de carga
