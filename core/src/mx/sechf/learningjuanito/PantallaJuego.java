@@ -331,31 +331,20 @@ public class PantallaJuego extends Pantalla {
     }
     private class EscenaOpciones extends Stage
     {
-        public EscenaOpciones(Viewport vista, SpriteBatch batch) {
+        public EscenaOpciones(Viewport vista, final SpriteBatch batch) {
             super(vista, batch);
             Texture texturaOpciones;
             Texture texturaBtnRegresar;
             Texture texturaBtnMusica;
+            Texture texturaBtnMusicaChecked;
             Texture texturaBtnEfecto;
+            Texture texturaBtnEfectoChecked;
             texturaOpciones = manager.get("Images/screens/opciones.jpg");
             texturaBtnRegresar = manager.get("Images/btns/btnRegresar.png");
-            if(menu.isMusicOn()) //AQUI VERIFICAMOS SI LA MUSICA ESTÁ ACTIVADO
-            {
-                texturaBtnMusica = manager.get("Images/btns/btnSoundOn.png");
-            }
-            else
-            {
-                texturaBtnMusica = manager.get("Images/btns/btnSoundOff.png");
-            }
-            if(menu.isEffectsOn()) // AQUI VERIFICAMOS SI LOS EFECTOS DE SONIDO ESTÁN ACTIVADOS
-            {
-
-                texturaBtnEfecto = manager.get("Images/btns/btnEfectoOn.png");
-            }
-            else
-            {
-                texturaBtnEfecto = manager.get("Images/btns/btnEfectoOff.png");
-            }
+            texturaBtnMusica = manager.get("Images/btns/btnSoundOn.png");
+            texturaBtnMusicaChecked = manager.get("Images/btns/btnSoundOff.png");
+            texturaBtnEfecto = manager.get("Images/btns/btnEfectoOn.png");
+            texturaBtnEfectoChecked = manager.get("Images/btns/btnEfectoOff.png");
             Image imgFondo = new Image(texturaOpciones);
             this.addActor(imgFondo);
             // Botón Regresar
@@ -374,61 +363,42 @@ public class PantallaJuego extends Pantalla {
             //boton Musica
             TextureRegionDrawable trdBtnMusic = new TextureRegionDrawable
                     (new TextureRegion(texturaBtnMusica));
-            final ImageButton btnMusic = new ImageButton(trdBtnMusic);
+            TextureRegionDrawable trdBtnMusicChecked = new TextureRegionDrawable
+                    (new TextureRegion(texturaBtnMusicaChecked));
+            final ImageButton btnMusic = new ImageButton(trdBtnMusic, trdBtnMusic, trdBtnMusicChecked);
             btnMusic.setPosition(ANCHO/2+220-btnMusic.getWidth()/2,ALTO/2+60-btnMusic.getHeight()/2);
+            if(!menu.isMusicOn())
+            {
+                btnMusic.setChecked(true);
+            }
             this.addActor(btnMusic);
 
             //accion del boton musica
-            btnMusic.addListener(new ClickListener(){
+            final ClickListener btnMusicListener = new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    Texture texturaBtnMusica;
-                    escenaOpciones.getActors().get(escenaOpciones.getActors().indexOf(btnMusic,false)).remove();
-                    if(menu.isMusicOn()) //AQUI VERIFICAMOS SI LA MUSICA ESTÁ ACTIVADO
-                    {
-                        texturaBtnMusica = manager.get("Images/btns/btnSoundOff.png");
-
-                    }
-                    else
-                    {
-                        texturaBtnMusica = manager.get("Images/btns/btnSoundOn.png");
-                    }
-                    TextureRegionDrawable trdBtnMusic = new TextureRegionDrawable
-                            (new TextureRegion(texturaBtnMusica));
-                    ImageButton btnMusic = new ImageButton(trdBtnMusic);
-                    btnMusic.setPosition(ANCHO/2+220-btnMusic.getWidth()/2,ALTO/2+60-btnMusic.getHeight()/2);
-                    escenaOpciones.addActor(btnMusic);
                     menu.turnMusicOn();
                 }
-            });
+            };
+            btnMusic.addListener(btnMusicListener);
 
             //boton Efecto
             TextureRegionDrawable trdBtnEfecto = new TextureRegionDrawable
                     (new TextureRegion(texturaBtnEfecto));
-            final ImageButton btnEfect = new ImageButton(trdBtnEfecto);
+            TextureRegionDrawable trdBtnEfectoChecked = new TextureRegionDrawable
+                    (new TextureRegion(texturaBtnEfectoChecked));
+            final ImageButton btnEfect = new ImageButton(trdBtnEfecto, trdBtnEfecto, trdBtnEfectoChecked);
             btnEfect.setPosition(ANCHO/2+220-btnEfect.getWidth()/2,ALTO/2-130-btnEfect.getHeight()/2);
+            if(!menu.isEffectsOn())
+            {
+                btnEfect.setChecked(true);
+            }
             this.addActor(btnEfect);
 
             //accion del boton musica
             btnEfect.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    Texture texturaBtnEfecto;
-                    escenaOpciones.getActors().get(escenaOpciones.getActors().indexOf(btnEfect,false)).remove();
-                    if(menu.isEffectsOn()) //AQUI VERIFICAMOS SI EFECTO ESTÁ ACTIVADO
-                    {
-                        texturaBtnEfecto = manager.get("Images/btns/btnEfectoOff.png");
-
-                    }
-                    else
-                    {
-                        texturaBtnEfecto = manager.get("Images/btns/btnEfectoOn.png");
-                    }
-                    TextureRegionDrawable trdBtnEfecto = new TextureRegionDrawable
-                            (new TextureRegion(texturaBtnEfecto));
-                    final ImageButton btnEfect = new ImageButton(trdBtnEfecto);
-                    btnEfect.setPosition(ANCHO/2+220-btnEfect.getWidth()/2,ALTO/2-130-btnEfect.getHeight()/2);
-                    escenaOpciones.addActor(btnEfect);
                     menu.turnEffectsOn();
                 }
             });
@@ -886,7 +856,7 @@ public class PantallaJuego extends Pantalla {
             case OPCIONES:
                 if(escenaOpciones==null)
                 {
-                    escenaOpciones = new EscenaOpciones(vista,batch);
+                    escenaOpciones = new EscenaOpciones(vistaHUD,batch);
                     actualizarCamara();
                 }
                 Gdx.input.setInputProcessor(escenaOpciones);
