@@ -799,15 +799,14 @@ public class PantallaJuegoNivel2 extends Pantalla {
                             } else {
                                 ordenItems = (int) (Math.random() * 2) + 1;
                                 posicionObjeto = posXJuanito + 40;
-                                Random rand = new Random();
-                                r1 = rand.nextInt(9);
-                                r2 = rand.nextInt(9);
+                                int res = r1*r2;
+                                int incorrect = rand.nextInt(9);
                                 if (ordenItems == 1) {
-                                    generaItem(r1, posicionObjeto, 8);
-                                    generaItem(r2, posicionObjeto, 1);
+                                    generaItem(res, posicionObjeto, 8);
+                                    generaItem(incorrect, posicionObjeto, 1);
                                 } else {
-                                    generaItem(r2, posicionObjeto, 8);
-                                    generaItem(r1, posicionObjeto, 1);
+                                    generaItem(incorrect, posicionObjeto, 8);
+                                    generaItem(res, posicionObjeto, 1);
                                 }
                                 tiempoMinijuego--;
                             }
