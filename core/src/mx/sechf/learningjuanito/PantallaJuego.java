@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Random;
+
 /**
  * Created by Erick Chávez on 15/02/2017.
  */
@@ -239,6 +241,23 @@ public class PantallaJuego extends Pantalla {
     }
     private class EscenaAlcanzado extends Stage
     {
+        @Override
+        public boolean keyDown(int keycode) {
+            if(keycode == Input.Keys.BACK)
+            {
+                estadoJuego = EstadoJuego.CORRIENDO;
+                Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                // Regresa el control a la pantalla
+                Gdx.input.setInputProcessor(procesadorEntrada);
+                // Reiniciar música juego
+                if(menu.isMusicOn())
+                {
+                    menu.musicaFondo.play();
+                }
+            }
+            return true;
+        }
         public EscenaAlcanzado(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             // Crear rectángulo transparente
@@ -282,6 +301,22 @@ public class PantallaJuego extends Pantalla {
 
     private class EscenaPausa extends Stage
     {
+        @Override
+        public boolean keyDown(int keycode) {
+            if(keycode == Input.Keys.BACK)
+            {
+                estadoJuego = EstadoJuego.CORRIENDO;
+                Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                if(menu.isMusicOn())
+                {
+                    menu.musicaFondo.play();
+                }
+                // Regresa el control a la pantalla
+                Gdx.input.setInputProcessor(procesadorEntrada);
+            }
+            return true;
+        }
         public EscenaPausa(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             Texture texturaPausa;
@@ -348,6 +383,14 @@ public class PantallaJuego extends Pantalla {
     }
     private class EscenaOpciones extends Stage
     {
+        @Override
+        public boolean keyDown(int keycode) {
+            if(keycode == Input.Keys.BACK)
+            {
+                estadoJuego = EstadoJuego.PAUSADO;
+            }
+            return true;
+        }
         public EscenaOpciones(Viewport vista, final SpriteBatch batch) {
             super(vista, batch);
             Texture texturaOpciones;
@@ -423,11 +466,19 @@ public class PantallaJuego extends Pantalla {
     }
     private class EscenaGameOver extends Stage
     {
+        @Override
+        public boolean keyDown(int keycode) {
+            if(keycode == Input.Keys.BACK)
+            {
+                cargarMusica();
+                menu.setScreen(new PantallaMenu(menu));
+            }
+            return true;
+        }
         public EscenaGameOver(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             Texture texturaGameOver;
             Texture texturaBtnRegresar;
-            Texture texturaBtnJugar;
             Texture texturaBtnOpciones;
             texturaGameOver = manager.get("Images/screens/gameOver.jpg");
             texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
@@ -467,6 +518,15 @@ public class PantallaJuego extends Pantalla {
     }
     private class EscenaGanaste extends Stage
     {
+        @Override
+        public boolean keyDown(int keycode) {
+            if(keycode == Input.Keys.BACK)
+            {
+                cargarMusica();
+                menu.setScreen(new PantallaMenu(menu));
+            }
+            return true;
+        }
         public EscenaGanaste(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             Texture texturaGanaste;
@@ -602,6 +662,7 @@ public class PantallaJuego extends Pantalla {
         mapa = manager.get("Mapa/mapaNivel1.tmx");
         rendererMapa = new OrthogonalTiledMapRenderer(mapa, batch);
         rendererMapa.setView(camara);
+        eliminarObjetos();
     }
 
 
@@ -663,7 +724,7 @@ public class PantallaJuego extends Pantalla {
                             escenaHUD.addActor(retroalimentacion);
                         }
                         else{
-                            puntosJugador-=10;
+                            puntosJugador-=5;
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
@@ -680,7 +741,7 @@ public class PantallaJuego extends Pantalla {
                     else
                     {
                         if(posYJuanito >= 4){
-                            puntosJugador-=10;
+                            puntosJugador-=5;
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
@@ -757,7 +818,8 @@ public class PantallaJuego extends Pantalla {
                             }
                             else
                             {
-                                ordenItems = (int)(Math.random()*2)+1;
+                                Random random = new Random();
+                                ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
                                 int par = generaMultiplo(2);
                                 int impar =  generaNoMultiplo(2);
@@ -784,7 +846,8 @@ public class PantallaJuego extends Pantalla {
                             }
                             else
                             {
-                                ordenItems = (int)(Math.random()*2)+1;
+                                Random random = new Random();
+                                ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
                                 int par = generaMultiplo(2);
                                 int impar =  generaNoMultiplo(2);
@@ -811,7 +874,8 @@ public class PantallaJuego extends Pantalla {
                             }
                             else
                             {
-                                ordenItems = (int)(Math.random()*2)+1;
+                                Random random = new Random();
+                                ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
                                 int multiplo = generaMultiplo(3);
                                 int nomultiplo = generaNoMultiplo(3);
@@ -954,8 +1018,9 @@ public class PantallaJuego extends Pantalla {
         tiempoInstrucciones = 4;
         escenaHUD.addActor(imgRectangulo);
         int juegoAnt = siguienteJuego;
+        Random random = new Random();
         do {
-            siguienteJuego = (int) (Math.random() * 4);
+            siguienteJuego = random.nextInt(4);
         }while(siguienteJuego==juegoAnt);
         minijuego = Minijuego.INSTRUCCIONES;
     }
@@ -979,16 +1044,18 @@ public class PantallaJuego extends Pantalla {
     }
 
     private int generaMultiplo(int x) {
+        Random random = new Random();
         int num;
         do{
-            num = (int)(Math.random()*8)+1;
+            num = random.nextInt(9)+1;
         }while(num%x!=0);
         return num;
     }
     private int generaNoMultiplo(int x) {
+        Random random = new Random();
         int num;
         do{
-            num = (int)(Math.random()*8)+1;
+            num = random.nextInt(9)+1;
         }while(num%x==0);
         return num;
     }

@@ -1,6 +1,7 @@
 package mx.sechf.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -152,7 +153,7 @@ public class PantallaMenu extends Pantalla {
         });
 
         Gdx.input.setInputProcessor(escenaMenu);
-        Gdx.input.setCatchBackKey(false);
+        Gdx.input.setCatchBackKey(true);
     }
 
     private void cargarTexturas() {
@@ -178,6 +179,15 @@ public class PantallaMenu extends Pantalla {
 
     private class EscenaOpciones extends Stage
     {
+        @Override
+        public boolean keyDown(int keycode) {
+            if(keycode == Input.Keys.BACK)
+            {
+                showOptions = false;
+                Gdx.input.setInputProcessor(escenaMenu);
+            }
+            return true;
+        }
         public EscenaOpciones(Viewport vista, final SpriteBatch batch) {
             super(vista, batch);
             Texture texturaOpciones;

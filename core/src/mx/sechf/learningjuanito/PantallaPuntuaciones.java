@@ -2,6 +2,7 @@ package mx.sechf.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,7 +26,7 @@ public class PantallaPuntuaciones extends Pantalla {
     //texturas
     private Texture texturaPuntuaciones;
     private Texture texturaBtnRegresar;
-    private Texture texturaBtnJugar;
+    private Texture texturaBtnBorrar;
 
     // Escenas
     private Stage escenaPuntuaciones;
@@ -52,12 +53,7 @@ public class PantallaPuntuaciones extends Pantalla {
         escenaPuntuaciones = new Stage(vista,batch);
         Image imgFondo = new Image(texturaPuntuaciones);
         escenaPuntuaciones.addActor(imgFondo);
-        cadenaNombres = cargarNombres();
-        cadenaPuntajes = cargarPuntajes();
-        puntajes.setColor(Color.BLACK);
-        nombres.setColor(Color.BLACK);
-        escenaPuntuaciones.addActor(puntajes);
-        escenaPuntuaciones.addActor(nombres);
+        cargarTodo();
 
         //botonRegresar
         TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable
@@ -74,23 +70,46 @@ public class PantallaPuntuaciones extends Pantalla {
             }
         });
 
-        //boton Jugar
-        TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable
-                (new TextureRegion(texturaBtnJugar));
-        ImageButton btnJugar = new ImageButton(trdBtnJugar);
-        btnJugar.setPosition(9*ANCHO/10-70-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
-        escenaPuntuaciones.addActor(btnJugar);
+        //boton Borrar
+        TextureRegionDrawable trdBtnBorrar= new TextureRegionDrawable
+                (new TextureRegion(texturaBtnBorrar));
+        ImageButton btnBorrar = new ImageButton(trdBtnBorrar);
+        btnBorrar.setPosition(9*ANCHO/10-70-btnBorrar.getWidth()/2,2*ALTO/12-btnBorrar.getHeight()/2);
+        escenaPuntuaciones.addActor(btnBorrar);
 
-        //accion del boton jugar
-        btnJugar.addListener(new ClickListener(){
+        //accion del boton borrar
+        btnBorrar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                menu.setScreen(new PantallaDificultades(menu));
+                borrarPuntuaciones();
+                cargarTodo();
             }
         });
 
         Gdx.input.setInputProcessor(escenaPuntuaciones);
         Gdx.input.setCatchBackKey(true);
+    }
+
+    private void borrarPuntuaciones() {
+        Preferences preferences = Gdx.app.getPreferences("marcador");
+        preferences.putInteger("puntaje4",0);
+        preferences.putString("nombre4",null);
+        preferences.putInteger("puntaje3",0);
+        preferences.putString("nombre3",null);
+        preferences.putInteger("puntaje2",0);
+        preferences.putString("nombre2",null);
+        preferences.putInteger("puntaje1",0);
+        preferences.putString("nombre1",null);
+        preferences.flush();
+    }
+
+    private void cargarTodo() {
+        cadenaNombres = cargarNombres();
+        cadenaPuntajes = cargarPuntajes();
+        puntajes.setColor(Color.BLACK);
+        nombres.setColor(Color.BLACK);
+        escenaPuntuaciones.addActor(puntajes);
+        escenaPuntuaciones.addActor(nombres);
     }
 
     private String cargarNombres() {
@@ -113,7 +132,7 @@ public class PantallaPuntuaciones extends Pantalla {
     private void cargarTexturas() {
         texturaPuntuaciones = new Texture("Images/screens/puntuaciones.jpg");
         texturaBtnRegresar = new Texture("Images/btns/btnMenuPrinc.png");
-        texturaBtnJugar = new Texture("Images/btns/btnJugarPantallas.png");
+        texturaBtnBorrar = new Texture("Images/btns/btnBorrarPuntajes.png");
     }
 
     private void crearCamara() {

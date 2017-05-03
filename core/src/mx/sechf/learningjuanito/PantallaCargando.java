@@ -57,7 +57,7 @@ class PantallaCargando extends Pantalla
                 cargarRecursosNivel2();
                 break;
             case NIVEL_EXPERTO:
-                cargarRecursosNivel1();
+                cargarRecursosNivel2();
                 break;
         }
     }
@@ -152,7 +152,7 @@ class PantallaCargando extends Pantalla
                     juego.setScreen(new PantallaJuegoNivel2(juego));   // 100% de carga
                     break;
                 case NIVEL_EXPERTO:
-                    juego.setScreen(new PantallaJuego(juego));   // 100% de carga
+                    juego.setScreen(new PantallaJuegoNivel2(juego));   // 100% de carga
                     break;
             }
         }
