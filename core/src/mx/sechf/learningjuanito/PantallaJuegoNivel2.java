@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import java.util.Random;
 
 /**
  * Created by Erick Chávez on 02/05/2017.
@@ -37,7 +38,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
     private float tiempo;
     private float tiempoMinijuego = 5;
     private float tiempoInstrucciones = 4;
-    private int ordenItems;
+    private int ordenItems, r1, r2;
     private int siguienteJuego = 0;
     private int posXJuanito;
     private int posYJuanito;
@@ -614,6 +615,12 @@ public class PantallaJuegoNivel2 extends Pantalla {
         vista = new StretchViewport(ANCHO, ALTO, camara);
     }
 
+    public void generarPregunta(){
+        Random rand = new Random();
+        r1 = rand.nextInt(9);
+        r2 = rand.nextInt(9);
+    }
+
     @Override
     public void render(float delta) {
         tiempo = tiempo + delta;
@@ -694,13 +701,16 @@ public class PantallaJuegoNivel2 extends Pantalla {
                                 instruccionMinijuego = "¡SALTA LOS OBSTACULOS!";
                                 break;
                             case 1:
-                                instruccionMinijuego = "¡ATRAPA LOS PARES!";
+                                generarPregunta();
+                                instruccionMinijuego = "¡ATRAPA EL RESULTADO DE LA SUMA "+String.valueOf(r1)+"+"+String.valueOf(r2)+"!";
                                 break;
                             case 2:
-                                instruccionMinijuego = "¡ATRAPA LOS NONES!";
+                                generarPregunta();
+                                instruccionMinijuego = "¡ATRAPA EL RESULTADO DE LA RESTA "+String.valueOf(r1)+"-"+String.valueOf(r2)+"!";
                                 break;
                             case 3:
-                                instruccionMinijuego = "¡ATRAPA LOS MULTIPLOS DE 3!";
+                                generarPregunta();
+                                instruccionMinijuego = "¡ATRAPA EL RESULTADO DE LA MULTIPLICACION "+String.valueOf(r1)+"*"+String.valueOf(r2)+"!";
                                 break;
                         }
                         // TERMINA CAMBIO INSTRUCCIONES
@@ -723,61 +733,61 @@ public class PantallaJuegoNivel2 extends Pantalla {
                             }
                         }
                         break;
-                    case PARES:
+                    case SUMAS:
                         if (posicionObjeto < posXJuanito) {
                             if (tiempoMinijuego == 0) {
                                 mostrarInstrucciones();
                             } else {
                                 ordenItems = (int) (Math.random() * 2) + 1;
                                 posicionObjeto = posXJuanito + 40;
-                                int par = generaMultiplo(2);
-                                int impar = generaNoMultiplo(2);
                                 if (ordenItems == 1) {
-                                    generaItem(par, posicionObjeto, 8);
-                                    generaItem(impar, posicionObjeto, 1);
+                                    generaItem(r1, posicionObjeto, 8);
+                                    generaItem(r2, posicionObjeto, 1);
                                 } else {
-                                    generaItem(impar, posicionObjeto, 8);
-                                    generaItem(par, posicionObjeto, 1);
+                                    generaItem(r2, posicionObjeto, 8);
+                                    generaItem(r1, posicionObjeto, 1);
                                 }
                                 tiempoMinijuego--;
                             }
                         }
                         break;
-                    case NONES:
+                    case RESTAS:
                         if (posicionObjeto < posXJuanito) {
                             if (tiempoMinijuego == 0) {
                                 mostrarInstrucciones();
                             } else {
                                 ordenItems = (int) (Math.random() * 2) + 1;
                                 posicionObjeto = posXJuanito + 40;
-                                int par = generaMultiplo(2);
-                                int impar = generaNoMultiplo(2);
+                                Random rand = new Random();
+                                r1 = rand.nextInt(9);
+                                r2 = rand.nextInt(9);
                                 if (ordenItems == 1) {
-                                    generaItem(impar, posicionObjeto, 8);
-                                    generaItem(par, posicionObjeto, 1);
+                                    generaItem(r1, posicionObjeto, 8);
+                                    generaItem(r2, posicionObjeto, 1);
                                 } else {
-                                    generaItem(par, posicionObjeto, 8);
-                                    generaItem(impar, posicionObjeto, 1);
+                                    generaItem(r2, posicionObjeto, 8);
+                                    generaItem(r1, posicionObjeto, 1);
                                 }
                                 tiempoMinijuego--;
                             }
                         }
                         break;
-                    case MULTIPLOSDETRES:
+                    case MULTIPLICACIONES:
                         if (posicionObjeto < posXJuanito) {
                             if (tiempoMinijuego == 0) {
                                 mostrarInstrucciones();
                             } else {
                                 ordenItems = (int) (Math.random() * 2) + 1;
                                 posicionObjeto = posXJuanito + 40;
-                                int multiplo = generaMultiplo(3);
-                                int nomultiplo = generaNoMultiplo(3);
+                                Random rand = new Random();
+                                r1 = rand.nextInt(9);
+                                r2 = rand.nextInt(9);
                                 if (ordenItems == 1) {
-                                    generaItem(multiplo, posicionObjeto, 8);
-                                    generaItem(nomultiplo, posicionObjeto, 1);
+                                    generaItem(r1, posicionObjeto, 8);
+                                    generaItem(r2, posicionObjeto, 1);
                                 } else {
-                                    generaItem(nomultiplo, posicionObjeto, 8);
-                                    generaItem(multiplo, posicionObjeto, 1);
+                                    generaItem(r2, posicionObjeto, 8);
+                                    generaItem(r1, posicionObjeto, 1);
                                 }
                                 tiempoMinijuego--;
                             }
@@ -912,13 +922,13 @@ public class PantallaJuegoNivel2 extends Pantalla {
                 minijuego = Minijuego.OBSTACULOS;
                 break;
             case 1:
-                minijuego = Minijuego.PARES;
+                minijuego = Minijuego.SUMAS;
                 break;
             case 2:
-                minijuego = Minijuego.NONES;
+                minijuego = Minijuego.RESTAS;
                 break;
             case 3:
-                minijuego = Minijuego.MULTIPLOSDETRES;
+                minijuego = Minijuego.MULTIPLICACIONES;
                 break;
         }
     }
@@ -1224,10 +1234,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
 
     public enum Minijuego {
         OBSTACULOS,
-        PARES,
-        NONES,
-        MULTIPLOSDETRES,
-        INSTRUCCIONES
+        SUMAS, RESTAS, MULTIPLICACIONES, INSTRUCCIONES
     }
 
     private class Procesador implements InputProcessor {
