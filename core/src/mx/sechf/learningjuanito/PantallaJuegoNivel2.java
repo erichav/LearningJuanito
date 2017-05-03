@@ -761,6 +761,12 @@ public class PantallaJuegoNivel2 extends Pantalla {
                                 posicionObjeto = posXJuanito + 40;
                                 int res = r1 + r2;
                                 int incorrect = rand.nextInt(9);
+                                if(res == incorrect && incorrect > 0){
+                                    incorrect = incorrect - 1;
+                                }
+                                else if(res == incorrect && incorrect == 0){
+                                    incorrect = incorrect + 1;
+                                }
                                 if (ordenItems == 1) {
                                     generaItem(res, posicionObjeto, 8);
                                     generaItem(incorrect, posicionObjeto, 1);
@@ -781,6 +787,12 @@ public class PantallaJuegoNivel2 extends Pantalla {
                                 posicionObjeto = posXJuanito + 40;
                                 int res = r1-r2;
                                 int incorrect = rand.nextInt(9);
+                                if(res == incorrect && incorrect > 0){
+                                    incorrect = incorrect - 1;
+                                }
+                                else if(res == incorrect && incorrect == 0){
+                                    incorrect = incorrect + 1;
+                                }
                                 if (ordenItems == 1) {
                                     generaItem(res, posicionObjeto, 8);
                                     generaItem(incorrect, posicionObjeto, 1);
@@ -801,6 +813,12 @@ public class PantallaJuegoNivel2 extends Pantalla {
                                 posicionObjeto = posXJuanito + 40;
                                 int res = r1*r2;
                                 int incorrect = rand.nextInt(9);
+                                if(res == incorrect && incorrect > 0){
+                                    incorrect = incorrect - 1;
+                                }
+                                else if(res == incorrect && incorrect == 0){
+                                    incorrect = incorrect + 1;
+                                }
                                 if (ordenItems == 1) {
                                     generaItem(res, posicionObjeto, 8);
                                     generaItem(incorrect, posicionObjeto, 1);
