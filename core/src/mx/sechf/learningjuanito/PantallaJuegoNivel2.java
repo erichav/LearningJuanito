@@ -92,11 +92,13 @@ public class PantallaJuegoNivel2 extends Pantalla {
     //Puntaje
     private float puntosJugador = 0;
     private Texto puntaje;
-    //dialogos
+
+    // Diálogos
     private Texture texturadialo;
     private Texture texturadialogoJuanito;
     private Texture texturadialogoMama;
     private  int contadorDialogo=0;
+
     // AssetManager
     private AssetManager manager;
 
@@ -171,6 +173,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
 
 
     }
+
     public void cargarMusica(){
         menu.musicaFondo.stop();
         menu.musicaFondo = manager.get("Audio/menuFondo.mp3");
@@ -239,6 +242,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             default:break;
         }
     }
+
     private class EscenaAlcanzado extends Stage
     {
         @Override
@@ -258,6 +262,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             }
             return true;
         }
+
         public EscenaAlcanzado(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             // Crear rectángulo transparente
@@ -317,6 +322,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             }
             return true;
         }
+
         public EscenaPausa(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             Texture texturaPausa;
@@ -381,6 +387,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             });
         }
     }
+
     private class EscenaOpciones extends Stage
     {
         @Override
@@ -391,6 +398,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             }
             return true;
         }
+
         public EscenaOpciones(Viewport vista, final SpriteBatch batch) {
             super(vista, batch);
             Texture texturaOpciones;
@@ -464,6 +472,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             });
         }
     }
+
     private class EscenaGameOver extends Stage
     {
         @Override
@@ -475,6 +484,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             }
             return true;
         }
+
         public EscenaGameOver(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             Texture texturaGameOver;
@@ -516,6 +526,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             });
         }
     }
+
     private class EscenaGanaste extends Stage
     {
         @Override
@@ -527,6 +538,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             }
             return true;
         }
+
         public EscenaGanaste(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             Texture texturaGanaste;
@@ -599,6 +611,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             }
         }
     }
+
     class Marcador{
         int puntaje;
         String nombre;
@@ -664,7 +677,6 @@ public class PantallaJuegoNivel2 extends Pantalla {
         rendererMapa.setView(camara);
         eliminarObjetos();
     }
-
 
     private void cargarTexturas() {
         texturaJuanito = manager.get("Images/objects/Juanito/juanito.png");
@@ -1129,6 +1141,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             generaItem(num-(izquierda*10),posX+2,posY);
         }
     }
+
     private void generaObstaculo(int tipo, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
     {
         TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
@@ -1257,6 +1270,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             }
         }
     }
+
     //ELIMINAR NUMEROS
     private void eliminarNumeroSuperior() {
         TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(2);
@@ -1270,6 +1284,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
             }
         }
     }
+
     private void eliminarNumeroInferior() {
         TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(2);
         TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(3);
@@ -1377,8 +1392,11 @@ public class PantallaJuegoNivel2 extends Pantalla {
         CORRIENDO,
         PAUSADO,
         ALCANZADO,
-        PERDIDO, OPCIONES, TERMINADO
+        PERDIDO,
+        OPCIONES,
+        TERMINADO
     }
+
     public enum Minijuego {
         OBSTACULOS,
         SUMAS,
