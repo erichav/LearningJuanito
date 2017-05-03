@@ -47,6 +47,8 @@ public class PantallaJuegoNivel2 extends Pantalla {
     private float separacion; //La separación original entre Juanito y su mamá.
     private int posicionObjeto = 0;
     public static final float ANCHOTOTAL = ANCHO * 50;
+    public boolean flg;
+    Random rand = new Random();
 
     //Juego terminado
     private EscenaGameOver escenaGameOver;
@@ -616,9 +618,9 @@ public class PantallaJuegoNivel2 extends Pantalla {
     }
 
     public void generarPregunta(){
-        Random rand = new Random();
-        r1 = rand.nextInt(9);
-        r2 = rand.nextInt(9);
+        r1 = rand.nextInt(4);
+        r2 = rand.nextInt(4);
+        flg = false;
     }
 
     @Override
@@ -651,6 +653,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
                             eliminarNumeroSuperior();
                             if (menu.isEffectsOn()) {
                                 sonidoRespuestaCorrecta.play();
+                                flg = true;
                             }
                             retroalimentar();
                             retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaRespuestaCorrecta)));
@@ -663,6 +666,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
                             eliminarNumeroInferior();
                             if (menu.isEffectsOn()) {
                                 sonidoRespuestaIncorrecta.play();
+                                flg = true;
                             }
                             retroalimentar();
                             retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaRespuestaIncorrecta)));
@@ -701,15 +705,21 @@ public class PantallaJuegoNivel2 extends Pantalla {
                                 instruccionMinijuego = "¡SALTA LOS OBSTACULOS!";
                                 break;
                             case 1:
-                                generarPregunta();
+                                if(flg) {
+                                    generarPregunta();
+                                }
                                 instruccionMinijuego = "¡ATRAPA EL RESULTADO DE LA SUMA "+String.valueOf(r1)+"+"+String.valueOf(r2)+"!";
                                 break;
                             case 2:
-                                generarPregunta();
+                                if(flg) {
+                                    generarPregunta();
+                                }
                                 instruccionMinijuego = "¡ATRAPA EL RESULTADO DE LA RESTA "+String.valueOf(r1)+"-"+String.valueOf(r2)+"!";
                                 break;
                             case 3:
-                                generarPregunta();
+                                if(flg) {
+                                    generarPregunta();
+                                }
                                 instruccionMinijuego = "¡ATRAPA EL RESULTADO DE LA MULTIPLICACION "+String.valueOf(r1)+"*"+String.valueOf(r2)+"!";
                                 break;
                         }
@@ -740,12 +750,14 @@ public class PantallaJuegoNivel2 extends Pantalla {
                             } else {
                                 ordenItems = (int) (Math.random() * 2) + 1;
                                 posicionObjeto = posXJuanito + 40;
+                                int res = r1 + r2;
+                                int incorrect = rand.nextInt(9);
                                 if (ordenItems == 1) {
-                                    generaItem(r1, posicionObjeto, 8);
-                                    generaItem(r2, posicionObjeto, 1);
+                                    generaItem(res, posicionObjeto, 8);
+                                    generaItem(incorrect, posicionObjeto, 1);
                                 } else {
-                                    generaItem(r2, posicionObjeto, 8);
-                                    generaItem(r1, posicionObjeto, 1);
+                                    generaItem(incorrect, posicionObjeto, 8);
+                                    generaItem(res, posicionObjeto, 1);
                                 }
                                 tiempoMinijuego--;
                             }
