@@ -26,6 +26,7 @@ public class PantallaAcercaDe2 extends Pantalla {
     private Texture texturaBtnRegresar;
     private Texture texturaBtnJugar;
     private Texture texturaBtnPrev;
+    private Texture texturaBtnNext;
 
     // Escenas
     private Stage escenaAcercaDe2;
@@ -81,14 +82,29 @@ public class PantallaAcercaDe2 extends Pantalla {
         TextureRegionDrawable trdBtnPrev = new TextureRegionDrawable
                 (new TextureRegion(texturaBtnPrev));
         ImageButton btnPrev = new ImageButton(trdBtnPrev);
-        btnPrev.setPosition(ANCHO/2-280-btnPrev.getWidth()/2,2*ALTO/12+160-btnPrev.getHeight()/2);
+        btnPrev.setPosition(ANCHO/2-560-btnPrev.getWidth()/2,2*ALTO/12+280-btnPrev.getHeight()/2);
         escenaAcercaDe2.addActor(btnPrev);
 
-        //accion del boton jugar
+        //accion del boton Prev
         btnPrev.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 menu.setScreen(new PantallaAcercaDe(menu));
+            }
+        });
+
+        //boton Next
+        TextureRegionDrawable trdBtnNext = new TextureRegionDrawable
+                (new TextureRegion(texturaBtnNext));
+        ImageButton btnNext = new ImageButton(trdBtnNext);
+        btnNext.setPosition(ANCHO/2+560-btnNext.getWidth()/2,2*ALTO/12+280-btnNext.getHeight()/2);
+        escenaAcercaDe2.addActor(btnNext);
+
+        //accion del boton Next
+        btnNext.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                menu.setScreen(new PantallaAcercaDe3(menu));
             }
         });
 
@@ -100,7 +116,8 @@ public class PantallaAcercaDe2 extends Pantalla {
         texturaAcercaDe2 = new Texture("Images/screens/acercade2.jpg");
         texturaBtnRegresar = new Texture("Images/btns/btnMenuPrinc.png");
         texturaBtnJugar = new Texture("Images/btns/btnJugarPantallas.png");
-        texturaBtnPrev = new Texture ("Images/btns/btnIzqAcercaDe.png");
+        texturaBtnPrev = new Texture ("Images/btns/btnIzqAcercaDeAzul.png");
+        texturaBtnNext = new Texture("Images/btns/btnDerechaAcercaDeAzul.png");
     }
 
     private void crearCamara() {
