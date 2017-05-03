@@ -617,9 +617,18 @@ public class PantallaJuegoNivel2 extends Pantalla {
         vista = new StretchViewport(ANCHO, ALTO, camara);
     }
 
-    public void generarPregunta(){
-        r1 = rand.nextInt(4);
-        r2 = rand.nextInt(4);
+    public void generarPregunta(int i){
+        if(i==0){
+            r2 = rand.nextInt(4);
+            r1 = rand.nextInt(4);
+        }
+        if(i==1){
+            r2 = rand.nextInt(9);
+            r1 = r2 + rand.nextInt(4);
+        }if(i==2){
+            r2 = rand.nextInt(3);
+            r1 = rand.nextInt(3);
+        }
         flg = false;
     }
 
@@ -706,19 +715,19 @@ public class PantallaJuegoNivel2 extends Pantalla {
                                 break;
                             case 1:
                                 if(flg) {
-                                    generarPregunta();
+                                    generarPregunta(0);
                                 }
                                 instruccionMinijuego = "¡ATRAPA EL RESULTADO DE LA SUMA "+String.valueOf(r1)+"+"+String.valueOf(r2)+"!";
                                 break;
                             case 2:
                                 if(flg) {
-                                    generarPregunta();
+                                    generarPregunta(1);
                                 }
                                 instruccionMinijuego = "¡ATRAPA EL RESULTADO DE LA RESTA "+String.valueOf(r1)+"-"+String.valueOf(r2)+"!";
                                 break;
                             case 3:
                                 if(flg) {
-                                    generarPregunta();
+                                    generarPregunta(2);
                                 }
                                 instruccionMinijuego = "¡ATRAPA EL RESULTADO DE LA MULTIPLICACION "+String.valueOf(r1)+"*"+String.valueOf(r2)+"!";
                                 break;
@@ -770,15 +779,14 @@ public class PantallaJuegoNivel2 extends Pantalla {
                             } else {
                                 ordenItems = (int) (Math.random() * 2) + 1;
                                 posicionObjeto = posXJuanito + 40;
-                                Random rand = new Random();
-                                r1 = rand.nextInt(9);
-                                r2 = rand.nextInt(9);
+                                int res = r1-r2;
+                                int incorrect = rand.nextInt(9);
                                 if (ordenItems == 1) {
-                                    generaItem(r1, posicionObjeto, 8);
-                                    generaItem(r2, posicionObjeto, 1);
+                                    generaItem(res, posicionObjeto, 8);
+                                    generaItem(incorrect, posicionObjeto, 1);
                                 } else {
-                                    generaItem(r2, posicionObjeto, 8);
-                                    generaItem(r1, posicionObjeto, 1);
+                                    generaItem(incorrect, posicionObjeto, 8);
+                                    generaItem(res, posicionObjeto, 1);
                                 }
                                 tiempoMinijuego--;
                             }
