@@ -92,11 +92,13 @@ public class PantallaJuego extends Pantalla {
     //Puntaje
     private float puntosJugador = 0;
     private Texto puntaje;
-    //dialogos
+
+    // Diálogos
     private Texture texturadialo;
     private Texture texturadialogoJuanito;
     private Texture texturadialogoMama;
     private  int contadorDialogo=0;
+
     // AssetManager
     private AssetManager manager;
 
@@ -106,6 +108,7 @@ public class PantallaJuego extends Pantalla {
     // HUD
     private OrthographicCamera camaraHUD;
     private Viewport vistaHUD;
+
     // El HUD lo manejamos con una escena (opcional)
     private Stage escenaHUD;
     private Texto mensajeMinijuego = new Texto();
@@ -171,6 +174,7 @@ public class PantallaJuego extends Pantalla {
 
 
     }
+
     public void cargarMusica(){
         menu.musicaFondo.stop();
         menu.musicaFondo = manager.get("Audio/menuFondo.mp3");
@@ -239,6 +243,7 @@ public class PantallaJuego extends Pantalla {
             default:break;
         }
     }
+
     private class EscenaAlcanzado extends Stage
     {
         @Override
@@ -258,6 +263,7 @@ public class PantallaJuego extends Pantalla {
             }
             return true;
         }
+
         public EscenaAlcanzado(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             // Crear rectángulo transparente
@@ -317,6 +323,7 @@ public class PantallaJuego extends Pantalla {
             }
             return true;
         }
+
         public EscenaPausa(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             Texture texturaPausa;
@@ -381,6 +388,7 @@ public class PantallaJuego extends Pantalla {
             });
         }
     }
+
     private class EscenaOpciones extends Stage
     {
         @Override
@@ -391,6 +399,7 @@ public class PantallaJuego extends Pantalla {
             }
             return true;
         }
+
         public EscenaOpciones(Viewport vista, final SpriteBatch batch) {
             super(vista, batch);
             Texture texturaOpciones;
@@ -464,6 +473,7 @@ public class PantallaJuego extends Pantalla {
             });
         }
     }
+
     private class EscenaGameOver extends Stage
     {
         @Override
@@ -475,6 +485,7 @@ public class PantallaJuego extends Pantalla {
             }
             return true;
         }
+
         public EscenaGameOver(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             Texture texturaGameOver;
@@ -516,6 +527,7 @@ public class PantallaJuego extends Pantalla {
             });
         }
     }
+
     private class EscenaGanaste extends Stage
     {
         @Override
@@ -527,6 +539,7 @@ public class PantallaJuego extends Pantalla {
             }
             return true;
         }
+
         public EscenaGanaste(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
             Texture texturaGanaste;
@@ -599,6 +612,7 @@ public class PantallaJuego extends Pantalla {
             }
         }
     }
+
     class Marcador{
         int puntaje;
         String nombre;
@@ -664,7 +678,6 @@ public class PantallaJuego extends Pantalla {
         rendererMapa.setView(camara);
         eliminarObjetos();
     }
-
 
     private void cargarTexturas() {
         texturaJuanito = manager.get("Images/objects/Juanito/juanito.png");
@@ -1229,6 +1242,7 @@ public class PantallaJuego extends Pantalla {
             }
         }
     }
+
     //ELIMINAR NUMEROS
     private void eliminarNumeroSuperior() {
         TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(2);
@@ -1242,6 +1256,7 @@ public class PantallaJuego extends Pantalla {
             }
         }
     }
+
     private void eliminarNumeroInferior() {
         TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(2);
         TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(3);
@@ -1288,7 +1303,6 @@ public class PantallaJuego extends Pantalla {
         eliminarObjetos();
         menu.musicaFondo.stop();
         }
-
 
     private void ganaste() {
         estadoJuego = EstadoJuego.TERMINADO;
@@ -1349,8 +1363,11 @@ public class PantallaJuego extends Pantalla {
         CORRIENDO,
         PAUSADO,
         ALCANZADO,
-        PERDIDO, OPCIONES, TERMINADO
+        PERDIDO,
+        OPCIONES,
+        TERMINADO
     }
+
     public enum Minijuego {
         OBSTACULOS,
         PARES,
