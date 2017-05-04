@@ -57,7 +57,7 @@ class PantallaCargando extends Pantalla
                 cargarRecursosNivel2();
                 break;
             case NIVEL_EXPERTO:
-                cargarRecursosNivel2();
+                cargarRecursosNivel3();
                 break;
         }
     }
@@ -99,6 +99,29 @@ class PantallaCargando extends Pantalla
         manager.load("Images/screens/gameOver.jpg", Texture.class);
         manager.load("Images/screens/ganaste.jpg", Texture.class);
         manager.load("Mapa/mapaNivel2.tmx", TiledMap.class);
+        manager.load("Images/btns/btnPausa.png", Texture.class);
+        manager.load("Images/PantallaJuego/correcto.png", Texture.class);
+        manager.load("Images/PantallaJuego/incorrecto.png", Texture.class);
+        manager.load("Audio/Slap.mp3", Sound.class);
+        manager.load("Audio/Correcto.wav", Sound.class);
+        manager.load("Audio/Incorrecto.mp3", Sound.class);
+    }
+
+    private void cargarRecursosNivel3(){
+        manager.load("Images/objects/Juanito/juanito.png", Texture.class);
+        manager.load("Images/objects/Mama/mamaJuanito.png", Texture.class);
+        manager.load("Images/PantallaJuego/vida.png", Texture.class);
+        manager.load("Images/btns/btnContinuar.png", Texture.class);
+        manager.load("Images/dialogos/dialo.png", Texture.class);
+        manager.load("Images/dialogos/dialogoJuanito.png", Texture.class);
+        manager.load("Images/dialogos/dialogoMama1.png", Texture.class);
+        manager.load("Images/screens/pausa.jpg", Texture.class);
+        manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
+        manager.load("Images/btns/btnJugarPausa.png", Texture.class);
+        manager.load("Images/btns/btnOpcionesPausa.png", Texture.class);
+        manager.load("Images/screens/gameOver.jpg", Texture.class);
+        manager.load("Images/screens/ganaste.jpg", Texture.class);
+        manager.load("Mapa/mapaNivel3.tmx", TiledMap.class);
         manager.load("Images/btns/btnPausa.png", Texture.class);
         manager.load("Images/PantallaJuego/correcto.png", Texture.class);
         manager.load("Images/PantallaJuego/incorrecto.png", Texture.class);
@@ -152,7 +175,7 @@ class PantallaCargando extends Pantalla
                     juego.setScreen(new PantallaJuegoNivel2(juego));   // 100% de carga
                     break;
                 case NIVEL_EXPERTO:
-                    juego.setScreen(new PantallaJuegoNivel2(juego));   // 100% de carga
+                    juego.setScreen(new PantallaJuegoNivel3(juego));   // 100% de carga
                     break;
             }
         }
