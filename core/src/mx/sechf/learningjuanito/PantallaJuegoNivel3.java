@@ -177,7 +177,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
 
     public void cargarMusica(){
         menu.musicaFondo.stop();
-        menu.musicaFondo = manager.get("Audio/menuFondo.mp3");
+        menu.musicaFondo = manager.get("Audio/Fondo.mp3");
         menu.musicaFondo.setVolume(0.75f);
         menu.musicaFondo.setLooping(true);
         if(menu.isMusicOn())
