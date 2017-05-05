@@ -37,6 +37,7 @@ public class PantallaJuego extends Pantalla {
     private String instruccionMinijuego = "NO DEJES QUE TE ATRAPE!";
     private float tiempo;
     private float tiempoFinal=8;
+    private float tiempoGanador=8;
     private float tiempoMinijuego = 5;
     private float tiempoInstrucciones = 4;
     private int ordenItems;
@@ -242,6 +243,20 @@ public class PantallaJuego extends Pantalla {
                 escenaHUD.addActor(imgDialogo );
                 break;
             case 4:
+                escenaHUD.clear();
+                //crearRectangulo();
+                imgDialogo = new Image(texturadialo);
+                imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
+                escenaHUD.addActor(imgDialogo );
+                break;
+            case 5:
+                escenaHUD.clear();
+                //crearRectangulo();
+                imgDialogo = new Image(texturadialogoMama);
+                imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
+                escenaHUD.addActor(imgDialogo );
+                break;
+            case 6:
                 escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturadialo);
@@ -1031,22 +1046,36 @@ public class PantallaJuego extends Pantalla {
                         Juanito.actualizar(mapa);
                     }
                     tiempoFinal-=delta;
-                    batch.begin();
-                    mensajeMinijuego.mostrarMensaje(batch,"FINAL",ANCHO/2,4*ALTO/5);
-                    batch.end();
                 }
                 break;
             case TERMINADO:
-                if (escenaGanaste==null) {
-                    escenaGanaste = new EscenaGanaste(vistaHUD, batch);
-                    actualizarCamara();
-                }
-                Gdx.input.setInputProcessor(escenaGanaste);
-                escenaGanaste.draw();
-                batch.begin();
-                puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int)(puntosJugador*10)), ANCHO/2,ALTO/3);
-                batch.end();
-                break;
+                if(tiempoGanador<=0) {
+                    if (escenaGanaste == null) {
+                        escenaGanaste = new EscenaGanaste(vistaHUD, batch);
+                        actualizarCamara();
+                    }
+                    Gdx.input.setInputProcessor(escenaGanaste);
+                    escenaGanaste.draw();
+                    batch.begin();
+                    puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int) (puntosJugador * 10)), ANCHO / 2, ALTO / 3);
+                    batch.end();
+                    break;
+                }else{
+                    if(tiempoGanador>=7){
+                        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                        Juanito.actualizar(mapa);
+                    }else if(tiempoGanador>=6){
+                        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                        Juanito.actualizar(mapa);
+                    }else if(tiempoGanador>=3){
+                        contadorDialogo=5;
+                        dibujardialogo();
+                    }else{
+                        contadorDialogo=6;
+                        dibujardialogo();
+                    }
+                    tiempoGanador-=delta;
+                    break;}
         }
     }
 
