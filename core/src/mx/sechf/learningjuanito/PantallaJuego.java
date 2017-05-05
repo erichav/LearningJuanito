@@ -40,7 +40,7 @@ public class PantallaJuego extends Pantalla {
     private float tiempoGanador=8;
     private float tiempoMinijuego = 5;
     private float tiempoInstrucciones = 4;
-    private int ordenItems;
+    private int ordenItems, numero1, numero2;;
     private int siguienteJuego = 0;
     private int posXJuanito;
     private int posYJuanito;
@@ -203,7 +203,7 @@ public class PantallaJuego extends Pantalla {
         Texture texturaRectangulo = new Texture( pixmap );
         pixmap.dispose();
         retroalimentacion = new Image(texturaRespuestaCorrecta);
-        retroalimentacion.setPosition(ALTO/2,ANCHO/2-30);
+        retroalimentacion.setPosition(ANCHO/2,ALTO/2);
         imgRectangulo = new Image(texturaRectangulo);
         imgRectangulo.setPosition((ANCHO-pixmap.getWidth())/2, ((ALTO*31/20)-pixmap.getHeight())/2);
 
@@ -713,8 +713,8 @@ public class PantallaJuego extends Pantalla {
         texturadialogoJuanito = manager.get("Images/dialogos/dialogoJuanito.png");
         texturadialogoMama = manager.get("Images/dialogos/dialogoMama1.png");
         texturaFinalPierde = manager.get("Images/dialogos/finalPierde.png");
-        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/correcto.png");
-        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/incorrecto.png");
+        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/mas100.png");
+        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/menos50.png");
     }
 
     private void crearCamara() {
@@ -861,17 +861,17 @@ public class PantallaJuego extends Pantalla {
                                 Random random = new Random();
                                 ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
-                                int par = generaMultiplo(2);
-                                int impar =  generaNoMultiplo(2);
+                                numero1 = generaNumeroEntre(1,50)*2;
+                                numero2 =  (generaNumeroEntre(1,50)*2)-1;
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(par, posicionObjeto,8);
-                                    generaItem(impar, posicionObjeto,1);
+                                    generaItem(numero1, posicionObjeto,8);
+                                    generaItem(numero2, posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem(impar, posicionObjeto,8);
-                                    generaItem(par, posicionObjeto,1);
+                                    generaItem(numero2, posicionObjeto,8);
+                                    generaItem(numero1, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
@@ -889,17 +889,17 @@ public class PantallaJuego extends Pantalla {
                                 Random random = new Random();
                                 ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
-                                int par = generaMultiplo(2);
-                                int impar =  generaNoMultiplo(2);
+                                numero1 = generaNumeroEntre(1,50)*2;
+                                numero2 =  (generaNumeroEntre(1,50)*2)-1;
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(impar, posicionObjeto,8);
-                                    generaItem(par, posicionObjeto,1);
+                                    generaItem(numero2, posicionObjeto,8);
+                                    generaItem(numero1, posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem(par, posicionObjeto,8);
-                                    generaItem(impar, posicionObjeto,1);
+                                    generaItem(numero1, posicionObjeto,8);
+                                    generaItem(numero2, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
@@ -917,17 +917,17 @@ public class PantallaJuego extends Pantalla {
                                 Random random = new Random();
                                 ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
-                                int multiplo = generaMultiplo(3);
-                                int nomultiplo = generaNoMultiplo(3);
+                                numero1 = generaNumeroEntre(1,34)*3;
+                                numero2 = (generaNumeroEntre(1,34)*3)-1;
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(multiplo, posicionObjeto,8);
-                                    generaItem(nomultiplo, posicionObjeto,1);
+                                    generaItem(numero1, posicionObjeto,8);
+                                    generaItem(numero2, posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem(nomultiplo, posicionObjeto,8);
-                                    generaItem(multiplo, posicionObjeto,1);
+                                    generaItem(numero1, posicionObjeto,8);
+                                    generaItem(numero2, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
@@ -1120,20 +1120,9 @@ public class PantallaJuego extends Pantalla {
         }
     }
 
-    private int generaMultiplo(int x) {
+    private int generaNumeroEntre(int min, int max) {
         Random random = new Random();
-        int num;
-        do{
-            num = random.nextInt(9)+1;
-        }while(num%x!=0);
-        return num;
-    }
-    private int generaNoMultiplo(int x) {
-        Random random = new Random();
-        int num;
-        do{
-            num = random.nextInt(9)+1;
-        }while(num%x==0);
+        int num = random.nextInt(max - min) + min;
         return num;
     }
 
@@ -1170,12 +1159,21 @@ public class PantallaJuego extends Pantalla {
 
     private void generaItem(int num, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
     {
-        TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(3);
-        TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(0);
-        for(int y=0;y<=3;y++)
+        if(num<10)
         {
-            capa.setCell(posX,posY+y, items.getCell(24+(2*num),25+y));
-            capa.setCell(posX+1,posY+y, items.getCell(25+(2*num),25+y));
+            TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(3);
+            TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(0);
+            for(int y=0;y<=3;y++)
+            {
+                capa.setCell(posX,posY+y, items.getCell(24+(2*num),25+y));
+                capa.setCell(posX+1,posY+y, items.getCell(25+(2*num),25+y));
+            }
+        }
+        else
+        {
+            int izquierda = num/10;
+            generaItem(izquierda,posX,posY);
+            generaItem(num-(izquierda*10),posX+2,posY);
         }
     }
     private void generaObstaculo(int tipo, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
@@ -1416,8 +1414,8 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/screens/ganaste.jpg");
         manager.unload("Mapa/mapaNivel1.tmx");
         manager.unload("Images/btns/btnPausa.png");
-        manager.unload("Images/PantallaJuego/correcto.png");
-        manager.unload("Images/PantallaJuego/incorrecto.png");
+        manager.unload("Images/PantallaJuego/mas100.png");
+        manager.unload("Images/PantallaJuego/menos50.png");
         manager.unload("Audio/Slap.mp3");
         manager.unload("Audio/Correcto.wav");
         manager.unload("Audio/Incorrecto.mp3");

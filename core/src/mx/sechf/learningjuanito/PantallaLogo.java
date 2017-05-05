@@ -25,7 +25,7 @@ class PantallaLogo extends Pantalla
 
     @Override
     public void show() {
-        texturaLogo = new Texture(Gdx.files.internal("Images/PantallaLogo/logo.png"));
+        texturaLogo = new Texture(Gdx.files.internal("Images/PantallaLogo/pantallaLogo.jpg"));
         spriteLogo = new Sprite(texturaLogo);
         spriteLogo.setPosition(ANCHO/2-spriteLogo.getWidth()/2, ALTO/2-spriteLogo.getHeight()/2);
         escalarLogo();

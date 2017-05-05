@@ -203,7 +203,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
         Texture texturaRectangulo = new Texture( pixmap );
         pixmap.dispose();
         retroalimentacion = new Image(texturaRespuestaCorrecta);
-        retroalimentacion.setPosition(ALTO/2,ANCHO/2-30);
+        retroalimentacion.setPosition(ANCHO/2,ALTO/2);
         imgRectangulo = new Image(texturaRectangulo);
         imgRectangulo.setPosition((ANCHO-pixmap.getWidth())/2, ((ALTO*31/20)-pixmap.getHeight())/2);
 
@@ -713,8 +713,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
         texturadialogoJuanito = manager.get("Images/dialogos/dialogoJuanito.png");
         texturadialogoMama = manager.get("Images/dialogos/dialogoMama1.png");
         texturaFinalPierde = manager.get("Images/dialogos/finalPierde.png");
-        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/correcto.png");
-        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/incorrecto.png");
+        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/mas300.png");
+        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/menos150.png");
     }
 
     private void crearCamara() {
@@ -818,26 +818,25 @@ public class PantallaJuegoNivel3 extends Pantalla {
                             case 1:
                                 if(numero1==-1)
                                 {
-                                    numero1 = generaNumeroEntre(0,99);
-                                    numero2 = generaNumeroEntre(0,99-numero1);
+                                    numero1 = generaNumeroEntre(0,10);
                                 }
-                                instruccionMinijuego = "SUMA: " + numero1 + " + " + numero2;
+                                instruccionMinijuego = "RAIZ CUADRADA DE: " + numero1*numero1;
                                 break;
                             case 2:
                                 if(numero1==-1)
                                 {
-                                    numero1 = generaNumeroEntre(0,99);
-                                    numero2 = generaNumeroEntre(0,numero1);
+                                    numero1 = generaNumeroEntre(0,10);
+                                    numero2 = generaNumeroEntre(0,4);
                                 }
-                                instruccionMinijuego = "RESTA: " + numero1 + " - " + numero2;
+                                instruccionMinijuego = "ELEVA: " + numero1 + " ^ " + numero2;
                                 break;
                             case 3:
                                 if(numero1==-1)
                                 {
-                                    numero1 = generaNumeroEntre(1,99);
-                                    numero2 = generaNumeroEntre(0,(98/numero1)+1);
+                                    numero1 = generaNumeroEntre(0,100);
+                                    numero2 = generaNumeroEntre(1,10);
                                 }
-                                instruccionMinijuego = "MULTIPLICA: " + numero1 + " * " + numero2;
+                                instruccionMinijuego = "DIVIDE: " + numero1*numero2 + " / " + numero2;
                                 break;
                         }
                         // TERMINA CAMBIO INSTRUCCIONES
@@ -863,7 +862,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                             }
                         }
                         break;
-                    case SUMAS:
+                    case RAICES:
                         if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
@@ -877,19 +876,19 @@ public class PantallaJuegoNivel3 extends Pantalla {
                                 posicionObjeto = posXJuanito+40;
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(numero1+numero2, posicionObjeto,8);
-                                    generaItem((numero1+numero2)+generaNumeroEntre(1,5), posicionObjeto,1);
+                                    generaItem(numero1, posicionObjeto,8);
+                                    generaItem((numero1)+generaNumeroEntre(1,3), posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem((numero1+numero2)+generaNumeroEntre(1,5), posicionObjeto,8);
-                                    generaItem(numero1+numero2, posicionObjeto,1);
+                                    generaItem((numero1)+generaNumeroEntre(1,3), posicionObjeto,8);
+                                    generaItem(numero1, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
                         }
                         break;
-                    case RESTAS:
+                    case POTENCIAS:
                         if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
@@ -903,19 +902,19 @@ public class PantallaJuegoNivel3 extends Pantalla {
                                 posicionObjeto = posXJuanito+40;
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(numero1-numero2, posicionObjeto,8);
-                                    generaItem((numero1-numero2)+generaNumeroEntre(1,5), posicionObjeto,1);
+                                    generaItem((int)Math.pow((double)numero1,(double)numero2), posicionObjeto,8);
+                                    generaItem((int)Math.pow((double)numero1,(double)numero2)+generaNumeroEntre(1,5), posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem((numero1-numero2)+generaNumeroEntre(1,5), posicionObjeto,8);
-                                    generaItem(numero1-numero2, posicionObjeto,1);
+                                    generaItem((int)Math.pow((double)numero1,(double)numero2)+generaNumeroEntre(1,5), posicionObjeto,8);
+                                    generaItem((int)Math.pow((double)numero1,(double)numero2), posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
                         }
                         break;
-                    case MULTIPLICACIONES:
+                    case DIVISIONES:
                         if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
@@ -929,13 +928,13 @@ public class PantallaJuegoNivel3 extends Pantalla {
                                 posicionObjeto = posXJuanito+40;
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(numero1*numero2, posicionObjeto,8);
-                                    generaItem((numero1*numero2)+generaNumeroEntre(1,5), posicionObjeto,1);
+                                    generaItem(numero1, posicionObjeto,8);
+                                    generaItem((numero1)+generaNumeroEntre(1,5), posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem((numero1*numero2)+generaNumeroEntre(1,5), posicionObjeto,8);
-                                    generaItem(numero1*numero2, posicionObjeto,1);
+                                    generaItem((numero1)+generaNumeroEntre(1,5), posicionObjeto,8);
+                                    generaItem(numero1, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
@@ -1102,13 +1101,13 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 minijuego = Minijuego.OBSTACULOS;
                 break;
             case 1:
-                minijuego = Minijuego.SUMAS;
+                minijuego = Minijuego.RAICES;
                 break;
             case 2:
-                minijuego = Minijuego.RESTAS;
+                minijuego = Minijuego.POTENCIAS;
                 break;
             case 3:
-                minijuego = Minijuego.MULTIPLICACIONES;
+                minijuego = Minijuego.DIVISIONES;
                 break;
         }
     }
@@ -1117,22 +1116,6 @@ public class PantallaJuegoNivel3 extends Pantalla {
     {
         Random random = new Random();
         int num = random.nextInt(max-min)+min;
-        return num;
-    }
-    private int generaMultiplo(int x) {
-        Random random = new Random();
-        int num;
-        do{
-            num = random.nextInt(9)+1;
-        }while(num%x!=0);
-        return num;
-    }
-    private int generaNoMultiplo(int x) {
-        Random random = new Random();
-        int num;
-        do{
-            num = random.nextInt(9)+1;
-        }while(num%x==0);
         return num;
     }
 
@@ -1178,6 +1161,12 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 capa.setCell(posX,posY+y, items.getCell(24+(2*num),25+y));
                 capa.setCell(posX+1,posY+y, items.getCell(25+(2*num),25+y));
             }
+        }
+        else if(num>=100)
+        {
+            int izquierda = num/100;
+            generaItem(izquierda,posX,posY);
+            generaItem(num-(izquierda*100),posX+2,posY);
         }
         else
         {
@@ -1345,8 +1334,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
 
     private void reacomodarPersonajes() {
         //Pone los personajes en su posición original con respecto a la cámara
-        Mama.sprite.setY(64);
-        Juanito.sprite.setY(64);
+        Mama.sprite.setY(32);
+        Juanito.sprite.setY(32);
         Mama.sprite.setX(camara.position.x-posicionMama);
         Juanito.sprite.setX(Mama.sprite.getX()+separacion);
     }
@@ -1426,8 +1415,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
         manager.unload("Images/screens/ganaste.jpg");
         manager.unload("Mapa/mapaNivel3.tmx");
         manager.unload("Images/btns/btnPausa.png");
-        manager.unload("Images/PantallaJuego/correcto.png");
-        manager.unload("Images/PantallaJuego/incorrecto.png");
+        manager.unload("Images/PantallaJuego/mas300.png");
+        manager.unload("Images/PantallaJuego/menos150.png");
         manager.unload("Audio/Slap.mp3");
         manager.unload("Audio/Correcto.wav");
         manager.unload("Audio/Incorrecto.mp3");
@@ -1445,9 +1434,9 @@ public class PantallaJuegoNivel3 extends Pantalla {
 
     public enum Minijuego {
         OBSTACULOS,
-        SUMAS,
-        RESTAS,
-        MULTIPLICACIONES,
+        RAICES,
+        POTENCIAS,
+        DIVISIONES,
         INSTRUCCIONES
     }
 

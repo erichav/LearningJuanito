@@ -202,7 +202,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
         Texture texturaRectangulo = new Texture( pixmap );
         pixmap.dispose();
         retroalimentacion = new Image(texturaRespuestaCorrecta);
-        retroalimentacion.setPosition(ALTO/2,ANCHO/2-30);
+        retroalimentacion.setPosition(ANCHO/2,ALTO/2);
         imgRectangulo = new Image(texturaRectangulo);
         imgRectangulo.setPosition((ANCHO-pixmap.getWidth())/2, ((ALTO*31/20)-pixmap.getHeight())/2);
 
@@ -712,8 +712,8 @@ public class PantallaJuegoNivel2 extends Pantalla {
         texturadialogoJuanito = manager.get("Images/dialogos/dialogoJuanito.png");
         texturadialogoMama = manager.get("Images/dialogos/dialogoMama1.png");
         texturaFinalPierde = manager.get("Images/dialogos/finalPierde.png");
-        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/correcto.png");
-        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/incorrecto.png");
+        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/mas200.png");
+        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/menos100.png");
     }
 
     private void crearCamara() {
@@ -1112,26 +1112,9 @@ public class PantallaJuegoNivel2 extends Pantalla {
         }
     }
 
-    private int generaNumeroEntre(int min, int max)
-    {
+    private int generaNumeroEntre(int min, int max) {
         Random random = new Random();
-        int num = random.nextInt(max-min)+min;
-        return num;
-    }
-    private int generaMultiplo(int x) {
-        Random random = new Random();
-        int num;
-        do{
-            num = random.nextInt(9)+1;
-        }while(num%x!=0);
-        return num;
-    }
-    private int generaNoMultiplo(int x) {
-        Random random = new Random();
-        int num;
-        do{
-            num = random.nextInt(9)+1;
-        }while(num%x==0);
+        int num = random.nextInt(max - min) + min;
         return num;
     }
 
@@ -1344,8 +1327,8 @@ public class PantallaJuegoNivel2 extends Pantalla {
 
     private void reacomodarPersonajes() {
         //Pone los personajes en su posición original con respecto a la cámara
-        Mama.sprite.setY(64);
-        Juanito.sprite.setY(64);
+        Mama.sprite.setY(32);
+        Juanito.sprite.setY(32);
         Mama.sprite.setX(camara.position.x-posicionMama);
         Juanito.sprite.setX(Mama.sprite.getX()+separacion);
     }
@@ -1425,8 +1408,8 @@ public class PantallaJuegoNivel2 extends Pantalla {
         manager.unload("Images/screens/ganaste.jpg");
         manager.unload("Mapa/mapaNivel2.tmx");
         manager.unload("Images/btns/btnPausa.png");
-        manager.unload("Images/PantallaJuego/correcto.png");
-        manager.unload("Images/PantallaJuego/incorrecto.png");
+        manager.unload("Images/PantallaJuego/mas200.png");
+        manager.unload("Images/PantallaJuego/menos100.png");
         manager.unload("Audio/Slap.mp3");
         manager.unload("Audio/Correcto.wav");
         manager.unload("Audio/Incorrecto.mp3");
