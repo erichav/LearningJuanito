@@ -36,7 +36,7 @@ public class PantallaJuego extends Pantalla {
     public Minijuego minijuego = Minijuego.INSTRUCCIONES;
     private String instruccionMinijuego = "NO DEJES QUE TE ATRAPE!";
     private float tiempo;
-    private float tiempoFinal=8;
+    private float tiempoFinal=5;
     private float tiempoGanador=8;
     private float tiempoMinijuego = 5;
     private float tiempoInstrucciones = 4;
@@ -99,6 +99,9 @@ public class PantallaJuego extends Pantalla {
     private Texture texturadialo;
     private Texture texturadialogoJuanito;
     private Texture texturadialogoMama;
+    private Texture texturaFinalPierde;
+    private Texture texturaFinalJuanito;
+    private Texture texturaFinalMama;
     private  int contadorDialogo=0;
 
     // AssetManager
@@ -243,21 +246,21 @@ public class PantallaJuego extends Pantalla {
                 escenaHUD.addActor(imgDialogo );
                 break;
             case 4:
-                escenaHUD.clear();
+                //escenaHUD.clear();
                 //crearRectangulo();
-                imgDialogo = new Image(texturadialo);
+                imgDialogo = new Image(texturaFinalPierde);
                 imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
                 escenaHUD.addActor(imgDialogo );
                 break;
             case 5:
-                escenaHUD.clear();
+                //escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturadialogoMama);
                 imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
                 escenaHUD.addActor(imgDialogo );
                 break;
             case 6:
-                escenaHUD.clear();
+                //escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturadialo);
                 imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
@@ -709,6 +712,7 @@ public class PantallaJuego extends Pantalla {
         texturadialo = manager.get("Images/dialogos/dialo.png");
         texturadialogoJuanito = manager.get("Images/dialogos/dialogoJuanito.png");
         texturadialogoMama = manager.get("Images/dialogos/dialogoMama1.png");
+        texturaFinalPierde = manager.get("Images/dialogos/finalPierde.png");
         texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/correcto.png");
         texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/incorrecto.png");
     }
@@ -1022,6 +1026,7 @@ public class PantallaJuego extends Pantalla {
                 break;
             case PERDIDO:
                 if(tiempoFinal<=0) {
+                    //menu.musicaFondo.stop();
                     if (escenaGameOver == null) {
                         escenaGameOver = new EscenaGameOver(vistaHUD, batch);
                         actualizarCamara();
@@ -1033,15 +1038,15 @@ public class PantallaJuego extends Pantalla {
                     batch.end();
                     break;
                 }else{
-                    if(tiempoFinal>=7){
+                    if(tiempoFinal>=4){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                         Juanito.actualizar(mapa);
-                    }else if(tiempoFinal>=5){
+                    }else if(tiempoFinal>=2){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                         contadorDialogo=4;
                         dibujardialogo();
                         Juanito.actualizar(mapa);
-                    }else if(tiempoFinal>=3){
+                    }else if(tiempoFinal>=1){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                         Juanito.actualizar(mapa);
                     }
@@ -1061,7 +1066,9 @@ public class PantallaJuego extends Pantalla {
                     batch.end();
                     break;
                 }else{
-                    if(tiempoGanador>=7){
+                    if(tiempoGanador>=7.5){//Sobre 7-8
+                        Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+                        Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                         Juanito.actualizar(mapa);
                     }else if(tiempoGanador>=6){
@@ -1400,6 +1407,7 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/dialogos/dialo.png");
         manager.unload("Images/dialogos/dialogoJuanito.png");
         manager.unload("Images/dialogos/dialogoMama1.png");
+        manager.unload("Images/dialogos/finalPierde.png");
         manager.unload("Images/screens/pausa.jpg");
         manager.unload("Images/btns/btnMenuPrinc.png");
         manager.unload("Images/btns/btnJugarPausa.png");

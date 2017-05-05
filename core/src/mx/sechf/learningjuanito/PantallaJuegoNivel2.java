@@ -36,6 +36,8 @@ public class PantallaJuegoNivel2 extends Pantalla {
     public Minijuego minijuego = Minijuego.INSTRUCCIONES;
     private String instruccionMinijuego = "NO DEJES QUE TE ATRAPE!";
     private float tiempo;
+    private float tiempoFinal=5;
+    private float tiempoGanador=8;
     private float tiempoMinijuego = 4;
     private float tiempoInstrucciones = 4;
     private int ordenItems, numero1=-1, numero2;
@@ -97,6 +99,9 @@ public class PantallaJuegoNivel2 extends Pantalla {
     private Texture texturadialo;
     private Texture texturadialogoJuanito;
     private Texture texturadialogoMama;
+    private Texture texturaFinalPierde;
+    private Texture texturaFinalJuanito;
+    private Texture texturaFinalMama;
     private  int contadorDialogo=0;
 
     // AssetManager
@@ -1005,6 +1010,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
                 escenaPausa.draw();
                 break;
             case PERDIDO:
+                if(tiempoFinal<=0) {
                 if (escenaGameOver==null) {
                     escenaGameOver = new EscenaGameOver(vistaHUD, batch);
                     actualizarCamara();
@@ -1014,6 +1020,22 @@ public class PantallaJuegoNivel2 extends Pantalla {
                 batch.begin();
                 puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int)(puntosJugador*10)), ANCHO/2,ALTO/3);
                 batch.end();
+                break;
+                }else{
+                    if(tiempoFinal>=4){
+                        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                        Juanito.actualizar(mapa);
+                    }else if(tiempoFinal>=2){
+                        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                        contadorDialogo=4;
+                        dibujardialogo();
+                        Juanito.actualizar(mapa);
+                    }else if(tiempoFinal>=1){
+                        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                        Juanito.actualizar(mapa);
+                    }
+                    tiempoFinal-=delta;
+                }
                 break;
             case TERMINADO:
                 if (escenaGanaste==null) {
