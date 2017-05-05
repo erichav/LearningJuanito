@@ -244,6 +244,27 @@ public class PantallaJuegoNivel2 extends Pantalla {
                 imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
                 escenaHUD.addActor(imgDialogo );
                 break;
+            case 4:
+                //escenaHUD.clear();
+                //crearRectangulo();
+                imgDialogo = new Image(texturaFinalPierde);
+                imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
+                escenaHUD.addActor(imgDialogo );
+                break;
+            case 5:
+                //escenaHUD.clear();
+                //crearRectangulo();
+                imgDialogo = new Image(texturadialogoMama);
+                imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
+                escenaHUD.addActor(imgDialogo );
+                break;
+            case 6:
+                //escenaHUD.clear();
+                //crearRectangulo();
+                imgDialogo = new Image(texturadialo);
+                imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
+                escenaHUD.addActor(imgDialogo );
+                break;
             default:break;
         }
     }
@@ -690,6 +711,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
         texturadialo = manager.get("Images/dialogos/dialo.png");
         texturadialogoJuanito = manager.get("Images/dialogos/dialogoJuanito.png");
         texturadialogoMama = manager.get("Images/dialogos/dialogoMama1.png");
+        texturaFinalPierde = manager.get("Images/dialogos/finalPierde.png");
         texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/correcto.png");
         texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/incorrecto.png");
     }
@@ -1394,6 +1416,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
         manager.unload("Images/dialogos/dialo.png");
         manager.unload("Images/dialogos/dialogoJuanito.png");
         manager.unload("Images/dialogos/dialogoMama1.png");
+        manager.unload("Images/dialogos/finalPierde.png");
         manager.unload("Images/screens/pausa.jpg");
         manager.unload("Images/btns/btnMenuPrinc.png");
         manager.unload("Images/btns/btnJugarPausa.png");
