@@ -71,6 +71,8 @@ class PantallaCargando extends Pantalla
         manager.load("Images/dialogos/dialogoJuanito.png", Texture.class);
         manager.load("Images/dialogos/dialogoMama1.png", Texture.class);
         manager.load("Images/dialogos/finalPierde.png", Texture.class);
+        manager.load("Images/dialogos/finalGanaJuanito.png", Texture.class);
+        manager.load("Images/dialogos/finalGanaMama.png", Texture.class);
         manager.load("Images/screens/pausa.jpg", Texture.class);
         manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
         manager.load("Images/btns/btnJugarPausa.png", Texture.class);
@@ -94,6 +96,8 @@ class PantallaCargando extends Pantalla
         manager.load("Images/dialogos/dialogoJuanito.png", Texture.class);
         manager.load("Images/dialogos/dialogoMama1.png", Texture.class);
         manager.load("Images/dialogos/finalPierde.png", Texture.class);
+        manager.load("Images/dialogos/finalGanaJuanito.png", Texture.class);
+        manager.load("Images/dialogos/finalGanaMama.png", Texture.class);
         manager.load("Images/screens/pausa.jpg", Texture.class);
         manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
         manager.load("Images/btns/btnJugarPausa.png", Texture.class);
@@ -118,6 +122,8 @@ class PantallaCargando extends Pantalla
         manager.load("Images/dialogos/dialogoJuanito.png", Texture.class);
         manager.load("Images/dialogos/dialogoMama1.png", Texture.class);
         manager.load("Images/dialogos/finalPierde.png", Texture.class);
+        manager.load("Images/dialogos/finalGanaJuanito.png", Texture.class);
+        manager.load("Images/dialogos/finalGanaMama.png", Texture.class);
         manager.load("Images/screens/pausa.jpg", Texture.class);
         manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
         manager.load("Images/btns/btnJugarPausa.png", Texture.class);
