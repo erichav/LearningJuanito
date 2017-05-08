@@ -171,7 +171,7 @@ class PantallaCargando extends Pantalla
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         spriteCargando.draw(batch);
-        texto.mostrarMensaje(batch,avance+" %",ANCHO/2,ALTO/2);
+        texto.mostrarMensaje(batch,avance+" %",ANCHO/2+15,ALTO/2+15);
         batch.end();
         // Actualizar
         timerAnimacion -= delta;
