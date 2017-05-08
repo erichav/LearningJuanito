@@ -1098,7 +1098,8 @@ public class PantallaJuego extends Pantalla {
                         dibujardialogo();
                     }
                     tiempoGanador-=delta;
-                    break;}
+                    break;
+                }
         }
     }
 
