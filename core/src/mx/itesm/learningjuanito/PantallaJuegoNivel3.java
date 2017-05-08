@@ -1040,17 +1040,17 @@ public class PantallaJuegoNivel3 extends Pantalla {
                     batch.end();
                     break;
                 }else{
-                    if(tiempoGanador>=4.5){//Sobre 7-8
+                    if(tiempoGanador>=4.7){//Sobre 7-8
                         Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                         Juanito.actualizar(mapa);
-                    }else if(tiempoGanador>=3){
+                    }else if(tiempoGanador>=4){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                         Juanito.actualizar(mapa);
                     }else{
-                        contadorDialogo=6;
-                        dibujardialogo();
+                        //contadorDialogo=6;
+                        //dibujardialogo();
                     }
                     tiempoGanador-=delta;
                     break;

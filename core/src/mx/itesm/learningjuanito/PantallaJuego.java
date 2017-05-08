@@ -265,7 +265,7 @@ public class PantallaJuego extends Pantalla {
                 //escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturaFinalJuanito);
-                imgDialogo .setPosition(25*ANCHO/50-imgDialogo.getWidth()/2,60*ALTO/100-imgDialogo.getHeight()/2);
+                imgDialogo .setPosition(23*ANCHO/50-imgDialogo.getWidth()/2,40*ALTO/100-imgDialogo.getHeight()/2);
                 escenaHUD.addActor(imgDialogo );
                 break;
             default:break;
@@ -1037,17 +1037,17 @@ public class PantallaJuego extends Pantalla {
                     batch.end();
                     break;
                 }else{
-                    if(tiempoGanador>=4.5){//Sobre 7-8
+                    if(tiempoGanador>=4.7){//Sobre 7-8
                         Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                         Juanito.actualizar(mapa);
-                    }else if(tiempoGanador>=3){
+                    }else if(tiempoGanador>=4){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                         Juanito.actualizar(mapa);
                     }else{
-                        contadorDialogo=6;
-                        dibujardialogo();
+                        //contadorDialogo=6;
+                        //dibujardialogo();
                     }
                     tiempoGanador-=delta;
                     break;
