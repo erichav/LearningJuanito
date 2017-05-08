@@ -1046,8 +1046,8 @@ public class PantallaJuego extends Pantalla {
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                         Juanito.actualizar(mapa);
                     }else{
-                        //contadorDialogo=6;
-                        //dibujardialogo();
+                        contadorDialogo=6;
+                        dibujardialogo();
                     }
                     tiempoGanador-=delta;
                     break;

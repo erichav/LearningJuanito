@@ -264,7 +264,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
                 escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturaFinalJuanito);
-                imgDialogo .setPosition(20*ANCHO/50-imgDialogo.getWidth()/2,60*ALTO/100-imgDialogo.getHeight()/2);
+                imgDialogo .setPosition(25*ANCHO/50-imgDialogo.getWidth()/2,40*ALTO/100-imgDialogo.getHeight()/2);
                 escenaHUD.addActor(imgDialogo );
                 break;
             default:break;
@@ -1049,8 +1049,8 @@ public class PantallaJuegoNivel2 extends Pantalla {
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                         Juanito.actualizar(mapa);
                     }else{
-                        //contadorDialogo=6;
-                        //dibujardialogo();
+                        contadorDialogo=6;
+                        dibujardialogo();
                     }
                     tiempoGanador-=delta;
                     break;
@@ -1376,6 +1376,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
         Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         Mama.actualizar(mapa);
+        //
         Juanito.actualizar(mapa);
         eliminarObjetos();
         escenaHUD.clear();
