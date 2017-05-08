@@ -734,7 +734,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
                             escenaHUD.addActor(retroalimentacion);
                         }
                         else{
-                            puntosJugador-=20;
+                            puntosJugador-=15;
+                            Juanito.retrasar();
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
@@ -751,7 +752,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
                     else
                     {
                         if(posYJuanito >= 4){
-                            puntosJugador-=20;
+                            puntosJugador-=15;
+                            Juanito.retrasar();
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
@@ -813,7 +815,11 @@ public class PantallaJuegoNivel3 extends Pantalla {
                         if(tiempoInstrucciones<=0) {
                             instruccionMinijuego = "";
                             recolectando = true;
-                            escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
+                            try {
+                                escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
+                            }catch (Exception e){
+
+                            }
                             cambiaMinijuego(siguienteJuego);
                         }
                         tiempoInstrucciones-=delta;
@@ -918,7 +924,11 @@ public class PantallaJuegoNivel3 extends Pantalla {
                     tiempoRetroalimentacion-=delta;
                     if(tiempoRetroalimentacion<=0)
                     {
-                        escenaHUD.getActors().get(escenaHUD.getActors().indexOf(retroalimentacion,false)).remove();
+                        try {
+                            escenaHUD.getActors().get(escenaHUD.getActors().indexOf(retroalimentacion,false)).remove();
+                        }catch (Exception e){
+
+                        }
                         retroalimenta=false;
                     }
                 }
@@ -1115,6 +1125,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
     private void colision() {
         if(Juanito.Colisiona(Mama))
         {
+            Juanito.quitaRetraso();
             if(vidas>0)
             {
                 vidas--;

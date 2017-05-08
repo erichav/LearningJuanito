@@ -16,7 +16,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 public class Personaje extends Objeto
 {
     private float velocidad = 10; // Velocidad inicial de Juanito
-    private int ANCHO_PERSONAJE, ALTO_PERSONAJE;
+    private float retraso = 4.5f;
+    private int tiempoRetraso = -1;
 
     private Animation<TextureRegion> spriteAnimado;         // Animación de Juanito caminando
     private float timerAnimacion, yInicial, tiempo;                          // Tiempo para cambiar frames de la animación
@@ -118,7 +119,19 @@ public class Personaje extends Objeto
         }
     }
 
-
+    public void retrasar()
+    {
+        tiempoRetraso = 12;
+        velocidad-=retraso;
+    }
+    public void quitaRetraso()
+    {
+        if(tiempoRetraso>0)
+        {
+            velocidad+=retraso;
+            tiempoRetraso=-1;
+        }
+    }
     // Mueve el personaje a la derecha/izquierda, prueba choques con obstáculos
     private void moverHorizontal(TiledMap mapa) {
         // Obtiene la primer capa del mapa (en este caso es la única)
@@ -128,6 +141,15 @@ public class Personaje extends Objeto
         // ¿Quiere ir a la Derecha?
         if ( estadoMovimiento== EstadoMovimiento.MOV_DERECHA) {
             velocidad = velocidad + 0.001f;
+            if(tiempoRetraso>0)
+            {
+                tiempoRetraso--;
+            }
+            if(tiempoRetraso == 0)
+            {
+                velocidad+=retraso;
+                tiempoRetraso--;
+            }
             // Obtiene el bloque del lado derecho. Asigna null si puede pasar.
             int x = (int) ((sprite.getX() + sprite.getWidth()-10.0f) / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
             int y = (int) ((sprite.getY()) / 32);
