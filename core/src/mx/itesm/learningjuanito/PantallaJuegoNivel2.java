@@ -1375,7 +1375,10 @@ public class PantallaJuegoNivel2 extends Pantalla {
         Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+        Mama.actualizar(mapa);
+        Juanito.actualizar(mapa);
         eliminarObjetos();
+        escenaHUD.clear();
         menu.musicaFondo.stop();
     }
 
