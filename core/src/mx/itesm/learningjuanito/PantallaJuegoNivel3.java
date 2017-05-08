@@ -265,7 +265,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturaFinalJuanito);
-                imgDialogo .setPosition(25*ANCHO/50-imgDialogo.getWidth()/2,40*ALTO/100-imgDialogo.getHeight()/2);
+                imgDialogo .setPosition(28*ANCHO/50-imgDialogo.getWidth()/2,40*ALTO/100-imgDialogo.getHeight()/2);
                 escenaHUD.addActor(imgDialogo );
                 break;
             default:break;
@@ -1041,8 +1041,10 @@ public class PantallaJuegoNivel3 extends Pantalla {
                     break;
                 }else{
                     if(tiempoGanador>=4.7){//Sobre 7-8
-                        Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
-                        Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+                        if(Juanito.sprite.getX()<camara.position.x)
+                        {
+                            tiempoGanador+=delta;
+                        }
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                         Juanito.actualizar(mapa);
                     }else if(tiempoGanador>=4){
@@ -1369,8 +1371,6 @@ public class PantallaJuegoNivel3 extends Pantalla {
         estadoJuego = EstadoJuego.PERDIDO;
         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
-        Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
-        Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         eliminarObjetos();
         menu.musicaFondo.stop();
     }
@@ -1380,8 +1380,6 @@ public class PantallaJuegoNivel3 extends Pantalla {
         estadoJuego = EstadoJuego.TERMINADO;
         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
-        Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
-        Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         Mama.actualizar(mapa);
         Juanito.actualizar(mapa);
         eliminarObjetos();
