@@ -900,8 +900,8 @@ public class PantallaJuego extends Pantalla {
                                 }
                                 else
                                 {
-                                    generaItem(numero1, posicionObjeto,8);
-                                    generaItem(numero2, posicionObjeto,1);
+                                    generaItem(numero2, posicionObjeto,8);
+                                    generaItem(numero1, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
