@@ -39,7 +39,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
     private boolean recolectando = true;
     private float tiempo;
     private float tiempoFinal=5;
-    private float tiempoGanador=8;
+    private float tiempoGanador=5;
     private float tiempoMinijuego = 4;
     private float tiempoInstrucciones = 4;
     private int ordenItems, numero1=-1, numero2;
@@ -238,21 +238,21 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturadialogoJuanito);
-                imgDialogo .setPosition(20*ANCHO/50-imgDialogo.getWidth()/2,60*ALTO/100-imgDialogo.getHeight()/2);
+                imgDialogo .setPosition(22*ANCHO/50-imgDialogo.getWidth()/2,40*ALTO/100-imgDialogo.getHeight()/2);
                 escenaHUD.addActor(imgDialogo );
                 break;
             case 3:
                 escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturadialo);
-                imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
+                imgDialogo .setPosition(9*ANCHO/50-imgDialogo.getWidth()/2,43*ALTO/100-imgDialogo.getHeight()/2);
                 escenaHUD.addActor(imgDialogo );
                 break;
             case 4:
                 //escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturaFinalPierde);
-                imgDialogo .setPosition(10*ANCHO/50-imgDialogo.getWidth()/2,62*ALTO/100-imgDialogo.getHeight()/2);
+                imgDialogo .setPosition(9*ANCHO/50-imgDialogo.getWidth()/2,43*ALTO/100-imgDialogo.getHeight()/2);
                 escenaHUD.addActor(imgDialogo );
                 break;
             case 5:
@@ -1051,17 +1051,14 @@ public class PantallaJuegoNivel3 extends Pantalla {
                     batch.end();
                     break;
                 }else{
-                    if(tiempoGanador>=7.5){//Sobre 7-8
+                    if(tiempoGanador>=4.5){//Sobre 7-8
                         Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                         Juanito.actualizar(mapa);
-                    }else if(tiempoGanador>=6){
+                    }else if(tiempoGanador>=3){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                         Juanito.actualizar(mapa);
-                    }else if(tiempoGanador>=3){
-                        contadorDialogo=5;
-                        dibujardialogo();
                     }else{
                         contadorDialogo=6;
                         dibujardialogo();
