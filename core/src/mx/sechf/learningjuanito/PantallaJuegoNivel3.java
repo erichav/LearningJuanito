@@ -36,6 +36,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
     public EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
     public Minijuego minijuego = Minijuego.INSTRUCCIONES;
     private String instruccionMinijuego = "NO DEJES QUE TE ATRAPE!";
+    private boolean recolectando = true;
     private float tiempo;
     private float tiempoFinal=5;
     private float tiempoGanador=8;
@@ -70,11 +71,15 @@ public class PantallaJuegoNivel3 extends Pantalla {
 
     //Juanito
     private Personaje Juanito;
-    private Texture texturaJuanito;
+    private Texture texturaJuanitoquieto;
+    private Texture texturaJuanito1;
+    private Texture texturaJuanito2;
 
     //Mama
     private Personaje Mama;
-    private Texture texturaMama;
+    private Texture texturaMamaquieta;
+    private Texture texturaMama1;
+    private Texture texturaMama2;
 
     // Efecto de Sonido
     private Sound cachetada;
@@ -693,8 +698,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
     }
 
     private void cargarPersonajes() {
-        Juanito = new Personaje(texturaJuanito,90,180,-200,32);
-        Mama = new Personaje(texturaMama,120,240,-200,32);
+        Juanito = new Personaje(texturaJuanitoquieto,texturaJuanito1,texturaJuanito2,-200,32);
+        Mama = new Personaje(texturaMamaquieta,texturaMama1,texturaMama2,-200,32);
     }
 
     private void cargarMapa() {
@@ -706,8 +711,12 @@ public class PantallaJuegoNivel3 extends Pantalla {
     }
 
     private void cargarTexturas() {
-        texturaJuanito = manager.get("Images/objects/Juanito/juanito.png");
-        texturaMama = manager.get("Images/objects/Mama/mamaJuanito.png");
+        texturaJuanitoquieto = manager.get("Images/personajes/Juanito/Juanito0.png");
+        texturaJuanito1 = manager.get("Images/personajes/Juanito/Juanito1.png");
+        texturaJuanito2 = manager.get("Images/personajes/Juanito/Juanito2.png");
+        texturaMamaquieta = manager.get("Images/personajes/Mama/Mama0.png");
+        texturaMama1 = manager.get("Images/personajes/Mama/Mama1.png");
+        texturaMama2 = manager.get("Images/personajes/Mama/Mama2.png");
         texturaVidas = manager.get("Images/PantallaJuego/vida.png");
         texturadialo = manager.get("Images/dialogos/dialo.png");
         texturadialogoJuanito = manager.get("Images/dialogos/dialogoJuanito.png");
@@ -750,8 +759,9 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 Juanito.actualizar(mapa);
                 Mama.actualizar(mapa);
                 Mama.checaSalto(mapa);
-                if(Juanito.recolectarItems(mapa))
+                if(recolectando && Juanito.recolectarItems(mapa))
                 {
+                    recolectando = false;
                     if(ordenItems == 1)
                     {
                         if(posYJuanito >= 4){
@@ -844,6 +854,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                         // TERMINA CAMBIO INSTRUCCIONES
                         if(tiempoInstrucciones<=0) {
                             instruccionMinijuego = "";
+                            recolectando = true;
                             escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
                             cambiaMinijuego(siguienteJuego);
                         }
@@ -1401,8 +1412,12 @@ public class PantallaJuegoNivel3 extends Pantalla {
 
     @Override
     public void dispose() {
-        manager.unload("Images/objects/Juanito/juanito.png");
-        manager.unload("Images/objects/Mama/mamaJuanito.png");
+        manager.unload("Images/personajes/Juanito/Juanito0.png");
+        manager.unload("Images/personajes/Juanito/Juanito1.png");
+        manager.unload("Images/personajes/Juanito/Juanito2.png");
+        manager.unload("Images/personajes/Mama/Mama0.png");
+        manager.unload("Images/personajes/Mama/Mama1.png");
+        manager.unload("Images/personajes/Mama/Mama2.png");
         manager.unload("Images/PantallaJuego/vida.png");
         manager.unload("Images/btns/btnContinuar.png");
         manager.unload("Images/dialogos/dialo.png");

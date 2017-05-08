@@ -63,8 +63,12 @@ class PantallaCargando extends Pantalla
     }
 
     private void cargarRecursosNivel1() {
-        manager.load("Images/objects/Juanito/juanito.png", Texture.class);
-        manager.load("Images/objects/Mama/mamaJuanito.png", Texture.class);
+        manager.load("Images/personajes/Juanito/Juanito0.png", Texture.class);
+        manager.load("Images/personajes/Juanito/Juanito1.png", Texture.class);
+        manager.load("Images/personajes/Juanito/Juanito2.png", Texture.class);
+        manager.load("Images/personajes/Mama/Mama0.png", Texture.class);
+        manager.load("Images/personajes/Mama/Mama1.png", Texture.class);
+        manager.load("Images/personajes/Mama/Mama2.png", Texture.class);
         manager.load("Images/PantallaJuego/vida.png", Texture.class);
         manager.load("Images/btns/btnContinuar.png", Texture.class);
         manager.load("Images/dialogos/dialo.png", Texture.class);
@@ -88,8 +92,12 @@ class PantallaCargando extends Pantalla
         manager.load("Audio/Incorrecto.mp3", Sound.class);
     }
     private void cargarRecursosNivel2() {
-        manager.load("Images/objects/Juanito/juanito.png", Texture.class);
-        manager.load("Images/objects/Mama/mamaJuanito.png", Texture.class);
+        manager.load("Images/personajes/Juanito/Juanito0.png", Texture.class);
+        manager.load("Images/personajes/Juanito/Juanito1.png", Texture.class);
+        manager.load("Images/personajes/Juanito/Juanito2.png", Texture.class);
+        manager.load("Images/personajes/Mama/Mama0.png", Texture.class);
+        manager.load("Images/personajes/Mama/Mama1.png", Texture.class);
+        manager.load("Images/personajes/Mama/Mama2.png", Texture.class);
         manager.load("Images/PantallaJuego/vida.png", Texture.class);
         manager.load("Images/btns/btnContinuar.png", Texture.class);
         manager.load("Images/dialogos/dialo.png", Texture.class);
@@ -114,8 +122,12 @@ class PantallaCargando extends Pantalla
     }
 
     private void cargarRecursosNivel3(){
-        manager.load("Images/objects/Juanito/juanito.png", Texture.class);
-        manager.load("Images/objects/Mama/mamaJuanito.png", Texture.class);
+        manager.load("Images/personajes/Juanito/Juanito0.png", Texture.class);
+        manager.load("Images/personajes/Juanito/Juanito1.png", Texture.class);
+        manager.load("Images/personajes/Juanito/Juanito2.png", Texture.class);
+        manager.load("Images/personajes/Mama/Mama0.png", Texture.class);
+        manager.load("Images/personajes/Mama/Mama1.png", Texture.class);
+        manager.load("Images/personajes/Mama/Mama2.png", Texture.class);
         manager.load("Images/PantallaJuego/vida.png", Texture.class);
         manager.load("Images/btns/btnContinuar.png", Texture.class);
         manager.load("Images/dialogos/dialo.png", Texture.class);

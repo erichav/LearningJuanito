@@ -43,6 +43,7 @@ class PantallaLogo extends Pantalla
         juego.musicaFondo = Gdx.audio.newMusic(Gdx.files.internal("Audio/menuFondo.mp3"));
         juego.musicaFondo.setVolume(0.75f);
         juego.musicaFondo.setLooping(true);
+        if(juego.isMusicOn())
         juego.musicaFondo.play();
     }
     @Override

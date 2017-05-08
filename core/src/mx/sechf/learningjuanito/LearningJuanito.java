@@ -1,6 +1,8 @@
 package mx.sechf.learningjuanito;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
@@ -12,8 +14,9 @@ public class LearningJuanito extends Game {
 	SpriteBatch batch;
 	private final AssetManager assetManager;
 	public Music musicaFondo;
-	private boolean musicOn = true;
-	private boolean effectsOn = true;
+	private boolean musicOn;
+	private boolean effectsOn;
+	private Preferences preferences;
 
 	public LearningJuanito() {
 		assetManager = new AssetManager();
@@ -22,15 +25,27 @@ public class LearningJuanito extends Game {
 	@Override
 	public void create () {
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver())); // Le permitimos cargar mapas
+		revisarSonido();
 		setScreen(new PantallaLogo(this)); // Lanzamos el logo del Tec.
 	}
+
+	private void revisarSonido() {
+		preferences = Gdx.app.getPreferences("marcador");
+		musicOn = preferences.getBoolean("Musica",true);
+		effectsOn = preferences.getBoolean("Efectos",true);
+	}
+
 	public void turnEffectsOn()
 	{
-		this.effectsOn = !effectsOn;
+		effectsOn = !effectsOn;
+		preferences.putBoolean("Efectos",effectsOn);
+		preferences.flush();
 	}
 	public void turnMusicOn()
 	{
-		this.musicOn = !musicOn;
+		musicOn = !musicOn;
+		preferences.putBoolean("Musica",musicOn);
+		preferences.flush();
 	}
 	public boolean isMusicOn()
 	{

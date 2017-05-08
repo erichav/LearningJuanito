@@ -25,22 +25,20 @@ public class Personaje extends Objeto
     private EstadoSalto estadoSalto = EstadoSalto.EN_PISO;
 
     // Recibe la imagen de Juanito con todos sus frames
-    public Personaje(Texture textura, int w, int h, float x, float y) {
-        this.ANCHO_PERSONAJE = w;
-        this.ALTO_PERSONAJE = h;
+    public Personaje(Texture texturaquieto, Texture textura1, Texture textura2, float x, float y) {
         // Lee la textura como región
-        TextureRegion texturaCompleta = new TextureRegion(textura);
+        //TextureRegion texturaCompleta = new TextureRegion(textura);
         // La divide en 4 frames de 32x64
-        TextureRegion[][] texturaPersonaje = texturaCompleta.split(w,h);
+        //TextureRegion[][] texturaPersonaje = texturaCompleta.split(w,h);
         // Crea la animación con tiempo de 0.25 segundos entre frames.
 
-        spriteAnimado = new Animation(0.1f, texturaPersonaje[0][0], texturaPersonaje[0][1], texturaPersonaje[0][2], texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1] );
+        spriteAnimado = new Animation(0.1f, new TextureRegion(textura1), new TextureRegion(textura2));
         // Animación infinita
         spriteAnimado.setPlayMode(Animation.PlayMode.LOOP);
         // Inicia el timer que contará tiempo para saber qué frame se dibuja
         timerAnimacion = 0;
         // Crea el sprite con el personaje quieto
-        sprite = new Sprite(texturaPersonaje[0][0]);    // QUIETO
+        sprite = new Sprite(new TextureRegion(texturaquieto));    // QUIETO
         sprite.setPosition(x,y);    // Posición inicial
     }
 
@@ -92,21 +90,30 @@ public class Personaje extends Objeto
             // VERIFICAMOS QUE NO TENGA UN OBSTÁCULO DEBAJO
             TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
             int x = (int) (sprite.getX() / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
-            int y = (int) ((sprite.getY() + 10 ) / 32);
+            int y = (int) ((sprite.getY() -15.0f) / 32);
+            Gdx.app.log("x: " +x ," y:" + y);
+            int xFinal = (int) (sprite.getX() + sprite.getWidth() / 32);
             TiledMapTileLayer.Cell celdaAbajo = capa.getCell(x, y);
+            TiledMapTileLayer.Cell celdaAbajoFinal = capa.getCell(xFinal-1, y);
             if (celdaAbajo != null) {
                 Object tipo = (String) celdaAbajo.getTile().getProperties().get("tipo");
                 if (!"obstaculo".equals(tipo)) {
                     celdaAbajo = null;  // Puede pasar
                 }
             }
-            if (celdaAbajo == null) {
+            if (celdaAbajoFinal != null) {
+                Object tipo = (String) celdaAbajoFinal.getTile().getProperties().get("tipo");
+                if (!"obstaculo".equals(tipo)) {
+                    celdaAbajoFinal = null;  // Puede pasar
+                }
+            }
+            if (celdaAbajo == null && celdaAbajoFinal==null) {
                 yNueva = (int) (yInicial + 20 * tiempo - (0.98 * tiempo * tiempo) / 2);
                 sprite.setY(yNueva);
                 tiempo++;
             }
-            if (sprite.getY() <= yInicial) {
-                sprite.setY(yInicial);
+            if (sprite.getY() <= 32) {
+                sprite.setY(32);
                 estadoSalto = EstadoSalto.EN_PISO;
             }
         }
@@ -123,14 +130,19 @@ public class Personaje extends Objeto
         if ( estadoMovimiento== EstadoMovimiento.MOV_DERECHA) {
             velocidad = velocidad + 0.001f;
             // Obtiene el bloque del lado derecho. Asigna null si puede pasar.
-            int x = (int) ((sprite.getX() + 32) / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
-            int y = (int) ((sprite.getY() + 32) / 32);
+            int x = (int) ((sprite.getX() + sprite.getWidth()-23.0f) / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
+            int y = (int) ((sprite.getY()) / 32);
+            Gdx.app.log("MOVIMIENTO x: " +x ," y:" + y + " WIDTH: " + sprite.getWidth());
             TiledMapTileLayer.Cell celdaDerecha = capa.getCell(x, y);
             if (celdaDerecha != null) {
                 Object tipo = (String) celdaDerecha.getTile().getProperties().get("tipo");
                 if (!"obstaculo".equals(tipo)) {
                     celdaDerecha = null;  // Puede pasar
                 }
+            }
+            if(sprite.getWidth()>100)
+            {
+                celdaDerecha=null;
             }
             if ( celdaDerecha==null) {
                 // Ejecutar movimiento horizontal
@@ -149,16 +161,20 @@ public class Personaje extends Objeto
     // Revisa si toca un numero
     public boolean recolectarItems(TiledMap mapa) {
         TiledMapTileLayer capa = (TiledMapTileLayer)mapa.getLayers().get(3);
-        int x = (int)(sprite.getX()/ 32)+1;
+        int x = (int)(sprite.getX()/ 32)+2;
         int y = (int)(sprite.getY()/ 32);
-        TiledMapTileLayer.Cell celda = capa.getCell(x,y);
-        if (celda!=null ) {
-            Object tipo = celda.getTile().getProperties().get("tipo");
-            if ( "item".equals(tipo) ) {
-                return true;
+        TiledMapTileLayer.Cell celda;
+        for(int i = 0;i<6;i++)
+        {
+            celda = capa.getCell(x,y+i);
+            if (celda!=null ) {
+                Object tipo = celda.getTile().getProperties().get("tipo");
+                if ( "item".equals(tipo) ) {
+                    return true;
+                }
             }
         }
-        x = (int)(sprite.getX()/ 32)+1;
+        /*x = (int)(sprite.getX()/ 32)+1;
         y = (int)(sprite.getY()/ 32)+1;
         celda = capa.getCell(x,y);
         if (celda!=null ) {
@@ -166,19 +182,9 @@ public class Personaje extends Objeto
             if ( "item".equals(tipo) ) {
                 return true;
             }
-        }
+        }*/
         return false;
     }
-
-    private void eliminarObjetos(TiledMap mapa) {
-        TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(3);
-        for (int cordX = 0; cordX <= 2000; cordX++) {
-            for (int cordY = 0; cordY <= 25; cordY++) {
-                items.setCell(cordX,cordY, null);
-            }
-        }
-    }
-
     // Accesor de estadoMovimiento
     public EstadoMovimiento getEstadoMovimiento() {
         return estadoMovimiento;
