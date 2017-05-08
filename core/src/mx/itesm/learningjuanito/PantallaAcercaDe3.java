@@ -1,9 +1,7 @@
-package mx.sechf.learningjuanito;
+package mx.itesm.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,24 +13,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+
 
 /**
- * Created by Erick Chávez on 15/02/2017.
+ * Created by Erick Chávez on 03/05/2017.
  */
-public class PantallaInstrucciones extends Pantalla {
 
+public class PantallaAcercaDe3 extends Pantalla {
     private final LearningJuanito menu;
 
     //texturas
-    private Texture texturaInstrucciones;
+    private Texture texturaAcercaDe3;
     private Texture texturaBtnRegresar;
     private Texture texturaBtnJugar;
+    private Texture texturaBtnPrev;
+    private Texture texturaBtnNext;
 
     // Escenas
-    private Stage escenaInstrucciones;
+    private Stage escenaAcercaDe3;
 
-    public PantallaInstrucciones(LearningJuanito menu) {
+    public PantallaAcercaDe3(LearningJuanito menu) {
         this.menu=menu;
     }
 
@@ -45,16 +45,16 @@ public class PantallaInstrucciones extends Pantalla {
 
     private void crearObjetos() {
         batch = new SpriteBatch();
-        escenaInstrucciones = new Stage(vista,batch);
-        Image imgFondo = new Image(texturaInstrucciones);
-        escenaInstrucciones.addActor(imgFondo);
+        escenaAcercaDe3 = new Stage(vista,batch);
+        Image imgFondo = new Image(texturaAcercaDe3);
+        escenaAcercaDe3.addActor(imgFondo);
 
         //botonRegresar
         TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable
                 (new TextureRegion(texturaBtnRegresar));
         ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
         btnRegresar.setPosition(ANCHO/10+50-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
-        escenaInstrucciones.addActor(btnRegresar);
+        escenaAcercaDe3.addActor(btnRegresar);
 
         //accion del boton Regresar
         btnRegresar.addListener(new ClickListener(){
@@ -68,8 +68,8 @@ public class PantallaInstrucciones extends Pantalla {
         TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable
                 (new TextureRegion(texturaBtnJugar));
         ImageButton btnJugar = new ImageButton(trdBtnJugar);
-        btnJugar.setPosition(9*ANCHO/10-60-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
-        escenaInstrucciones.addActor(btnJugar);
+        btnJugar.setPosition(9*ANCHO/10-70-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
+        escenaAcercaDe3.addActor(btnJugar);
 
         //accion del boton jugar
         btnJugar.addListener(new ClickListener(){
@@ -79,14 +79,46 @@ public class PantallaInstrucciones extends Pantalla {
             }
         });
 
-        Gdx.input.setInputProcessor(escenaInstrucciones);
+        //boton Prev
+        TextureRegionDrawable trdBtnPrev = new TextureRegionDrawable
+                (new TextureRegion(texturaBtnPrev));
+        ImageButton btnPrev = new ImageButton(trdBtnPrev);
+        btnPrev.setPosition(ANCHO/2-560-btnPrev.getWidth()/2,2*ALTO/12+280-btnPrev.getHeight()/2);
+        escenaAcercaDe3.addActor(btnPrev);
+
+        //accion del boton Prev
+        btnPrev.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                menu.setScreen(new PantallaAcercaDe2(menu));
+            }
+        });
+
+        //boton Next
+        TextureRegionDrawable trdBtnNext = new TextureRegionDrawable
+                (new TextureRegion(texturaBtnNext));
+        ImageButton btnNext = new ImageButton(trdBtnNext);
+        btnNext.setPosition(ANCHO/2+560-btnNext.getWidth()/2,2*ALTO/12+280-btnNext.getHeight()/2);
+        escenaAcercaDe3.addActor(btnNext);
+
+        //accion del boton jugar
+        btnPrev.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                menu.setScreen(new PantallaAcercaDe2(menu));
+            }
+        });
+
+        Gdx.input.setInputProcessor(escenaAcercaDe3);
         Gdx.input.setCatchBackKey(true);
     }
 
     private void cargarTexturas() {
-        texturaInstrucciones = new Texture("Images/screens/instrucciones.jpg");
+        texturaAcercaDe3 = new Texture("Images/screens/acercade3.jpg");
         texturaBtnRegresar = new Texture("Images/btns/btnMenuPrinc.png");
         texturaBtnJugar = new Texture("Images/btns/btnJugarPantallas.png");
+        texturaBtnPrev = new Texture ("Images/btns/btnIzqAcercaDeAzul.png");
+        texturaBtnNext = new Texture("Images/btns/btnDerechaAcercaDeGris.png");
     }
 
     private void crearCamara() {
@@ -99,7 +131,7 @@ public class PantallaInstrucciones extends Pantalla {
     @Override
     public void render(float delta) {
         borrarPantalla();
-        escenaInstrucciones.draw();
+        escenaAcercaDe3.draw();
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
             menu.setScreen(new PantallaMenu(menu));
         }

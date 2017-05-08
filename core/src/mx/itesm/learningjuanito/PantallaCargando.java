@@ -1,9 +1,10 @@
-package mx.sechf.learningjuanito;
+package mx.itesm.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -15,7 +16,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 class PantallaCargando extends Pantalla
 {
     // Animación cargando
-    private static final float TIEMPO_ENTRE_FRAMES = 0.05f;
+    private static final float TIEMPO_ENTRE_FRAMES = 0.15f;
     private Sprite spriteCargando;
     private float timerAnimacion = TIEMPO_ENTRE_FRAMES;
 
@@ -40,6 +41,7 @@ class PantallaCargando extends Pantalla
         spriteCargando.setPosition(ANCHO/2-spriteCargando.getWidth()/2,ALTO/2-spriteCargando.getHeight()/2);
         cargarRecursosSigPantalla();
         texto = new Texto();
+        texto.setColor(Color.BLACK);
     }
 
     // Carga los recursos de la siguiente pantalla
@@ -78,8 +80,8 @@ class PantallaCargando extends Pantalla
         manager.load("Images/dialogos/finalGanaJuanito.png", Texture.class);
         manager.load("Images/dialogos/finalGanaMama.png", Texture.class);
         manager.load("Images/screens/pausa.jpg", Texture.class);
+        manager.load("Images/screens/chanclazo.jpg", Texture.class);
         manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
-        manager.load("Images/btns/btnJugarPausa.png", Texture.class);
         manager.load("Images/btns/btnOpcionesPausa.png", Texture.class);
         manager.load("Images/screens/gameOver.jpg", Texture.class);
         manager.load("Images/screens/ganaste.jpg", Texture.class);
@@ -108,7 +110,6 @@ class PantallaCargando extends Pantalla
         manager.load("Images/dialogos/finalGanaMama.png", Texture.class);
         manager.load("Images/screens/pausa.jpg", Texture.class);
         manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
-        manager.load("Images/btns/btnJugarPausa.png", Texture.class);
         manager.load("Images/btns/btnOpcionesPausa.png", Texture.class);
         manager.load("Images/screens/gameOver.jpg", Texture.class);
         manager.load("Images/screens/ganaste.jpg", Texture.class);
@@ -138,7 +139,6 @@ class PantallaCargando extends Pantalla
         manager.load("Images/dialogos/finalGanaMama.png", Texture.class);
         manager.load("Images/screens/pausa.jpg", Texture.class);
         manager.load("Images/btns/btnMenuPrinc.png", Texture.class);
-        manager.load("Images/btns/btnJugarPausa.png", Texture.class);
         manager.load("Images/btns/btnOpcionesPausa.png", Texture.class);
         manager.load("Images/screens/gameOver.jpg", Texture.class);
         manager.load("Images/screens/ganaste.jpg", Texture.class);
@@ -167,11 +167,11 @@ class PantallaCargando extends Pantalla
 
     @Override
     public void render(float delta) {
-        borrarPantalla(0.5f, 0.5f, 0.5f);
+        borrarPantalla(1.0f, 1.0f, 1.0f);
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         spriteCargando.draw(batch);
-        texto.mostrarMensaje(batch,avance+" %",ANCHO/2,ALTO/2);
+        texto.mostrarMensaje(batch,avance+" %",ANCHO/2+15,ALTO/2+15);
         batch.end();
         // Actualizar
         timerAnimacion -= delta;

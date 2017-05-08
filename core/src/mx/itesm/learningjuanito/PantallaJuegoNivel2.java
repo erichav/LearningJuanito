@@ -1,4 +1,4 @@
-package mx.sechf.learningjuanito;
+package mx.itesm.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -29,7 +29,7 @@ import java.util.Random;
 /**
  * Created by Erick Chávez on 15/02/2017.
  */
-public class PantallaJuego extends Pantalla {
+public class PantallaJuegoNivel2 extends Pantalla {
 
     private final LearningJuanito menu;
     public EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
@@ -39,9 +39,9 @@ public class PantallaJuego extends Pantalla {
     private float tiempo;
     private float tiempoFinal=5;
     private float tiempoGanador=5;
-    private float tiempoMinijuego = 5;
+    private float tiempoMinijuego = 4;
     private float tiempoInstrucciones = 4;
-    private int ordenItems, numero1, numero2;;
+    private int ordenItems, numero1=-1, numero2;
     private int siguienteJuego = 0;
     private int posXJuanito;
     private int posYJuanito;
@@ -62,7 +62,6 @@ public class PantallaJuego extends Pantalla {
 
     //Alcanzado
     private EscenaAlcanzado escenaAlcanzado;
-    Texto chanclazo = new Texto();
 
     //Mapa
     private TiledMap mapa;
@@ -118,14 +117,13 @@ public class PantallaJuego extends Pantalla {
     // HUD
     private OrthographicCamera camaraHUD;
     private Viewport vistaHUD;
-
     // El HUD lo manejamos con una escena (opcional)
     private Stage escenaHUD;
     private Texto mensajeMinijuego = new Texto();
     Image imgRectangulo;
     ImageButton btnPausa;
 
-    public PantallaJuego(LearningJuanito menu) { this.menu=menu; manager = menu.getAssetManager();}
+    public PantallaJuegoNivel2(LearningJuanito menu) { this.menu=menu; manager = menu.getAssetManager();}
 
     @Override
     public void show() {
@@ -263,10 +261,10 @@ public class PantallaJuego extends Pantalla {
                 escenaHUD.addActor(imgDialogo );
                 break;
             case 6:
-                //escenaHUD.clear();
+                escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturaFinalJuanito);
-                imgDialogo .setPosition(25*ANCHO/50-imgDialogo.getWidth()/2,60*ALTO/100-imgDialogo.getHeight()/2);
+                imgDialogo .setPosition(20*ANCHO/50-imgDialogo.getWidth()/2,60*ALTO/100-imgDialogo.getHeight()/2);
                 escenaHUD.addActor(imgDialogo );
                 break;
             default:break;
@@ -295,25 +293,19 @@ public class PantallaJuego extends Pantalla {
 
         public EscenaAlcanzado(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
-            // Crear rectángulo transparente
-            Pixmap pixmap = new Pixmap((int)(ANCHO*0.6f), (int)(ALTO*0.7f), Pixmap.Format.RGBA8888 );
-            pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.65f );
-            pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
-            Texture texturaRectangulo = new Texture( pixmap );
-            pixmap.dispose();
-            Image imgRectangulo = new Image(texturaRectangulo);
-            imgRectangulo.setPosition((ANCHO-pixmap.getWidth())/2, (ALTO-pixmap.getHeight())/2);
-            this.addActor(imgRectangulo);
+            Texture texturaAlcanzado;
+            Texture texturaBtnContinuar;
+            texturaAlcanzado = manager.get("Images/screens/chanclazo.jpg");
+            texturaBtnContinuar = manager.get("Images/btns/btnContinuar.png");
+            Image imgFondo = new Image(texturaAlcanzado);
+            this.addActor(imgFondo);
+            // Botón Continuar
+            TextureRegionDrawable trdBtnContinuar = new TextureRegionDrawable(new TextureRegion(texturaBtnContinuar));
+            ImageButton btnContinuar = new ImageButton(trdBtnContinuar);
+            btnContinuar.setPosition(ANCHO/2-btnContinuar.getWidth()/2,ALTO/3-btnContinuar.getHeight()/2);
+            this.addActor(btnContinuar);
 
-            // Crea el texto
-            this.addActor(chanclazo);
-
-            // Continuar
-            Texture texturabtnContinuar = manager.get("Images/btns/btnContinuar.png");
-            TextureRegionDrawable trdContinuar = new TextureRegionDrawable(
-                    new TextureRegion(texturabtnContinuar));
-            ImageButton btnContinuar = new ImageButton(trdContinuar);
-            btnContinuar.setPosition(ANCHO/2-btnContinuar.getWidth()/2, ALTO/5);
+            // Acción del botón continuar
             btnContinuar.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -330,7 +322,6 @@ public class PantallaJuego extends Pantalla {
                     }
                 }
             });
-            this.addActor(btnContinuar);
         }
     }
 
@@ -357,11 +348,11 @@ public class PantallaJuego extends Pantalla {
             super(vista, batch);
             Texture texturaPausa;
             Texture texturaBtnRegresar;
-            Texture texturaBtnJugar;
+            Texture texturaBtnContinuar;
             Texture texturaBtnOpciones;
             texturaPausa = manager.get("Images/screens/pausa.jpg");
             texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
-            texturaBtnJugar = manager.get("Images/btns/btnJugarPausa.png");
+            texturaBtnContinuar = manager.get("Images/btns/btnContinuar.png");
             texturaBtnOpciones = manager.get("Images/btns/btnOpcionesPausa.png");
             Image imgFondo = new Image(texturaPausa);
             this.addActor(imgFondo);
@@ -379,14 +370,14 @@ public class PantallaJuego extends Pantalla {
                     menu.setScreen(new PantallaMenu(menu));
                 }
             });
-            // Botón Jugar
-            TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable(new TextureRegion(texturaBtnJugar));
-            ImageButton btnJugar = new ImageButton(trdBtnJugar);
-            btnJugar.setPosition(ANCHO/2-30-btnJugar.getWidth()/2,2*ALTO/12+90-btnJugar.getHeight()/2);
-            this.addActor(btnJugar);
+            // Botón Continuar
+            TextureRegionDrawable trdBtnContinuar = new TextureRegionDrawable(new TextureRegion(texturaBtnContinuar));
+            ImageButton btnContinuar = new ImageButton(trdBtnContinuar);
+            btnContinuar.setPosition(ANCHO/2-30-btnContinuar.getWidth()/2,2*ALTO/12+90-btnContinuar.getHeight()/2);
+            this.addActor(btnContinuar);
 
-            // Acción del botón jugar
-            btnJugar.addListener(new ClickListener(){
+            // Acción del botón continuar
+            btnContinuar.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     // Continuar el juego
@@ -623,7 +614,7 @@ public class PantallaJuego extends Pantalla {
             this.puntaje = puntaje;
             this.nombre = nombre;
         }
-        public java.lang.String getNombre()
+        public String getNombre()
         {
             return this.nombre;
         }
@@ -644,7 +635,7 @@ public class PantallaJuego extends Pantalla {
     private Marcador[] ordenaBurbuja(Marcador[] puntaje) {
         int N=puntaje.length;
         int i, j, temp;
-        java.lang.String nombreTemp;
+        String nombreTemp;
         for(i=N-1;i>0;i--)
         {
             for(j=0;j<i;j++)
@@ -670,7 +661,7 @@ public class PantallaJuego extends Pantalla {
 
     private void cargarMapa() {
         batch = new SpriteBatch();
-        mapa = manager.get("Mapa/mapaNivel1.tmx");
+        mapa = manager.get("Mapa/mapaNivel2.tmx");
         rendererMapa = new OrthogonalTiledMapRenderer(mapa, batch);
         rendererMapa.setView(camara);
         eliminarObjetos();
@@ -690,8 +681,8 @@ public class PantallaJuego extends Pantalla {
         texturaFinalPierde = manager.get("Images/dialogos/finalPierde.png");
         texturaFinalJuanito=manager.get("Images/dialogos/finalGanaJuanito.png");
         texturaFinalMama=manager.get("Images/dialogos/finalGanaMama.png");
-        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/mas100.png");
-        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/menos50.png");
+        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/mas200.png");
+        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/menos100.png");
     }
 
     private void crearCamara() {
@@ -731,7 +722,7 @@ public class PantallaJuego extends Pantalla {
                     if(ordenItems == 1)
                     {
                         if(posYJuanito >= 4){
-                            puntosJugador+=10;
+                            puntosJugador+=30;
                             eliminarNumeroSuperior();
                             if(menu.isEffectsOn())
                             {
@@ -742,7 +733,7 @@ public class PantallaJuego extends Pantalla {
                             escenaHUD.addActor(retroalimentacion);
                         }
                         else{
-                            puntosJugador-=5;
+                            puntosJugador-=20;
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
@@ -759,7 +750,7 @@ public class PantallaJuego extends Pantalla {
                     else
                     {
                         if(posYJuanito >= 4){
-                            puntosJugador-=5;
+                            puntosJugador-=20;
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
@@ -773,7 +764,7 @@ public class PantallaJuego extends Pantalla {
                             escenaHUD.addActor(retroalimentacion);
                         }
                         else{
-                            puntosJugador+=10;
+                            puntosJugador+=30;
                             eliminarNumeroInferior();
                             if(menu.isEffectsOn())
                             {
@@ -785,10 +776,6 @@ public class PantallaJuego extends Pantalla {
                         }
                     }
                 }
-                if(posXJuanito+20==posicionObjeto)
-                {
-                    recolectando = true;
-                }
                 switch (minijuego)
                 {
                     case INSTRUCCIONES:
@@ -798,19 +785,34 @@ public class PantallaJuego extends Pantalla {
                                 instruccionMinijuego = "¡SALTA LOS OBSTACULOS!";
                                 break;
                             case 1:
-                                instruccionMinijuego = "¡ATRAPA LOS PARES!";
+                                if(numero1==-1)
+                                {
+                                    numero1 = generaNumeroEntre(0,99);
+                                    numero2 = generaNumeroEntre(0,99-numero1);
+                                }
+                                instruccionMinijuego = "SUMA: " + numero1 + " + " + numero2;
                                 break;
                             case 2:
-                                instruccionMinijuego = "¡ATRAPA LOS NONES!";
+                                if(numero1==-1)
+                                {
+                                    numero1 = generaNumeroEntre(0,99);
+                                    numero2 = generaNumeroEntre(0,numero1);
+                                }
+                                instruccionMinijuego = "RESTA: " + numero1 + " - " + numero2;
                                 break;
                             case 3:
-                                instruccionMinijuego = "¡ATRAPA LOS MULTIPLOS DE 3!";
+                                if(numero1==-1)
+                                {
+                                    numero1 = generaNumeroEntre(1,17);
+                                    numero2 = generaNumeroEntre(0,7);
+                                }
+                                instruccionMinijuego = "MULTIPLICA: " + numero1 + " * " + numero2;
                                 break;
                         }
                         // TERMINA CAMBIO INSTRUCCIONES
                         if(tiempoInstrucciones<=0) {
-                            tiempoMinijuego = 5;
                             instruccionMinijuego = "";
+                            recolectando = true;
                             escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
                             cambiaMinijuego(siguienteJuego);
                         }
@@ -826,12 +828,12 @@ public class PantallaJuego extends Pantalla {
                             else
                             {
                                 posicionObjeto = posXJuanito+40;
-                                generaObstaculo((int)((Math.random()*10)%4), posicionObjeto,1);
+                                generaObstaculo(generaNumeroEntre(0,7), posicionObjeto,1);
                                 tiempoMinijuego--;
                             }
                         }
                         break;
-                    case PARES:
+                    case SUMAS:
                         if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
@@ -843,23 +845,21 @@ public class PantallaJuego extends Pantalla {
                                 Random random = new Random();
                                 ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
-                                numero1 = generaNumeroEntre(1,50)*2;
-                                numero2 =  (generaNumeroEntre(1,50)*2)-1;
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(numero1, posicionObjeto,8);
-                                    generaItem(numero2, posicionObjeto,1);
+                                    generaItem(numero1+numero2, posicionObjeto,8);
+                                    generaItem((numero1+numero2)+generaNumeroEntre(1,5), posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem(numero2, posicionObjeto,8);
-                                    generaItem(numero1, posicionObjeto,1);
+                                    generaItem((numero1+numero2)+generaNumeroEntre(1,5), posicionObjeto,8);
+                                    generaItem(numero1+numero2, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
                         }
                         break;
-                    case NONES:
+                    case RESTAS:
                         if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
@@ -871,23 +871,21 @@ public class PantallaJuego extends Pantalla {
                                 Random random = new Random();
                                 ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
-                                numero1 = generaNumeroEntre(1,50)*2;
-                                numero2 =  (generaNumeroEntre(1,50)*2)-1;
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(numero2, posicionObjeto,8);
-                                    generaItem(numero1, posicionObjeto,1);
+                                    generaItem(numero1-numero2, posicionObjeto,8);
+                                    generaItem((numero1-numero2)+generaNumeroEntre(1,5), posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem(numero1, posicionObjeto,8);
-                                    generaItem(numero2, posicionObjeto,1);
+                                    generaItem((numero1-numero2)+generaNumeroEntre(1,5), posicionObjeto,8);
+                                    generaItem(numero1-numero2, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
                         }
                         break;
-                    case MULTIPLOSDETRES:
+                    case MULTIPLICACIONES:
                         if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
@@ -899,17 +897,15 @@ public class PantallaJuego extends Pantalla {
                                 Random random = new Random();
                                 ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
-                                numero1 = generaNumeroEntre(1,34)*3;
-                                numero2 = (generaNumeroEntre(1,34)*3)-1;
                                 if(ordenItems == 1)
                                 {
-                                    generaItem(numero1, posicionObjeto,8);
-                                    generaItem(numero2, posicionObjeto,1);
+                                    generaItem(numero1*numero2, posicionObjeto,8);
+                                    generaItem((numero1*numero2)+generaNumeroEntre(1,5), posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem(numero1, posicionObjeto,8);
-                                    generaItem(numero2, posicionObjeto,1);
+                                    generaItem((numero1*numero2)+generaNumeroEntre(1,5), posicionObjeto,8);
+                                    generaItem(numero1*numero2, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
@@ -985,9 +981,6 @@ public class PantallaJuego extends Pantalla {
                 }
                 Gdx.input.setInputProcessor(escenaAlcanzado);
                 escenaAlcanzado.draw();
-                batch.begin();
-                chanclazo.mostrarMensaje(batch, "            CHANCLAZO\n\nHas perdido una vida", ANCHO/2,ALTO*2/3);
-                batch.end();
                 break;
             case OPCIONES:
                 if(escenaOpciones==null)
@@ -1008,17 +1001,16 @@ public class PantallaJuego extends Pantalla {
                 break;
             case PERDIDO:
                 if(tiempoFinal<=0) {
-                    //menu.musicaFondo.stop();
-                    if (escenaGameOver == null) {
-                        escenaGameOver = new EscenaGameOver(vistaHUD, batch);
-                        actualizarCamara();
-                    }
-                    Gdx.input.setInputProcessor(escenaGameOver);
-                    escenaGameOver.draw();
-                    batch.begin();
-                    puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int) (puntosJugador * 10)), ANCHO / 2, ALTO / 3);
-                    batch.end();
-                    break;
+                if (escenaGameOver==null) {
+                    escenaGameOver = new EscenaGameOver(vistaHUD, batch);
+                    actualizarCamara();
+                }
+                Gdx.input.setInputProcessor(escenaGameOver);
+                escenaGameOver.draw();
+                batch.begin();
+                puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int)(puntosJugador*10)), ANCHO/2,ALTO/3);
+                batch.end();
+                break;
                 }else{
                     if(tiempoFinal>=4){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
@@ -1067,35 +1059,40 @@ public class PantallaJuego extends Pantalla {
     }
 
     private void retroalimentar() {
-        tiempoRetroalimentacion = 0.7f;
+        tiempoRetroalimentacion = 2;
         retroalimenta = true;
     }
 
     private void mostrarInstrucciones() {
         tiempoInstrucciones = 4;
+        tiempoMinijuego = 1;
+        numero1=-1;
         escenaHUD.addActor(imgRectangulo);
         int juegoAnt = siguienteJuego;
         Random random = new Random();
         do {
             siguienteJuego = random.nextInt(4);
         }while(siguienteJuego==juegoAnt);
+        if(siguienteJuego==0)
+        {
+            tiempoMinijuego+=3;
+        }
         minijuego = Minijuego.INSTRUCCIONES;
     }
 
     private void cambiaMinijuego(int siguiente) {
-        tiempoMinijuego = 5;
         switch (siguiente) {
             case 0:
                 minijuego = Minijuego.OBSTACULOS;
                 break;
             case 1:
-                minijuego = Minijuego.PARES;
+                minijuego = Minijuego.SUMAS;
                 break;
             case 2:
-                minijuego = Minijuego.NONES;
+                minijuego = Minijuego.RESTAS;
                 break;
             case 3:
-                minijuego = Minijuego.MULTIPLOSDETRES;
+                minijuego = Minijuego.MULTIPLICACIONES;
                 break;
         }
     }
@@ -1145,8 +1142,8 @@ public class PantallaJuego extends Pantalla {
             TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(0);
             for(int y=0;y<=3;y++)
             {
-                capa.setCell(posX,posY+y, items.getCell(24+(2*num),25+y));
-                capa.setCell(posX+1,posY+y, items.getCell(25+(2*num),25+y));
+                capa.setCell(posX,posY+y, items.getCell(27+(2*num),25+y));
+                capa.setCell(posX+1,posY+y, items.getCell(28+(2*num),25+y));
             }
         }
         else
@@ -1156,12 +1153,13 @@ public class PantallaJuego extends Pantalla {
             generaItem(num-(izquierda*10),posX+2,posY);
         }
     }
+
     private void generaObstaculo(int tipo, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
     {
         TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
         TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(0);
         switch (tipo){
-            case 0: // MESA
+            case 0: // Dinosaurio
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(0,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(0,26));
@@ -1178,20 +1176,22 @@ public class PantallaJuego extends Pantalla {
                 capa.setCell(posX+3,posY, obstaculos.getCell(3,25));
                 capa.setCell(posX+3,posY+1, obstaculos.getCell(3,26));
                 capa.setCell(posX+3,posY+2, obstaculos.getCell(3,27));
-                //Quinta columna
-                capa.setCell(posX+4,posY, obstaculos.getCell(4,25));
-                capa.setCell(posX+4,posY+1, obstaculos.getCell(4,26));
-                capa.setCell(posX+4,posY+2, obstaculos.getCell(4,27));
-                //Sexta columna
-                capa.setCell(posX+5,posY, obstaculos.getCell(5,25));
-                capa.setCell(posX+5,posY+1, obstaculos.getCell(5,26));
-                capa.setCell(posX+5,posY+2, obstaculos.getCell(5,27));
-                //Séptima columna
-                capa.setCell(posX+6,posY, obstaculos.getCell(6,25));
-                capa.setCell(posX+6,posY+1, obstaculos.getCell(6,26));
-                capa.setCell(posX+6,posY+2, obstaculos.getCell(6,27));
                 break;
-            case 1: //SILLON 1
+            case 1: //Torres de Hanoi
+                //Primera columna
+                capa.setCell(posX,posY, obstaculos.getCell(4,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(4,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(4,27));
+                //Segunda columna
+                capa.setCell(posX+1,posY, obstaculos.getCell(5,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(5,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(5,27));
+                //Tercera columna
+                capa.setCell(posX+2,posY, obstaculos.getCell(6,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(6,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(6,27));
+                break;
+            case 2: // Pato
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(7,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(7,26));
@@ -1204,72 +1204,94 @@ public class PantallaJuego extends Pantalla {
                 capa.setCell(posX+2,posY, obstaculos.getCell(9,25));
                 capa.setCell(posX+2,posY+1, obstaculos.getCell(9,26));
                 capa.setCell(posX+2,posY+2, obstaculos.getCell(9,27));
-                //Cuarta columna
-                capa.setCell(posX+3,posY, obstaculos.getCell(10,25));
-                capa.setCell(posX+3,posY+1, obstaculos.getCell(10,26));
-                capa.setCell(posX+3,posY+2, obstaculos.getCell(10,27));
-                //Quinta columna
-                capa.setCell(posX+4,posY, obstaculos.getCell(11,25));
-                capa.setCell(posX+4,posY+1, obstaculos.getCell(11,26));
-                capa.setCell(posX+4,posY+2, obstaculos.getCell(11,27));
-                //Sexta columna
-                capa.setCell(posX+5,posY, obstaculos.getCell(12,25));
-                capa.setCell(posX+5,posY+1, obstaculos.getCell(12,26));
-                capa.setCell(posX+5,posY+2, obstaculos.getCell(12,27));
-                //Séptima columna
-                capa.setCell(posX+6,posY, obstaculos.getCell(13,25));
-                capa.setCell(posX+6,posY+1, obstaculos.getCell(13,26));
-                capa.setCell(posX+6,posY+2, obstaculos.getCell(13,27));
                 break;
-            case 2: // SILLON 2
+            case 3: // Avion
+                //Primera columna
+                capa.setCell(posX,posY, obstaculos.getCell(10,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(10,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(10,27));
+                capa.setCell(posX,posY+3, obstaculos.getCell(10,28));
+                //Segunda columna
+                capa.setCell(posX+1,posY, obstaculos.getCell(11,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(11,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(11,27));
+                capa.setCell(posX+1,posY+3, obstaculos.getCell(11,28));
+                //Tercera columna
+                capa.setCell(posX+2,posY, obstaculos.getCell(12,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(12,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(12,27));
+                capa.setCell(posX+2,posY+3, obstaculos.getCell(12,28));
+                //Cuarta columna
+                capa.setCell(posX+3,posY, obstaculos.getCell(13,25));
+                capa.setCell(posX+3,posY+1, obstaculos.getCell(13,26));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(13,27));
+                capa.setCell(posX+3,posY+3, obstaculos.getCell(13,28));
+                break;
+            case 4: // Robot
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(14,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(14,26));
                 capa.setCell(posX,posY+2, obstaculos.getCell(14,27));
+                capa.setCell(posX,posY+3, obstaculos.getCell(14,28));
+                capa.setCell(posX,posY+4, obstaculos.getCell(14,29));
                 //Segunda columna
                 capa.setCell(posX+1,posY, obstaculos.getCell(15,25));
                 capa.setCell(posX+1,posY+1, obstaculos.getCell(15,26));
                 capa.setCell(posX+1,posY+2, obstaculos.getCell(15,27));
+                capa.setCell(posX+1,posY+3, obstaculos.getCell(15,28));
+                capa.setCell(posX+1,posY+4, obstaculos.getCell(15,29));
                 //Tercera columna
                 capa.setCell(posX+2,posY, obstaculos.getCell(16,25));
                 capa.setCell(posX+2,posY+1, obstaculos.getCell(16,26));
                 capa.setCell(posX+2,posY+2, obstaculos.getCell(16,27));
+                capa.setCell(posX+2,posY+3, obstaculos.getCell(16,28));
+                capa.setCell(posX+2,posY+4, obstaculos.getCell(16,29));
                 //Cuarta columna
                 capa.setCell(posX+3,posY, obstaculos.getCell(17,25));
                 capa.setCell(posX+3,posY+1, obstaculos.getCell(17,26));
                 capa.setCell(posX+3,posY+2, obstaculos.getCell(17,27));
-                //Quinta columna
-                capa.setCell(posX+4,posY, obstaculos.getCell(18,25));
-                capa.setCell(posX+4,posY+1, obstaculos.getCell(18,26));
-                capa.setCell(posX+4,posY+2, obstaculos.getCell(18,27));
-                //Sexta columna
-                capa.setCell(posX+5,posY, obstaculos.getCell(19,25));
-                capa.setCell(posX+5,posY+1, obstaculos.getCell(19,26));
-                capa.setCell(posX+5,posY+2, obstaculos.getCell(19,27));
-                //Séptima columna
-                capa.setCell(posX+6,posY, obstaculos.getCell(20,25));
-                capa.setCell(posX+6,posY+1, obstaculos.getCell(20,26));
-                capa.setCell(posX+6,posY+2, obstaculos.getCell(20,27));
+                capa.setCell(posX+3,posY+3, obstaculos.getCell(17,28));
+                capa.setCell(posX+3,posY+4, obstaculos.getCell(17,29));
                 break;
-            case 3: // SILLA
+            case 5: // Balon
+                //Primera columna
+                capa.setCell(posX,posY, obstaculos.getCell(18,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(18,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(18,27));
+                //Segunda columna
+                capa.setCell(posX+1,posY, obstaculos.getCell(19,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(19,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(19,27));
+                //Tercera columna
+                capa.setCell(posX+2,posY, obstaculos.getCell(20,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(20,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(20,27));
+                break;
+            case 6: // Tren
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(21,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(21,26));
                 capa.setCell(posX,posY+2, obstaculos.getCell(21,27));
-                capa.setCell(posX,posY+3, obstaculos.getCell(21,28));
-                capa.setCell(posX,posY+4, obstaculos.getCell(21,29));
                 //Segunda columna
                 capa.setCell(posX+1,posY, obstaculos.getCell(22,25));
                 capa.setCell(posX+1,posY+1, obstaculos.getCell(22,26));
                 capa.setCell(posX+1,posY+2, obstaculos.getCell(22,27));
-                capa.setCell(posX+1,posY+3, obstaculos.getCell(22,28));
-                capa.setCell(posX+1,posY+4, obstaculos.getCell(22,29));
-                //Segunda columna
+                //Tercera columna
                 capa.setCell(posX+2,posY, obstaculos.getCell(23,25));
                 capa.setCell(posX+2,posY+1, obstaculos.getCell(23,26));
                 capa.setCell(posX+2,posY+2, obstaculos.getCell(23,27));
-                capa.setCell(posX+2,posY+3, obstaculos.getCell(23,28));
-                capa.setCell(posX+2,posY+4, obstaculos.getCell(23,29));
+                //Cuarta columna
+                capa.setCell(posX+3,posY, obstaculos.getCell(24,25));
+                capa.setCell(posX+3,posY+1, obstaculos.getCell(24,26));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(24,27));
+                //Quinta columna
+                capa.setCell(posX+4,posY, obstaculos.getCell(25,25));
+                capa.setCell(posX+4,posY+1, obstaculos.getCell(25,26));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(25,27));
+                //Sexta columna
+                capa.setCell(posX+5,posY, obstaculos.getCell(26,25));
+                capa.setCell(posX+5,posY+1, obstaculos.getCell(26,26));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(26,27));
                 break;
         }
     }
@@ -1346,6 +1368,7 @@ public class PantallaJuego extends Pantalla {
         menu.musicaFondo.stop();
         }
 
+
     private void ganaste() {
         estadoJuego = EstadoJuego.TERMINADO;
         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
@@ -1393,15 +1416,16 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/dialogos/finalGanaJuanito.png");
         manager.unload("Images/dialogos/finalGanaMama.png");
         manager.unload("Images/screens/pausa.jpg");
+        manager.unload("Images/screens/chanclazo.jpg");
         manager.unload("Images/btns/btnMenuPrinc.png");
         manager.unload("Images/btns/btnJugarPausa.png");
         manager.unload("Images/btns/btnOpcionesPausa.png");
         manager.unload("Images/screens/gameOver.jpg");
         manager.unload("Images/screens/ganaste.jpg");
-        manager.unload("Mapa/mapaNivel1.tmx");
+        manager.unload("Mapa/mapaNivel2.tmx");
         manager.unload("Images/btns/btnPausa.png");
-        manager.unload("Images/PantallaJuego/mas100.png");
-        manager.unload("Images/PantallaJuego/menos50.png");
+        manager.unload("Images/PantallaJuego/mas200.png");
+        manager.unload("Images/PantallaJuego/menos100.png");
         manager.unload("Audio/Slap.mp3");
         manager.unload("Audio/Correcto.wav");
         manager.unload("Audio/Incorrecto.mp3");
@@ -1419,9 +1443,9 @@ public class PantallaJuego extends Pantalla {
 
     public enum Minijuego {
         OBSTACULOS,
-        PARES,
-        NONES,
-        MULTIPLOSDETRES,
+        SUMAS,
+        RESTAS,
+        MULTIPLICACIONES,
         INSTRUCCIONES
     }
 

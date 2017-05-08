@@ -1,4 +1,4 @@
-package mx.sechf.learningjuanito;
+package mx.itesm.learningjuanito;
 
 import android.os.Bundle;
 import android.view.View;
