@@ -1351,8 +1351,8 @@ public class PantallaJuego extends Pantalla {
 
     private void reacomodarPersonajes() {
         //Pone los personajes en su posición original con respecto a la cámara
-        Mama.sprite.setY(64);
-        Juanito.sprite.setY(64);
+        Mama.sprite.setY(32);
+        Juanito.sprite.setY(32);
         Mama.sprite.setX(camara.position.x-posicionMama);
         Juanito.sprite.setX(Mama.sprite.getX()+separacion);
     }

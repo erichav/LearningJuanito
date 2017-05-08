@@ -92,9 +92,9 @@ public class Personaje extends Objeto
             int x = (int) (sprite.getX() / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
             int y = (int) ((sprite.getY() -15.0f) / 32);
             Gdx.app.log("x: " +x ," y:" + y);
-            int xFinal = (int) (sprite.getX() + sprite.getWidth() / 32);
+            int xFinal = (int) ((sprite.getX() + sprite.getWidth() - 23.0f)/ 32);
             TiledMapTileLayer.Cell celdaAbajo = capa.getCell(x, y);
-            TiledMapTileLayer.Cell celdaAbajoFinal = capa.getCell(xFinal-1, y);
+            TiledMapTileLayer.Cell celdaAbajoFinal = capa.getCell(xFinal, y);
             if (celdaAbajo != null) {
                 Object tipo = (String) celdaAbajo.getTile().getProperties().get("tipo");
                 if (!"obstaculo".equals(tipo)) {
