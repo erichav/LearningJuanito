@@ -1019,7 +1019,7 @@ public class PantallaJuego extends Pantalla {
                         dibujardialogo();
                         Juanito.actualizar(mapa);
                     }else if(tiempoFinal>=1){
-                        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.INICIANDO);
                         Juanito.actualizar(mapa);
                     }
                     tiempoFinal-=delta;
