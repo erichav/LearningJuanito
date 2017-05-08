@@ -1,4 +1,4 @@
-package mx.sechf.learningjuanito;
+package mx.itesm.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -62,7 +62,6 @@ public class PantallaJuego extends Pantalla {
 
     //Alcanzado
     private EscenaAlcanzado escenaAlcanzado;
-    Texto chanclazo = new Texto();
 
     //Mapa
     private TiledMap mapa;
@@ -124,8 +123,6 @@ public class PantallaJuego extends Pantalla {
     private Texto mensajeMinijuego = new Texto();
     Image imgRectangulo;
     ImageButton btnPausa;
-
-    private PantallaPausa panPausa;
 
     public PantallaJuego(LearningJuanito menu) { this.menu=menu; manager = menu.getAssetManager();}
 
@@ -297,25 +294,19 @@ public class PantallaJuego extends Pantalla {
 
         public EscenaAlcanzado(Viewport vista, SpriteBatch batch) {
             super(vista, batch);
-            // Crear rectángulo transparente
-            Pixmap pixmap = new Pixmap((int)(ANCHO*0.6f), (int)(ALTO*0.7f), Pixmap.Format.RGBA8888 );
-            pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.65f );
-            pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
-            Texture texturaRectangulo = new Texture( pixmap );
-            pixmap.dispose();
-            Image imgRectangulo = new Image(texturaRectangulo);
-            imgRectangulo.setPosition((ANCHO-pixmap.getWidth())/2, (ALTO-pixmap.getHeight())/2);
-            this.addActor(imgRectangulo);
+            Texture texturaAlcanzado;
+            Texture texturaBtnContinuar;
+            texturaAlcanzado = manager.get("Images/screens/chanclazo.jpg");
+            texturaBtnContinuar = manager.get("Images/btns/btnContinuar.png");
+            Image imgFondo = new Image(texturaAlcanzado);
+            this.addActor(imgFondo);
+            // Botón Continuar
+            TextureRegionDrawable trdBtnContinuar = new TextureRegionDrawable(new TextureRegion(texturaBtnContinuar));
+            ImageButton btnContinuar = new ImageButton(trdBtnContinuar);
+            btnContinuar.setPosition(ANCHO/2-btnContinuar.getWidth()/2,ALTO/3-btnContinuar.getHeight()/2);
+            this.addActor(btnContinuar);
 
-            // Crea el texto
-            this.addActor(chanclazo);
-
-            // Continuar
-            Texture texturabtnContinuar = manager.get("Images/btns/btnContinuar.png");
-            TextureRegionDrawable trdContinuar = new TextureRegionDrawable(
-                    new TextureRegion(texturabtnContinuar));
-            ImageButton btnContinuar = new ImageButton(trdContinuar);
-            btnContinuar.setPosition(ANCHO/2-btnContinuar.getWidth()/2, ALTO/5);
+            // Acción del botón continuar
             btnContinuar.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -332,7 +323,6 @@ public class PantallaJuego extends Pantalla {
                     }
                 }
             });
-            this.addActor(btnContinuar);
         }
     }
 
@@ -359,11 +349,11 @@ public class PantallaJuego extends Pantalla {
             super(vista, batch);
             Texture texturaPausa;
             Texture texturaBtnRegresar;
-            Texture texturaBtnJugar;
+            Texture texturaBtnContinuar;
             Texture texturaBtnOpciones;
             texturaPausa = manager.get("Images/screens/pausa.jpg");
             texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
-            texturaBtnJugar = manager.get("Images/btns/btnJugarPausa.png");
+            texturaBtnContinuar = manager.get("Images/btns/btnContinuar.png");
             texturaBtnOpciones = manager.get("Images/btns/btnOpcionesPausa.png");
             Image imgFondo = new Image(texturaPausa);
             this.addActor(imgFondo);
@@ -381,14 +371,14 @@ public class PantallaJuego extends Pantalla {
                     menu.setScreen(new PantallaMenu(menu));
                 }
             });
-            // Botón Jugar
-            TextureRegionDrawable trdBtnJugar = new TextureRegionDrawable(new TextureRegion(texturaBtnJugar));
-            ImageButton btnJugar = new ImageButton(trdBtnJugar);
-            btnJugar.setPosition(ANCHO/2-30-btnJugar.getWidth()/2,2*ALTO/12+90-btnJugar.getHeight()/2);
-            this.addActor(btnJugar);
+            // Botón Continuar
+            TextureRegionDrawable trdBtnContinuar = new TextureRegionDrawable(new TextureRegion(texturaBtnContinuar));
+            ImageButton btnContinuar = new ImageButton(trdBtnContinuar);
+            btnContinuar.setPosition(ANCHO/2-30-btnContinuar.getWidth()/2,2*ALTO/12+90-btnContinuar.getHeight()/2);
+            this.addActor(btnContinuar);
 
-            // Acción del botón jugar
-            btnJugar.addListener(new ClickListener(){
+            // Acción del botón continuar
+            btnContinuar.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     // Continuar el juego
@@ -521,10 +511,8 @@ public class PantallaJuego extends Pantalla {
             super(vista, batch);
             Texture texturaGameOver;
             Texture texturaBtnRegresar;
-            Texture texturaBtnOpciones;
             texturaGameOver = manager.get("Images/screens/gameOver.jpg");
             texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
-            texturaBtnOpciones = manager.get("Images/btns/btnOpcionesPausa.png");
             Image imgFondo = new Image(texturaGameOver);
             this.addActor(imgFondo);
             // Botón Regresar
@@ -542,20 +530,6 @@ public class PantallaJuego extends Pantalla {
                 }
             });
             this.addActor(puntajeFinal);
-
-            // Botón Opciones
-            TextureRegionDrawable trdBtnOpciones = new TextureRegionDrawable(new TextureRegion(texturaBtnOpciones));
-            ImageButton btnOpciones = new ImageButton(trdBtnOpciones);
-            btnOpciones.setPosition(85*ANCHO/100-btnOpciones.getWidth()/2,2*ALTO/12-btnOpciones.getHeight()/2);
-            this.addActor(btnOpciones);
-
-            // Acción del botón opciones
-            btnOpciones.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    menu.setScreen(new PantallaOpciones(menu));
-                }
-            });
         }
     }
 
@@ -575,10 +549,8 @@ public class PantallaJuego extends Pantalla {
             super(vista, batch);
             Texture texturaGanaste;
             Texture texturaBtnRegresar;
-            Texture texturaBtnOpciones;
             texturaGanaste = manager.get("Images/screens/ganaste.jpg");
             texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
-            texturaBtnOpciones = manager.get("Images/btns/btnOpcionesPausa.png");
             Image imgFondo = new Image(texturaGanaste);
             this.addActor(imgFondo);
             // Botón Regresar
@@ -596,20 +568,6 @@ public class PantallaJuego extends Pantalla {
                 }
             });
             this.addActor(puntajeFinal);
-
-            // Botón Opciones
-            TextureRegionDrawable trdBtnOpciones = new TextureRegionDrawable(new TextureRegion(texturaBtnOpciones));
-            ImageButton btnOpciones = new ImageButton(trdBtnOpciones);
-            btnOpciones.setPosition(85*ANCHO/100-btnOpciones.getWidth()/2,2*ALTO/12-btnOpciones.getHeight()/2);
-            this.addActor(btnOpciones);
-
-            // Acción del botón opciones
-            btnOpciones.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    menu.setScreen(new PantallaOpciones(menu));
-                }
-            });
             if(Gdx.app.getPreferences("marcador").getInteger("puntaje4",0)<(puntosJugador*10))
             {
                 Input.TextInputListener listener = new Input.TextInputListener() {
@@ -1019,9 +977,6 @@ public class PantallaJuego extends Pantalla {
                 }
                 Gdx.input.setInputProcessor(escenaAlcanzado);
                 escenaAlcanzado.draw();
-                batch.begin();
-                chanclazo.mostrarMensaje(batch, "            CHANCLAZO\n\nHas perdido una vida", ANCHO/2,ALTO*2/3);
-                batch.end();
                 break;
             case OPCIONES:
                 if(escenaOpciones==null)
@@ -1104,7 +1059,7 @@ public class PantallaJuego extends Pantalla {
     }
 
     private void retroalimentar() {
-        tiempoRetroalimentacion = 2;
+        tiempoRetroalimentacion = 0.7f;
         retroalimenta = true;
     }
 
@@ -1430,8 +1385,8 @@ public class PantallaJuego extends Pantalla {
         manager.unload("Images/dialogos/finalGanaJuanito.png");
         manager.unload("Images/dialogos/finalGanaMama.png");
         manager.unload("Images/screens/pausa.jpg");
+        manager.unload("Images/screens/chanclazo.jpg");
         manager.unload("Images/btns/btnMenuPrinc.png");
-        manager.unload("Images/btns/btnJugarPausa.png");
         manager.unload("Images/btns/btnOpcionesPausa.png");
         manager.unload("Images/screens/gameOver.jpg");
         manager.unload("Images/screens/ganaste.jpg");

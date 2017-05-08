@@ -1,4 +1,4 @@
-package mx.sechf.learningjuanito;
+package mx.itesm.learningjuanito;
 
 /**
  * Created by roberto on 13/03/17.

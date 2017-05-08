@@ -1,10 +1,7 @@
-package mx.sechf.learningjuanito;
+package mx.itesm.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,28 +14,26 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-/**
- * Created by Erick Chávez on 15/02/2017.
- */
-public class PantallaOpciones extends Pantalla {
 
+/**
+ * Created by Erick Chávez on 03/05/2017.
+ */
+
+public class PantallaAcercaDe3 extends Pantalla {
     private final LearningJuanito menu;
-    private AssetManager manager;
 
     //texturas
-    private Texture texturaOpciones;
+    private Texture texturaAcercaDe3;
     private Texture texturaBtnRegresar;
     private Texture texturaBtnJugar;
-    private Texture texturaBtnSonidoOn;
-    private Texture texturaBtnEfectoOn;
+    private Texture texturaBtnPrev;
+    private Texture texturaBtnNext;
 
     // Escenas
-    private Stage escenaOpciones;
+    private Stage escenaAcercaDe3;
 
-    public PantallaOpciones(LearningJuanito menu) {
-        this.app = app;
+    public PantallaAcercaDe3(LearningJuanito menu) {
         this.menu=menu;
-        this.manager = menu.getAssetManager();
     }
 
     @Override
@@ -50,16 +45,16 @@ public class PantallaOpciones extends Pantalla {
 
     private void crearObjetos() {
         batch = new SpriteBatch();
-        escenaOpciones = new Stage(vista,batch);
-        Image imgFondo = new Image(texturaOpciones);
-        escenaOpciones.addActor(imgFondo);
+        escenaAcercaDe3 = new Stage(vista,batch);
+        Image imgFondo = new Image(texturaAcercaDe3);
+        escenaAcercaDe3.addActor(imgFondo);
 
         //botonRegresar
         TextureRegionDrawable trdBtnRegresar = new TextureRegionDrawable
                 (new TextureRegion(texturaBtnRegresar));
         ImageButton btnRegresar = new ImageButton(trdBtnRegresar);
         btnRegresar.setPosition(ANCHO/10+50-btnRegresar.getWidth()/2,2*ALTO/12-btnRegresar.getHeight()/2);
-        escenaOpciones.addActor(btnRegresar);
+        escenaAcercaDe3.addActor(btnRegresar);
 
         //accion del boton Regresar
         btnRegresar.addListener(new ClickListener(){
@@ -74,7 +69,7 @@ public class PantallaOpciones extends Pantalla {
                 (new TextureRegion(texturaBtnJugar));
         ImageButton btnJugar = new ImageButton(trdBtnJugar);
         btnJugar.setPosition(9*ANCHO/10-70-btnJugar.getWidth()/2,2*ALTO/12-btnJugar.getHeight()/2);
-        escenaOpciones.addActor(btnJugar);
+        escenaAcercaDe3.addActor(btnJugar);
 
         //accion del boton jugar
         btnJugar.addListener(new ClickListener(){
@@ -84,45 +79,46 @@ public class PantallaOpciones extends Pantalla {
             }
         });
 
+        //boton Prev
+        TextureRegionDrawable trdBtnPrev = new TextureRegionDrawable
+                (new TextureRegion(texturaBtnPrev));
+        ImageButton btnPrev = new ImageButton(trdBtnPrev);
+        btnPrev.setPosition(ANCHO/2-560-btnPrev.getWidth()/2,2*ALTO/12+280-btnPrev.getHeight()/2);
+        escenaAcercaDe3.addActor(btnPrev);
 
-        //boton Musica
-        TextureRegionDrawable trdBtnMusic = new TextureRegionDrawable
-                (new TextureRegion(texturaBtnSonidoOn));
-        ImageButton btnMusic = new ImageButton(trdBtnMusic);
-        btnMusic.setPosition(ANCHO/2+220-btnMusic.getWidth()/2,ALTO/2+60-btnMusic.getHeight()/2);
-        escenaOpciones.addActor(btnMusic);
-
-        //accion del boton musica
-        btnJugar.addListener(new ClickListener(){
+        //accion del boton Prev
+        btnPrev.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                menu.setScreen(new PantallaAcercaDe2(menu));
             }
         });
 
-        //boton Efecto
-        TextureRegionDrawable trdBtnEfecto = new TextureRegionDrawable
-                (new TextureRegion(texturaBtnEfectoOn));
-        ImageButton btnEfect = new ImageButton(trdBtnEfecto);
-        btnEfect.setPosition(ANCHO/2+220-btnEfect.getWidth()/2,ALTO/2-130-btnEfect.getHeight()/2);
-        escenaOpciones.addActor(btnEfect);
+        //boton Next
+        TextureRegionDrawable trdBtnNext = new TextureRegionDrawable
+                (new TextureRegion(texturaBtnNext));
+        ImageButton btnNext = new ImageButton(trdBtnNext);
+        btnNext.setPosition(ANCHO/2+560-btnNext.getWidth()/2,2*ALTO/12+280-btnNext.getHeight()/2);
+        escenaAcercaDe3.addActor(btnNext);
 
-        //accion del boton musica
-        btnJugar.addListener(new ClickListener(){
+        //accion del boton jugar
+        btnPrev.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                menu.setScreen(new PantallaAcercaDe2(menu));
             }
         });
 
-        Gdx.input.setInputProcessor(escenaOpciones);
+        Gdx.input.setInputProcessor(escenaAcercaDe3);
         Gdx.input.setCatchBackKey(true);
     }
 
     private void cargarTexturas() {
-        texturaOpciones = new Texture("Images/screens/opciones.jpg");
+        texturaAcercaDe3 = new Texture("Images/screens/acercade3.jpg");
         texturaBtnRegresar = new Texture("Images/btns/btnMenuPrinc.png");
         texturaBtnJugar = new Texture("Images/btns/btnJugarPantallas.png");
-        texturaBtnSonidoOn = new Texture("Images/btns/btnSoundOn.png");
-        texturaBtnEfectoOn = new Texture("Images/btns/btnEfectoOn.png");
+        texturaBtnPrev = new Texture ("Images/btns/btnIzqAcercaDeAzul.png");
+        texturaBtnNext = new Texture("Images/btns/btnDerechaAcercaDeGris.png");
     }
 
     private void crearCamara() {
@@ -135,10 +131,11 @@ public class PantallaOpciones extends Pantalla {
     @Override
     public void render(float delta) {
         borrarPantalla();
-        escenaOpciones.draw();
+        escenaAcercaDe3.draw();
         if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
             menu.setScreen(new PantallaMenu(menu));
         }
+
     }
 
     @Override

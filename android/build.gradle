@@ -18,7 +18,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "mx.sechf.learningjuanito"
+        applicationId "mx.itesm.learningjuanito"
         minSdkVersion 11
         targetSdkVersion 25
     }
@@ -71,7 +71,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'mx.sechf.learningjuanito/mx.sechf.learningjuanito.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'mx.itesm.learningjuanito/mx.itesm.learningjuanito.AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.
