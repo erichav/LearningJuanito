@@ -125,8 +125,6 @@ public class PantallaJuegoNivel3 extends Pantalla {
     Image imgRectangulo;
     ImageButton btnPausa;
 
-    private PantallaPausa panPausa;
-
     public PantallaJuegoNivel3(LearningJuanito menu) { this.menu=menu; manager = menu.getAssetManager();}
 
     @Override
@@ -521,10 +519,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
             super(vista, batch);
             Texture texturaGameOver;
             Texture texturaBtnRegresar;
-            Texture texturaBtnOpciones;
             texturaGameOver = manager.get("Images/screens/gameOver.jpg");
             texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
-            texturaBtnOpciones = manager.get("Images/btns/btnOpcionesPausa.png");
             Image imgFondo = new Image(texturaGameOver);
             this.addActor(imgFondo);
             // Botón Regresar
@@ -542,20 +538,6 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 }
             });
             this.addActor(puntajeFinal);
-
-            // Botón Opciones
-            TextureRegionDrawable trdBtnOpciones = new TextureRegionDrawable(new TextureRegion(texturaBtnOpciones));
-            ImageButton btnOpciones = new ImageButton(trdBtnOpciones);
-            btnOpciones.setPosition(85*ANCHO/100-btnOpciones.getWidth()/2,2*ALTO/12-btnOpciones.getHeight()/2);
-            this.addActor(btnOpciones);
-
-            // Acción del botón opciones
-            btnOpciones.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    menu.setScreen(new PantallaOpciones(menu));
-                }
-            });
         }
     }
 
@@ -575,10 +557,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
             super(vista, batch);
             Texture texturaGanaste;
             Texture texturaBtnRegresar;
-            Texture texturaBtnOpciones;
             texturaGanaste = manager.get("Images/screens/ganaste.jpg");
             texturaBtnRegresar = manager.get("Images/btns/btnMenuPrinc.png");
-            texturaBtnOpciones = manager.get("Images/btns/btnOpcionesPausa.png");
             Image imgFondo = new Image(texturaGanaste);
             this.addActor(imgFondo);
             // Botón Regresar
@@ -596,20 +576,6 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 }
             });
             this.addActor(puntajeFinal);
-
-            // Botón Opciones
-            TextureRegionDrawable trdBtnOpciones = new TextureRegionDrawable(new TextureRegion(texturaBtnOpciones));
-            ImageButton btnOpciones = new ImageButton(trdBtnOpciones);
-            btnOpciones.setPosition(85*ANCHO/100-btnOpciones.getWidth()/2,2*ALTO/12-btnOpciones.getHeight()/2);
-            this.addActor(btnOpciones);
-
-            // Acción del botón opciones
-            btnOpciones.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    menu.setScreen(new PantallaOpciones(menu));
-                }
-            });
             if(Gdx.app.getPreferences("marcador").getInteger("puntaje4",0)<(puntosJugador*10))
             {
                 Input.TextInputListener listener = new Input.TextInputListener() {
