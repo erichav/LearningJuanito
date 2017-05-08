@@ -1,8 +1,8 @@
-package mx.sechf.learningjuanito.desktop;
+package mx.itesm.learningjuanito.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import mx.sechf.learningjuanito.LearningJuanito;
+import mx.itesm.learningjuanito.LearningJuanito;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

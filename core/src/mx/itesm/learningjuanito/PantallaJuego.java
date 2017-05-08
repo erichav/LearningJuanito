@@ -1,4 +1,4 @@
-package mx.sechf.learningjuanito;
+package mx.itesm.learningjuanito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -27,10 +27,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.Random;
 
 /**
- * Created by Erick Chávez on 04/05/2017.
+ * Created by Erick Chávez on 15/02/2017.
  */
-
-public class PantallaJuegoNivel3 extends Pantalla {
+public class PantallaJuego extends Pantalla {
 
     private final LearningJuanito menu;
     public EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
@@ -40,9 +39,9 @@ public class PantallaJuegoNivel3 extends Pantalla {
     private float tiempo;
     private float tiempoFinal=5;
     private float tiempoGanador=8;
-    private float tiempoMinijuego = 4;
+    private float tiempoMinijuego = 5;
     private float tiempoInstrucciones = 4;
-    private int ordenItems, numero1=-1, numero2;
+    private int ordenItems, numero1, numero2;;
     private int siguienteJuego = 0;
     private int posXJuanito;
     private int posYJuanito;
@@ -118,13 +117,14 @@ public class PantallaJuegoNivel3 extends Pantalla {
     // HUD
     private OrthographicCamera camaraHUD;
     private Viewport vistaHUD;
+
     // El HUD lo manejamos con una escena (opcional)
     private Stage escenaHUD;
     private Texto mensajeMinijuego = new Texto();
     Image imgRectangulo;
     ImageButton btnPausa;
 
-    public PantallaJuegoNivel3(LearningJuanito menu) { this.menu=menu; manager = menu.getAssetManager();}
+    public PantallaJuego(LearningJuanito menu) { this.menu=menu; manager = menu.getAssetManager();}
 
     @Override
     public void show() {
@@ -615,7 +615,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
             this.puntaje = puntaje;
             this.nombre = nombre;
         }
-        public String getNombre()
+        public java.lang.String getNombre()
         {
             return this.nombre;
         }
@@ -636,7 +636,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
     private Marcador[] ordenaBurbuja(Marcador[] puntaje) {
         int N=puntaje.length;
         int i, j, temp;
-        String nombreTemp;
+        java.lang.String nombreTemp;
         for(i=N-1;i>0;i--)
         {
             for(j=0;j<i;j++)
@@ -662,7 +662,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
 
     private void cargarMapa() {
         batch = new SpriteBatch();
-        mapa = manager.get("Mapa/mapaNivel3.tmx");
+        mapa = manager.get("Mapa/mapaNivel1.tmx");
         rendererMapa = new OrthogonalTiledMapRenderer(mapa, batch);
         rendererMapa.setView(camara);
         eliminarObjetos();
@@ -682,8 +682,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
         texturaFinalPierde = manager.get("Images/dialogos/finalPierde.png");
         texturaFinalJuanito=manager.get("Images/dialogos/finalGanaJuanito.png");
         texturaFinalMama=manager.get("Images/dialogos/finalGanaMama.png");
-        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/mas300.png");
-        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/menos150.png");
+        texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/mas100.png");
+        texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/menos50.png");
     }
 
     private void crearCamara() {
@@ -723,7 +723,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                     if(ordenItems == 1)
                     {
                         if(posYJuanito >= 4){
-                            puntosJugador+=30;
+                            puntosJugador+=10;
                             eliminarNumeroSuperior();
                             if(menu.isEffectsOn())
                             {
@@ -734,7 +734,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                             escenaHUD.addActor(retroalimentacion);
                         }
                         else{
-                            puntosJugador-=20;
+                            puntosJugador-=5;
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
@@ -751,7 +751,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                     else
                     {
                         if(posYJuanito >= 4){
-                            puntosJugador-=20;
+                            puntosJugador-=5;
                             if(puntosJugador<0)
                             {
                                 puntosJugador = 0;
@@ -765,7 +765,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                             escenaHUD.addActor(retroalimentacion);
                         }
                         else{
-                            puntosJugador+=30;
+                            puntosJugador+=10;
                             eliminarNumeroInferior();
                             if(menu.isEffectsOn())
                             {
@@ -777,6 +777,10 @@ public class PantallaJuegoNivel3 extends Pantalla {
                         }
                     }
                 }
+                if(posXJuanito+20==posicionObjeto)
+                {
+                    recolectando = true;
+                }
                 switch (minijuego)
                 {
                     case INSTRUCCIONES:
@@ -786,33 +790,19 @@ public class PantallaJuegoNivel3 extends Pantalla {
                                 instruccionMinijuego = "¡SALTA LOS OBSTACULOS!";
                                 break;
                             case 1:
-                                if(numero1==-1)
-                                {
-                                    numero1 = generaNumeroEntre(0,10);
-                                }
-                                instruccionMinijuego = "RAIZ CUADRADA DE: " + numero1*numero1;
+                                instruccionMinijuego = "¡ATRAPA LOS PARES!";
                                 break;
                             case 2:
-                                if(numero1==-1)
-                                {
-                                    numero1 = generaNumeroEntre(0,10);
-                                    numero2 = generaNumeroEntre(0,4);
-                                }
-                                instruccionMinijuego = "ELEVA: " + numero1 + " ^ " + numero2;
+                                instruccionMinijuego = "¡ATRAPA LOS NONES!";
                                 break;
                             case 3:
-                                if(numero1==-1)
-                                {
-                                    numero1 = generaNumeroEntre(0,100);
-                                    numero2 = generaNumeroEntre(1,10);
-                                }
-                                instruccionMinijuego = "DIVIDE: " + numero1*numero2 + " / " + numero2;
+                                instruccionMinijuego = "¡ATRAPA LOS MULTIPLOS DE 3!";
                                 break;
                         }
                         // TERMINA CAMBIO INSTRUCCIONES
                         if(tiempoInstrucciones<=0) {
+                            tiempoMinijuego = 5;
                             instruccionMinijuego = "";
-                            recolectando = true;
                             escenaHUD.getActors().get(escenaHUD.getActors().indexOf(imgRectangulo,false)).remove();
                             cambiaMinijuego(siguienteJuego);
                         }
@@ -833,7 +823,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                             }
                         }
                         break;
-                    case RAICES:
+                    case PARES:
                         if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
@@ -845,21 +835,23 @@ public class PantallaJuegoNivel3 extends Pantalla {
                                 Random random = new Random();
                                 ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
+                                numero1 = generaNumeroEntre(1,50)*2;
+                                numero2 =  (generaNumeroEntre(1,50)*2)-1;
                                 if(ordenItems == 1)
                                 {
                                     generaItem(numero1, posicionObjeto,8);
-                                    generaItem((numero1)+generaNumeroEntre(1,3), posicionObjeto,1);
+                                    generaItem(numero2, posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem((numero1)+generaNumeroEntre(1,3), posicionObjeto,8);
+                                    generaItem(numero2, posicionObjeto,8);
                                     generaItem(numero1, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
                         }
                         break;
-                    case POTENCIAS:
+                    case NONES:
                         if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
@@ -871,21 +863,23 @@ public class PantallaJuegoNivel3 extends Pantalla {
                                 Random random = new Random();
                                 ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
+                                numero1 = generaNumeroEntre(1,50)*2;
+                                numero2 =  (generaNumeroEntre(1,50)*2)-1;
                                 if(ordenItems == 1)
                                 {
-                                    generaItem((int)Math.pow((double)numero1,(double)numero2), posicionObjeto,8);
-                                    generaItem((int)Math.pow((double)numero1,(double)numero2)+generaNumeroEntre(1,5), posicionObjeto,1);
+                                    generaItem(numero2, posicionObjeto,8);
+                                    generaItem(numero1, posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem((int)Math.pow((double)numero1,(double)numero2)+generaNumeroEntre(1,5), posicionObjeto,8);
-                                    generaItem((int)Math.pow((double)numero1,(double)numero2), posicionObjeto,1);
+                                    generaItem(numero1, posicionObjeto,8);
+                                    generaItem(numero2, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
                         }
                         break;
-                    case DIVISIONES:
+                    case MULTIPLOSDETRES:
                         if(posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
@@ -897,15 +891,17 @@ public class PantallaJuegoNivel3 extends Pantalla {
                                 Random random = new Random();
                                 ordenItems = random.nextInt(2);
                                 posicionObjeto = posXJuanito+40;
+                                numero1 = generaNumeroEntre(1,34)*3;
+                                numero2 = (generaNumeroEntre(1,34)*3)-1;
                                 if(ordenItems == 1)
                                 {
                                     generaItem(numero1, posicionObjeto,8);
-                                    generaItem((numero1)+generaNumeroEntre(1,5), posicionObjeto,1);
+                                    generaItem(numero2, posicionObjeto,1);
                                 }
                                 else
                                 {
-                                    generaItem((numero1)+generaNumeroEntre(1,5), posicionObjeto,8);
-                                    generaItem(numero1, posicionObjeto,1);
+                                    generaItem(numero1, posicionObjeto,8);
+                                    generaItem(numero2, posicionObjeto,1);
                                 }
                                 tiempoMinijuego--;
                             }
@@ -1001,6 +997,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 break;
             case PERDIDO:
                 if(tiempoFinal<=0) {
+                    //menu.musicaFondo.stop();
                     if (escenaGameOver == null) {
                         escenaGameOver = new EscenaGameOver(vistaHUD, batch);
                         actualizarCamara();
@@ -1062,48 +1059,42 @@ public class PantallaJuegoNivel3 extends Pantalla {
     }
 
     private void retroalimentar() {
-        tiempoRetroalimentacion = 2;
+        tiempoRetroalimentacion = 0.7f;
         retroalimenta = true;
     }
 
     private void mostrarInstrucciones() {
         tiempoInstrucciones = 4;
-        tiempoMinijuego = 1;
-        numero1=-1;
         escenaHUD.addActor(imgRectangulo);
         int juegoAnt = siguienteJuego;
         Random random = new Random();
         do {
             siguienteJuego = random.nextInt(4);
         }while(siguienteJuego==juegoAnt);
-        if(siguienteJuego==0)
-        {
-            tiempoMinijuego+=3;
-        }
         minijuego = Minijuego.INSTRUCCIONES;
     }
 
     private void cambiaMinijuego(int siguiente) {
+        tiempoMinijuego = 5;
         switch (siguiente) {
             case 0:
                 minijuego = Minijuego.OBSTACULOS;
                 break;
             case 1:
-                minijuego = Minijuego.RAICES;
+                minijuego = Minijuego.PARES;
                 break;
             case 2:
-                minijuego = Minijuego.POTENCIAS;
+                minijuego = Minijuego.NONES;
                 break;
             case 3:
-                minijuego = Minijuego.DIVISIONES;
+                minijuego = Minijuego.MULTIPLOSDETRES;
                 break;
         }
     }
 
-    private int generaNumeroEntre(int min, int max)
-    {
+    private int generaNumeroEntre(int min, int max) {
         Random random = new Random();
-        int num = random.nextInt(max-min)+min;
+        int num = random.nextInt(max - min) + min;
         return num;
     }
 
@@ -1146,15 +1137,9 @@ public class PantallaJuegoNivel3 extends Pantalla {
             TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(0);
             for(int y=0;y<=3;y++)
             {
-                capa.setCell(posX,posY+y, items.getCell(27+(2*num),25+y));
-                capa.setCell(posX+1,posY+y, items.getCell(28+(2*num),25+y));
+                capa.setCell(posX,posY+y, items.getCell(24+(2*num),25+y));
+                capa.setCell(posX+1,posY+y, items.getCell(25+(2*num),25+y));
             }
-        }
-        else if(num>=100)
-        {
-            int izquierda = num/100;
-            generaItem(izquierda,posX,posY);
-            generaItem(num-(izquierda*100),posX+2,posY);
         }
         else
         {
@@ -1163,13 +1148,12 @@ public class PantallaJuegoNivel3 extends Pantalla {
             generaItem(num-(izquierda*10),posX+2,posY);
         }
     }
-
     private void generaObstaculo(int tipo, int posX, int posY) // Generará un obstáculo de tipo "tipo" en la posición posX
     {
         TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
         TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(0);
         switch (tipo){
-            case 0: // Dinosaurio
+            case 0: // MESA
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(0,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(0,26));
@@ -1186,22 +1170,20 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 capa.setCell(posX+3,posY, obstaculos.getCell(3,25));
                 capa.setCell(posX+3,posY+1, obstaculos.getCell(3,26));
                 capa.setCell(posX+3,posY+2, obstaculos.getCell(3,27));
+                //Quinta columna
+                capa.setCell(posX+4,posY, obstaculos.getCell(4,25));
+                capa.setCell(posX+4,posY+1, obstaculos.getCell(4,26));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(4,27));
+                //Sexta columna
+                capa.setCell(posX+5,posY, obstaculos.getCell(5,25));
+                capa.setCell(posX+5,posY+1, obstaculos.getCell(5,26));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(5,27));
+                //Séptima columna
+                capa.setCell(posX+6,posY, obstaculos.getCell(6,25));
+                capa.setCell(posX+6,posY+1, obstaculos.getCell(6,26));
+                capa.setCell(posX+6,posY+2, obstaculos.getCell(6,27));
                 break;
-            case 1: //Torres de Hanoi
-                //Primera columna
-                capa.setCell(posX,posY, obstaculos.getCell(4,25));
-                capa.setCell(posX,posY+1, obstaculos.getCell(4,26));
-                capa.setCell(posX,posY+2, obstaculos.getCell(4,27));
-                //Segunda columna
-                capa.setCell(posX+1,posY, obstaculos.getCell(5,25));
-                capa.setCell(posX+1,posY+1, obstaculos.getCell(5,26));
-                capa.setCell(posX+1,posY+2, obstaculos.getCell(5,27));
-                //Tercera columna
-                capa.setCell(posX+2,posY, obstaculos.getCell(6,25));
-                capa.setCell(posX+2,posY+1, obstaculos.getCell(6,26));
-                capa.setCell(posX+2,posY+2, obstaculos.getCell(6,27));
-                break;
-            case 2: // Pato
+            case 1: //SILLON 1
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(7,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(7,26));
@@ -1214,94 +1196,72 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 capa.setCell(posX+2,posY, obstaculos.getCell(9,25));
                 capa.setCell(posX+2,posY+1, obstaculos.getCell(9,26));
                 capa.setCell(posX+2,posY+2, obstaculos.getCell(9,27));
-                break;
-            case 3: // Avion
-                //Primera columna
-                capa.setCell(posX,posY, obstaculos.getCell(10,25));
-                capa.setCell(posX,posY+1, obstaculos.getCell(10,26));
-                capa.setCell(posX,posY+2, obstaculos.getCell(10,27));
-                capa.setCell(posX,posY+3, obstaculos.getCell(10,28));
-                //Segunda columna
-                capa.setCell(posX+1,posY, obstaculos.getCell(11,25));
-                capa.setCell(posX+1,posY+1, obstaculos.getCell(11,26));
-                capa.setCell(posX+1,posY+2, obstaculos.getCell(11,27));
-                capa.setCell(posX+1,posY+3, obstaculos.getCell(11,28));
-                //Tercera columna
-                capa.setCell(posX+2,posY, obstaculos.getCell(12,25));
-                capa.setCell(posX+2,posY+1, obstaculos.getCell(12,26));
-                capa.setCell(posX+2,posY+2, obstaculos.getCell(12,27));
-                capa.setCell(posX+2,posY+3, obstaculos.getCell(12,28));
                 //Cuarta columna
-                capa.setCell(posX+3,posY, obstaculos.getCell(13,25));
-                capa.setCell(posX+3,posY+1, obstaculos.getCell(13,26));
-                capa.setCell(posX+3,posY+2, obstaculos.getCell(13,27));
-                capa.setCell(posX+3,posY+3, obstaculos.getCell(13,28));
+                capa.setCell(posX+3,posY, obstaculos.getCell(10,25));
+                capa.setCell(posX+3,posY+1, obstaculos.getCell(10,26));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(10,27));
+                //Quinta columna
+                capa.setCell(posX+4,posY, obstaculos.getCell(11,25));
+                capa.setCell(posX+4,posY+1, obstaculos.getCell(11,26));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(11,27));
+                //Sexta columna
+                capa.setCell(posX+5,posY, obstaculos.getCell(12,25));
+                capa.setCell(posX+5,posY+1, obstaculos.getCell(12,26));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(12,27));
+                //Séptima columna
+                capa.setCell(posX+6,posY, obstaculos.getCell(13,25));
+                capa.setCell(posX+6,posY+1, obstaculos.getCell(13,26));
+                capa.setCell(posX+6,posY+2, obstaculos.getCell(13,27));
                 break;
-            case 4: // Robot
+            case 2: // SILLON 2
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(14,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(14,26));
                 capa.setCell(posX,posY+2, obstaculos.getCell(14,27));
-                capa.setCell(posX,posY+3, obstaculos.getCell(14,28));
-                capa.setCell(posX,posY+4, obstaculos.getCell(14,29));
                 //Segunda columna
                 capa.setCell(posX+1,posY, obstaculos.getCell(15,25));
                 capa.setCell(posX+1,posY+1, obstaculos.getCell(15,26));
                 capa.setCell(posX+1,posY+2, obstaculos.getCell(15,27));
-                capa.setCell(posX+1,posY+3, obstaculos.getCell(15,28));
-                capa.setCell(posX+1,posY+4, obstaculos.getCell(15,29));
                 //Tercera columna
                 capa.setCell(posX+2,posY, obstaculos.getCell(16,25));
                 capa.setCell(posX+2,posY+1, obstaculos.getCell(16,26));
                 capa.setCell(posX+2,posY+2, obstaculos.getCell(16,27));
-                capa.setCell(posX+2,posY+3, obstaculos.getCell(16,28));
-                capa.setCell(posX+2,posY+4, obstaculos.getCell(16,29));
                 //Cuarta columna
                 capa.setCell(posX+3,posY, obstaculos.getCell(17,25));
                 capa.setCell(posX+3,posY+1, obstaculos.getCell(17,26));
                 capa.setCell(posX+3,posY+2, obstaculos.getCell(17,27));
-                capa.setCell(posX+3,posY+3, obstaculos.getCell(17,28));
-                capa.setCell(posX+3,posY+4, obstaculos.getCell(17,29));
+                //Quinta columna
+                capa.setCell(posX+4,posY, obstaculos.getCell(18,25));
+                capa.setCell(posX+4,posY+1, obstaculos.getCell(18,26));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(18,27));
+                //Sexta columna
+                capa.setCell(posX+5,posY, obstaculos.getCell(19,25));
+                capa.setCell(posX+5,posY+1, obstaculos.getCell(19,26));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(19,27));
+                //Séptima columna
+                capa.setCell(posX+6,posY, obstaculos.getCell(20,25));
+                capa.setCell(posX+6,posY+1, obstaculos.getCell(20,26));
+                capa.setCell(posX+6,posY+2, obstaculos.getCell(20,27));
                 break;
-            case 5: // Balon
-                //Primera columna
-                capa.setCell(posX,posY, obstaculos.getCell(18,25));
-                capa.setCell(posX,posY+1, obstaculos.getCell(18,26));
-                capa.setCell(posX,posY+2, obstaculos.getCell(18,27));
-                //Segunda columna
-                capa.setCell(posX+1,posY, obstaculos.getCell(19,25));
-                capa.setCell(posX+1,posY+1, obstaculos.getCell(19,26));
-                capa.setCell(posX+1,posY+2, obstaculos.getCell(19,27));
-                //Tercera columna
-                capa.setCell(posX+2,posY, obstaculos.getCell(20,25));
-                capa.setCell(posX+2,posY+1, obstaculos.getCell(20,26));
-                capa.setCell(posX+2,posY+2, obstaculos.getCell(20,27));
-                break;
-            case 6: // Tren
+            case 3: // SILLA
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(21,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(21,26));
                 capa.setCell(posX,posY+2, obstaculos.getCell(21,27));
+                capa.setCell(posX,posY+3, obstaculos.getCell(21,28));
+                capa.setCell(posX,posY+4, obstaculos.getCell(21,29));
                 //Segunda columna
                 capa.setCell(posX+1,posY, obstaculos.getCell(22,25));
                 capa.setCell(posX+1,posY+1, obstaculos.getCell(22,26));
                 capa.setCell(posX+1,posY+2, obstaculos.getCell(22,27));
-                //Tercera columna
+                capa.setCell(posX+1,posY+3, obstaculos.getCell(22,28));
+                capa.setCell(posX+1,posY+4, obstaculos.getCell(22,29));
+                //Segunda columna
                 capa.setCell(posX+2,posY, obstaculos.getCell(23,25));
                 capa.setCell(posX+2,posY+1, obstaculos.getCell(23,26));
                 capa.setCell(posX+2,posY+2, obstaculos.getCell(23,27));
-                //Cuarta columna
-                capa.setCell(posX+3,posY, obstaculos.getCell(24,25));
-                capa.setCell(posX+3,posY+1, obstaculos.getCell(24,26));
-                capa.setCell(posX+3,posY+2, obstaculos.getCell(24,27));
-                //Quinta columna
-                capa.setCell(posX+4,posY, obstaculos.getCell(25,25));
-                capa.setCell(posX+4,posY+1, obstaculos.getCell(25,26));
-                capa.setCell(posX+4,posY+2, obstaculos.getCell(25,27));
-                //Sexta columna
-                capa.setCell(posX+5,posY, obstaculos.getCell(26,25));
-                capa.setCell(posX+5,posY+1, obstaculos.getCell(26,26));
-                capa.setCell(posX+5,posY+2, obstaculos.getCell(26,27));
+                capa.setCell(posX+2,posY+3, obstaculos.getCell(23,28));
+                capa.setCell(posX+2,posY+4, obstaculos.getCell(23,29));
                 break;
         }
     }
@@ -1376,8 +1336,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
         Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
         eliminarObjetos();
         menu.musicaFondo.stop();
-    }
-
+        }
 
     private void ganaste() {
         estadoJuego = EstadoJuego.TERMINADO;
@@ -1428,14 +1387,13 @@ public class PantallaJuegoNivel3 extends Pantalla {
         manager.unload("Images/screens/pausa.jpg");
         manager.unload("Images/screens/chanclazo.jpg");
         manager.unload("Images/btns/btnMenuPrinc.png");
-        manager.unload("Images/btns/btnJugarPausa.png");
         manager.unload("Images/btns/btnOpcionesPausa.png");
         manager.unload("Images/screens/gameOver.jpg");
         manager.unload("Images/screens/ganaste.jpg");
-        manager.unload("Mapa/mapaNivel3.tmx");
+        manager.unload("Mapa/mapaNivel1.tmx");
         manager.unload("Images/btns/btnPausa.png");
-        manager.unload("Images/PantallaJuego/mas300.png");
-        manager.unload("Images/PantallaJuego/menos150.png");
+        manager.unload("Images/PantallaJuego/mas100.png");
+        manager.unload("Images/PantallaJuego/menos50.png");
         manager.unload("Audio/Slap.mp3");
         manager.unload("Audio/Correcto.wav");
         manager.unload("Audio/Incorrecto.mp3");
@@ -1453,13 +1411,13 @@ public class PantallaJuegoNivel3 extends Pantalla {
 
     public enum Minijuego {
         OBSTACULOS,
-        RAICES,
-        POTENCIAS,
-        DIVISIONES,
+        PARES,
+        NONES,
+        MULTIPLOSDETRES,
         INSTRUCCIONES
     }
 
-    private class Procesador implements InputProcessor {
+    private class Procesador implements InputProcessor{
         @Override
         public boolean keyDown(int keycode) {
             if(keycode == Input.Keys.BACK)
