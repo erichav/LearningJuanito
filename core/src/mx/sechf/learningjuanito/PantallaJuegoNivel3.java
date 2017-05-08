@@ -1073,6 +1073,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 }
                 break;
             case TERMINADO:
+                if(tiempoGanador<=0) {
                     if (escenaGanaste == null) {
                         escenaGanaste = new EscenaGanaste(vistaHUD, batch);
                         actualizarCamara();
@@ -1083,6 +1084,25 @@ public class PantallaJuegoNivel3 extends Pantalla {
                     puntajeFinal.mostrarMensaje(batch, "Puntaje Final: " + Integer.toString((int) (puntosJugador * 10)), ANCHO / 2, ALTO / 3);
                     batch.end();
                     break;
+                }else{
+                    if(tiempoGanador>=7.5){//Sobre 7-8
+                        Juanito.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+                        Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
+                        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                        Juanito.actualizar(mapa);
+                    }else if(tiempoGanador>=6){
+                        Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                        Juanito.actualizar(mapa);
+                    }else if(tiempoGanador>=3){
+                        contadorDialogo=5;
+                        dibujardialogo();
+                    }else{
+                        contadorDialogo=6;
+                        dibujardialogo();
+                    }
+                    tiempoGanador-=delta;
+                    break;
+                }
         }
     }
 
