@@ -1482,9 +1482,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             Vector3 v = new Vector3();
             v.set(screenX, screenY, 0);
-            Gdx.app.log("x: " + v.x, "y: " + v.y);
             if(v.x<200 && v.y < 200){
-                if(!(estadoJuego == EstadoJuego.INICIANDO))
+                if(!(estadoJuego == EstadoJuego.INICIANDO) && !(estadoJuego == EstadoJuego.TERMINADO))
                 {
                     estadoJuego = EstadoJuego.PAUSADO;
                     menu.musicaFondo.pause();
