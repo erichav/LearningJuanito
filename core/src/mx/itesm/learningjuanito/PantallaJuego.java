@@ -1012,12 +1012,15 @@ public class PantallaJuego extends Pantalla {
                 }else{
                     if(tiempoFinal>=4){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
+                        Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                        Mama.actualizar(mapa);
                         Juanito.actualizar(mapa);
                     }else if(tiempoFinal>=2){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                         contadorDialogo=4;
                         dibujardialogo();
                         Juanito.actualizar(mapa);
+                        Mama.actualizar(mapa);
                     }else if(tiempoFinal>=1){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.INICIANDO);
                         Juanito.actualizar(mapa);
@@ -1045,9 +1048,12 @@ public class PantallaJuego extends Pantalla {
                         }
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
                         Juanito.actualizar(mapa);
+                        Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+                        Mama.actualizar(mapa);
                     }else if(tiempoGanador>=4){
                         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
                         Juanito.actualizar(mapa);
+                        Mama.actualizar(mapa);
                     }else{
                         contadorDialogo=6;
                         dibujardialogo();
