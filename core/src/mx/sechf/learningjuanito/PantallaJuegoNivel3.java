@@ -1191,8 +1191,8 @@ public class PantallaJuegoNivel3 extends Pantalla {
             TiledMapTileLayer items = (TiledMapTileLayer) mapa.getLayers().get(0);
             for(int y=0;y<=3;y++)
             {
-                capa.setCell(posX,posY+y, items.getCell(24+(2*num),25+y));
-                capa.setCell(posX+1,posY+y, items.getCell(25+(2*num),25+y));
+                capa.setCell(posX,posY+y, items.getCell(27+(2*num),25+y));
+                capa.setCell(posX+1,posY+y, items.getCell(28+(2*num),25+y));
             }
         }
         else if(num>=100)
@@ -1214,7 +1214,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
         TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
         TiledMapTileLayer obstaculos = (TiledMapTileLayer) mapa.getLayers().get(0);
         switch (tipo){
-            case 0: // MESA
+            case 0: // Dinosaurio
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(0,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(0,26));
@@ -1231,20 +1231,22 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 capa.setCell(posX+3,posY, obstaculos.getCell(3,25));
                 capa.setCell(posX+3,posY+1, obstaculos.getCell(3,26));
                 capa.setCell(posX+3,posY+2, obstaculos.getCell(3,27));
-                //Quinta columna
-                capa.setCell(posX+4,posY, obstaculos.getCell(4,25));
-                capa.setCell(posX+4,posY+1, obstaculos.getCell(4,26));
-                capa.setCell(posX+4,posY+2, obstaculos.getCell(4,27));
-                //Sexta columna
-                capa.setCell(posX+5,posY, obstaculos.getCell(5,25));
-                capa.setCell(posX+5,posY+1, obstaculos.getCell(5,26));
-                capa.setCell(posX+5,posY+2, obstaculos.getCell(5,27));
-                //Séptima columna
-                capa.setCell(posX+6,posY, obstaculos.getCell(6,25));
-                capa.setCell(posX+6,posY+1, obstaculos.getCell(6,26));
-                capa.setCell(posX+6,posY+2, obstaculos.getCell(6,27));
                 break;
-            case 1: //SILLON 1
+            case 1: //Torres de Hanoi
+                //Primera columna
+                capa.setCell(posX,posY, obstaculos.getCell(4,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(4,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(4,27));
+                //Segunda columna
+                capa.setCell(posX+1,posY, obstaculos.getCell(5,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(5,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(5,27));
+                //Tercera columna
+                capa.setCell(posX+2,posY, obstaculos.getCell(6,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(6,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(6,27));
+                break;
+            case 2: // Pato
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(7,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(7,26));
@@ -1257,72 +1259,94 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 capa.setCell(posX+2,posY, obstaculos.getCell(9,25));
                 capa.setCell(posX+2,posY+1, obstaculos.getCell(9,26));
                 capa.setCell(posX+2,posY+2, obstaculos.getCell(9,27));
-                //Cuarta columna
-                capa.setCell(posX+3,posY, obstaculos.getCell(10,25));
-                capa.setCell(posX+3,posY+1, obstaculos.getCell(10,26));
-                capa.setCell(posX+3,posY+2, obstaculos.getCell(10,27));
-                //Quinta columna
-                capa.setCell(posX+4,posY, obstaculos.getCell(11,25));
-                capa.setCell(posX+4,posY+1, obstaculos.getCell(11,26));
-                capa.setCell(posX+4,posY+2, obstaculos.getCell(11,27));
-                //Sexta columna
-                capa.setCell(posX+5,posY, obstaculos.getCell(12,25));
-                capa.setCell(posX+5,posY+1, obstaculos.getCell(12,26));
-                capa.setCell(posX+5,posY+2, obstaculos.getCell(12,27));
-                //Séptima columna
-                capa.setCell(posX+6,posY, obstaculos.getCell(13,25));
-                capa.setCell(posX+6,posY+1, obstaculos.getCell(13,26));
-                capa.setCell(posX+6,posY+2, obstaculos.getCell(13,27));
                 break;
-            case 2: // SILLON 2
+            case 3: // Avion
+                //Primera columna
+                capa.setCell(posX,posY, obstaculos.getCell(10,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(10,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(10,27));
+                capa.setCell(posX,posY+3, obstaculos.getCell(10,28));
+                //Segunda columna
+                capa.setCell(posX+1,posY, obstaculos.getCell(11,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(11,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(11,27));
+                capa.setCell(posX+1,posY+3, obstaculos.getCell(11,28));
+                //Tercera columna
+                capa.setCell(posX+2,posY, obstaculos.getCell(12,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(12,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(12,27));
+                capa.setCell(posX+2,posY+3, obstaculos.getCell(12,28));
+                //Cuarta columna
+                capa.setCell(posX+3,posY, obstaculos.getCell(13,25));
+                capa.setCell(posX+3,posY+1, obstaculos.getCell(13,26));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(13,27));
+                capa.setCell(posX+3,posY+3, obstaculos.getCell(13,28));
+                break;
+            case 4: // Robot
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(14,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(14,26));
                 capa.setCell(posX,posY+2, obstaculos.getCell(14,27));
+                capa.setCell(posX,posY+3, obstaculos.getCell(14,28));
+                capa.setCell(posX,posY+4, obstaculos.getCell(14,29));
                 //Segunda columna
                 capa.setCell(posX+1,posY, obstaculos.getCell(15,25));
                 capa.setCell(posX+1,posY+1, obstaculos.getCell(15,26));
                 capa.setCell(posX+1,posY+2, obstaculos.getCell(15,27));
+                capa.setCell(posX+1,posY+3, obstaculos.getCell(15,28));
+                capa.setCell(posX+1,posY+4, obstaculos.getCell(15,29));
                 //Tercera columna
                 capa.setCell(posX+2,posY, obstaculos.getCell(16,25));
                 capa.setCell(posX+2,posY+1, obstaculos.getCell(16,26));
                 capa.setCell(posX+2,posY+2, obstaculos.getCell(16,27));
+                capa.setCell(posX+2,posY+3, obstaculos.getCell(16,28));
+                capa.setCell(posX+2,posY+4, obstaculos.getCell(16,29));
                 //Cuarta columna
                 capa.setCell(posX+3,posY, obstaculos.getCell(17,25));
                 capa.setCell(posX+3,posY+1, obstaculos.getCell(17,26));
                 capa.setCell(posX+3,posY+2, obstaculos.getCell(17,27));
-                //Quinta columna
-                capa.setCell(posX+4,posY, obstaculos.getCell(18,25));
-                capa.setCell(posX+4,posY+1, obstaculos.getCell(18,26));
-                capa.setCell(posX+4,posY+2, obstaculos.getCell(18,27));
-                //Sexta columna
-                capa.setCell(posX+5,posY, obstaculos.getCell(19,25));
-                capa.setCell(posX+5,posY+1, obstaculos.getCell(19,26));
-                capa.setCell(posX+5,posY+2, obstaculos.getCell(19,27));
-                //Séptima columna
-                capa.setCell(posX+6,posY, obstaculos.getCell(20,25));
-                capa.setCell(posX+6,posY+1, obstaculos.getCell(20,26));
-                capa.setCell(posX+6,posY+2, obstaculos.getCell(20,27));
+                capa.setCell(posX+3,posY+3, obstaculos.getCell(17,28));
+                capa.setCell(posX+3,posY+4, obstaculos.getCell(17,29));
                 break;
-            case 3: // SILLA
+            case 5: // Balon
+                //Primera columna
+                capa.setCell(posX,posY, obstaculos.getCell(18,25));
+                capa.setCell(posX,posY+1, obstaculos.getCell(18,26));
+                capa.setCell(posX,posY+2, obstaculos.getCell(18,27));
+                //Segunda columna
+                capa.setCell(posX+1,posY, obstaculos.getCell(19,25));
+                capa.setCell(posX+1,posY+1, obstaculos.getCell(19,26));
+                capa.setCell(posX+1,posY+2, obstaculos.getCell(19,27));
+                //Tercera columna
+                capa.setCell(posX+2,posY, obstaculos.getCell(20,25));
+                capa.setCell(posX+2,posY+1, obstaculos.getCell(20,26));
+                capa.setCell(posX+2,posY+2, obstaculos.getCell(20,27));
+                break;
+            case 6: // Tren
                 //Primera columna
                 capa.setCell(posX,posY, obstaculos.getCell(21,25));
                 capa.setCell(posX,posY+1, obstaculos.getCell(21,26));
                 capa.setCell(posX,posY+2, obstaculos.getCell(21,27));
-                capa.setCell(posX,posY+3, obstaculos.getCell(21,28));
-                capa.setCell(posX,posY+4, obstaculos.getCell(21,29));
                 //Segunda columna
                 capa.setCell(posX+1,posY, obstaculos.getCell(22,25));
                 capa.setCell(posX+1,posY+1, obstaculos.getCell(22,26));
                 capa.setCell(posX+1,posY+2, obstaculos.getCell(22,27));
-                capa.setCell(posX+1,posY+3, obstaculos.getCell(22,28));
-                capa.setCell(posX+1,posY+4, obstaculos.getCell(22,29));
-                //Segunda columna
+                //Tercera columna
                 capa.setCell(posX+2,posY, obstaculos.getCell(23,25));
                 capa.setCell(posX+2,posY+1, obstaculos.getCell(23,26));
                 capa.setCell(posX+2,posY+2, obstaculos.getCell(23,27));
-                capa.setCell(posX+2,posY+3, obstaculos.getCell(23,28));
-                capa.setCell(posX+2,posY+4, obstaculos.getCell(23,29));
+                //Cuarta columna
+                capa.setCell(posX+3,posY, obstaculos.getCell(24,25));
+                capa.setCell(posX+3,posY+1, obstaculos.getCell(24,26));
+                capa.setCell(posX+3,posY+2, obstaculos.getCell(24,27));
+                //Quinta columna
+                capa.setCell(posX+4,posY, obstaculos.getCell(25,25));
+                capa.setCell(posX+4,posY+1, obstaculos.getCell(25,26));
+                capa.setCell(posX+4,posY+2, obstaculos.getCell(25,27));
+                //Sexta columna
+                capa.setCell(posX+5,posY, obstaculos.getCell(26,25));
+                capa.setCell(posX+5,posY+1, obstaculos.getCell(26,26));
+                capa.setCell(posX+5,posY+2, obstaculos.getCell(26,27));
                 break;
         }
     }
