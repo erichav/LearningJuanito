@@ -91,8 +91,7 @@ public class Personaje extends Objeto
             TiledMapTileLayer capa = (TiledMapTileLayer) mapa.getLayers().get(2);
             int x = (int) (sprite.getX() / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
             int y = (int) ((sprite.getY() -15.0f) / 32);
-            Gdx.app.log("x: " +x ," y:" + y);
-            int xFinal = (int) ((sprite.getX() + sprite.getWidth() - 23.0f)/ 32);
+            int xFinal = (int) ((sprite.getX() + sprite.getWidth() - 18.0f)/ 32);
             TiledMapTileLayer.Cell celdaAbajo = capa.getCell(x, y);
             TiledMapTileLayer.Cell celdaAbajoFinal = capa.getCell(xFinal, y);
             if (celdaAbajo != null) {
@@ -130,9 +129,8 @@ public class Personaje extends Objeto
         if ( estadoMovimiento== EstadoMovimiento.MOV_DERECHA) {
             velocidad = velocidad + 0.001f;
             // Obtiene el bloque del lado derecho. Asigna null si puede pasar.
-            int x = (int) ((sprite.getX() + sprite.getWidth()-23.0f) / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
+            int x = (int) ((sprite.getX() + sprite.getWidth()-10.0f) / 32);   // Convierte coordenadas del mundo en coordenadas del mapa
             int y = (int) ((sprite.getY()) / 32);
-            Gdx.app.log("MOVIMIENTO x: " +x ," y:" + y + " WIDTH: " + sprite.getWidth());
             TiledMapTileLayer.Cell celdaDerecha = capa.getCell(x, y);
             if (celdaDerecha != null) {
                 Object tipo = (String) celdaDerecha.getTile().getProperties().get("tipo");
