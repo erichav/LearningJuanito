@@ -230,7 +230,7 @@ public class PantallaJuego extends Pantalla {
         switch(contadorDialogo){
             case 1:
                 imgDialogo = new Image(texturadialogoMama);
-                imgDialogo .setPosition(15*ANCHO/50-imgDialogo.getWidth()/2,70*ALTO/100-imgDialogo.getHeight()/2);
+                imgDialogo  .setPosition(15*ANCHO/50-imgDialogo.getWidth()/2-100,70*ALTO/100-imgDialogo.getHeight()/2-50);
                 escenaHUD.addActor(imgDialogo );
                 break;
             case 2:
@@ -244,7 +244,7 @@ public class PantallaJuego extends Pantalla {
                 escenaHUD.clear();
                 //crearRectangulo();
                 imgDialogo = new Image(texturadialo);
-                imgDialogo .setPosition(9*ANCHO/50-imgDialogo.getWidth()/2,43*ALTO/100-imgDialogo.getHeight()/2);
+                imgDialogo .setPosition(9*ANCHO/50-imgDialogo.getWidth()/2+20,43*ALTO/100-imgDialogo.getHeight()/2+50);
                 escenaHUD.addActor(imgDialogo );
                 break;
             case 4:
@@ -266,7 +266,7 @@ public class PantallaJuego extends Pantalla {
                 //crearRectangulo();
                 //
                 imgDialogo = new Image(texturaFinalJuanito);
-                imgDialogo .setPosition(28*ANCHO/50-imgDialogo.getWidth()/2,40*ALTO/100-imgDialogo.getHeight()/2);
+                imgDialogo .setPosition(28*ANCHO/50-imgDialogo.getWidth()/2+90,40*ALTO/100-imgDialogo.getHeight()/2-60);
                 escenaHUD.addActor(imgDialogo );
                 break;
             default:break;
