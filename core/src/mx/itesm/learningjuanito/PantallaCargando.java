@@ -117,6 +117,7 @@ class PantallaCargando extends Pantalla
         manager.load("Images/screens/ganaste.jpg", Texture.class);
         manager.load("Mapa/mapaNivel2.tmx", TiledMap.class);
         manager.load("Images/btns/btnPausa.png", Texture.class);
+        manager.load("Images/PantallaJuego/mas50.png", Texture.class);
         manager.load("Images/PantallaJuego/mas200.png", Texture.class);
         manager.load("Images/PantallaJuego/menos100.png", Texture.class);
         manager.load("Audio/Slap.mp3", Sound.class);
@@ -147,6 +148,7 @@ class PantallaCargando extends Pantalla
         manager.load("Images/screens/ganaste.jpg", Texture.class);
         manager.load("Mapa/mapaNivel3.tmx", TiledMap.class);
         manager.load("Images/btns/btnPausa.png", Texture.class);
+        manager.load("Images/PantallaJuego/mas50.png", Texture.class);
         manager.load("Images/PantallaJuego/mas300.png", Texture.class);
         manager.load("Images/PantallaJuego/menos150.png", Texture.class);
         manager.load("Audio/Slap.mp3", Sound.class);
