@@ -16,7 +16,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 public class Personaje extends Objeto
 {
     private float velocidad = 10; // Velocidad inicial de Juanito
-    private float retraso = 4.5f;
+    private float retraso = 9.5f;
     private int tiempoRetraso = -1;
 
     private Animation<TextureRegion> spriteAnimado;         // Animación de Juanito caminando
@@ -121,7 +121,7 @@ public class Personaje extends Objeto
 
     public void retrasar()
     {
-        tiempoRetraso = 12;
+        tiempoRetraso = 17;
         velocidad-=retraso;
     }
     public void quitaRetraso()

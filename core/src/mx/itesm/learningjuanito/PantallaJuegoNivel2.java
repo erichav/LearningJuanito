@@ -34,8 +34,8 @@ public class PantallaJuegoNivel2 extends Pantalla {
     private final LearningJuanito menu;
     public EstadoJuego estadoJuego = EstadoJuego.INICIANDO;
     public Minijuego minijuego = Minijuego.INSTRUCCIONES;
-    private String instruccionMinijuego = "NO DEJES QUE TE ATRAPE!";
-    private boolean recolectando = true;
+    private String instruccionMinijuego = "";
+    private boolean recolectando = true, saltoObstaculo = false;
     private float tiempo;
     private float tiempoFinal=5;
     private float tiempoGanador=5;
@@ -83,6 +83,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
     private Sound cachetada;
 
     // Retroalimentación de items
+    private Texture texturaSaltaObstaculo;
     private Texture texturaRespuestaCorrecta;
     private Texture texturaRespuestaIncorrecta;
     private Sound sonidoRespuestaCorrecta;
@@ -681,6 +682,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
         texturaFinalPierde = manager.get("Images/dialogos/finalPierde.png");
         texturaFinalJuanito=manager.get("Images/dialogos/finalGanaJuanito.png");
         texturaFinalMama=manager.get("Images/dialogos/finalGanaMama.png");
+        texturaSaltaObstaculo = manager.get("Images/PantallaJuego/mas50.png");
         texturaRespuestaCorrecta = manager.get("Images/PantallaJuego/mas200.png");
         texturaRespuestaIncorrecta = manager.get("Images/PantallaJuego/menos100.png");
     }
@@ -825,6 +827,18 @@ public class PantallaJuegoNivel2 extends Pantalla {
                         tiempoInstrucciones-=delta;
                         break;
                     case OBSTACULOS:
+                        if(posicionObjeto == posXJuanito && saltoObstaculo == false)
+                        {
+                            saltoObstaculo = true;
+                            puntosJugador+=5;
+                            if(menu.isEffectsOn())
+                            {
+                                sonidoRespuestaCorrecta.setVolume(sonidoRespuestaCorrecta.play(),0.5f);
+                            }
+                            retroalimentar();
+                            retroalimentacion.setDrawable(new TextureRegionDrawable(new TextureRegion(texturaSaltaObstaculo)));
+                            escenaHUD.addActor(retroalimentacion);
+                        }
                         if(Math.random()>0.5&& posicionObjeto <posXJuanito)
                         {
                             if(tiempoMinijuego==0)
@@ -833,6 +847,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
                             }
                             else
                             {
+                                saltoObstaculo = false;
                                 posicionObjeto = posXJuanito+40;
                                 generaObstaculo(generaNumeroEntre(0,7), posicionObjeto,1);
                                 tiempoMinijuego--;
@@ -1443,6 +1458,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
         manager.unload("Images/screens/ganaste.jpg");
         manager.unload("Mapa/mapaNivel2.tmx");
         manager.unload("Images/btns/btnPausa.png");
+        manager.unload("Images/PantallaJuego/mas50.png");
         manager.unload("Images/PantallaJuego/mas200.png");
         manager.unload("Images/PantallaJuego/menos100.png");
         manager.unload("Audio/Slap.mp3");

@@ -87,6 +87,7 @@ class PantallaCargando extends Pantalla
         manager.load("Images/screens/ganaste.jpg", Texture.class);
         manager.load("Mapa/mapaNivel1.tmx", TiledMap.class);
         manager.load("Images/btns/btnPausa.png", Texture.class);
+        manager.load("Images/PantallaJuego/mas50.png", Texture.class);
         manager.load("Images/PantallaJuego/mas100.png", Texture.class);
         manager.load("Images/PantallaJuego/menos50.png", Texture.class);
         manager.load("Audio/Slap.mp3", Sound.class);
@@ -179,7 +180,7 @@ class PantallaCargando extends Pantalla
         timerAnimacion -= delta;
         if (timerAnimacion<=0) {
             timerAnimacion = TIEMPO_ENTRE_FRAMES;
-            spriteCargando.rotate(60);
+            spriteCargando.rotate(-60);
         }
         // Actualizar carga
         actualizarCargaRecursos();
