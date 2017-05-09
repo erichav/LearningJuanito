@@ -807,8 +807,8 @@ public class PantallaJuegoNivel2 extends Pantalla {
                             case 3:
                                 if(numero1==-1)
                                 {
-                                    numero1 = generaNumeroEntre(1,17);
-                                    numero2 = generaNumeroEntre(0,7);
+                                    numero1 = generaNumeroEntre(1,11);
+                                    numero2 = generaNumeroEntre(0,10);
                                 }
                                 instruccionMinijuego = "MULTIPLICA: " + numero1 + " * " + numero2;
                                 break;
@@ -1026,6 +1026,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
                 break;
             case PERDIDO:
                 if(tiempoFinal<=0) {
+                    menu.musicaFondo.stop();
                 if (escenaGameOver==null) {
                     escenaGameOver = new EscenaGameOver(vistaHUD, batch);
                     actualizarCamara();
@@ -1057,6 +1058,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
                 break;
             case TERMINADO:
                 if(tiempoGanador<=0) {
+                    menu.musicaFondo.stop();
                     if (escenaGanaste == null) {
                         escenaGanaste = new EscenaGanaste(vistaHUD, batch);
                         actualizarCamara();
@@ -1139,6 +1141,11 @@ public class PantallaJuegoNivel2 extends Pantalla {
     private void colision() {
         if(Juanito.Colisiona(Mama))
         {
+            // Efecto de sonido (cachetada)
+            if(menu.isEffectsOn())
+            {
+                cachetada.play();
+            }
             Juanito.quitaRetraso();
             if(vidas>0)
             {
@@ -1154,13 +1161,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
                 Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                 eliminarObjetos();
                 reacomodarPersonajes();
-                menu.musicaFondo.stop();
-
-                // Efecto de sonido (cachetada)
-                if(menu.isEffectsOn())
-                {
-                    cachetada.play();
-                }
+                menu.musicaFondo.pause();
             } else {
                 gameOver();
             }
@@ -1397,7 +1398,7 @@ public class PantallaJuegoNivel2 extends Pantalla {
         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         eliminarObjetos();
-        menu.musicaFondo.stop();
+        escenaHUD.clear();
         }
 
 
@@ -1405,12 +1406,8 @@ public class PantallaJuegoNivel2 extends Pantalla {
         estadoJuego = EstadoJuego.TERMINADO;
         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
-        Mama.actualizar(mapa);
-        //
-        Juanito.actualizar(mapa);
         eliminarObjetos();
         escenaHUD.clear();
-        menu.musicaFondo.stop();
     }
 
     @Override

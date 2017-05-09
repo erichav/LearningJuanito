@@ -16,7 +16,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 class PantallaCargando extends Pantalla
 {
     // Animación cargando
-    private static final float TIEMPO_ENTRE_FRAMES = 0.15f;
+    private static final float TIEMPO_ENTRE_FRAMES = 0.001f;
     private Sprite spriteCargando;
     private float timerAnimacion = TIEMPO_ENTRE_FRAMES;
 
@@ -182,7 +182,7 @@ class PantallaCargando extends Pantalla
         timerAnimacion -= delta;
         if (timerAnimacion<=0) {
             timerAnimacion = TIEMPO_ENTRE_FRAMES;
-            spriteCargando.rotate(-60);
+            spriteCargando.rotate(-2);
         }
         // Actualizar carga
         actualizarCargaRecursos();

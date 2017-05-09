@@ -1023,7 +1023,7 @@ public class PantallaJuego extends Pantalla {
                 break;
             case PERDIDO:
                 if(tiempoFinal<=0) {
-                    //menu.musicaFondo.stop();
+                    menu.musicaFondo.stop();
                     if (escenaGameOver == null) {
                         escenaGameOver = new EscenaGameOver(vistaHUD, batch);
                         actualizarCamara();
@@ -1055,6 +1055,7 @@ public class PantallaJuego extends Pantalla {
                 break;
             case TERMINADO:
                 if(tiempoGanador<=0) {
+                    menu.musicaFondo.stop();
                     if (escenaGanaste == null) {
                         escenaGanaste = new EscenaGanaste(vistaHUD, batch);
                         actualizarCamara();
@@ -1132,6 +1133,11 @@ public class PantallaJuego extends Pantalla {
     private void colision() {
         if(Juanito.Colisiona(Mama))
         {
+            // Efecto de sonido (cachetada)
+            if(menu.isEffectsOn())
+            {
+                cachetada.play();
+            }
             Juanito.quitaRetraso();
             if(vidas>0)
             {
@@ -1147,13 +1153,7 @@ public class PantallaJuego extends Pantalla {
                 Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                 eliminarObjetos();
                 reacomodarPersonajes();
-                menu.musicaFondo.stop();
-
-                // Efecto de sonido (cachetada)
-                if(menu.isEffectsOn())
-                {
-                    cachetada.play();
-                }
+                menu.musicaFondo.pause();
             } else {
                 gameOver();
             }
@@ -1365,18 +1365,15 @@ public class PantallaJuego extends Pantalla {
         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         eliminarObjetos();
-        menu.musicaFondo.stop();
+        escenaHUD.clear();
         }
 
     private void ganaste() {
         estadoJuego = EstadoJuego.TERMINADO;
         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
-        Mama.actualizar(mapa);
-        Juanito.actualizar(mapa);
         eliminarObjetos();
         escenaHUD.clear();
-        menu.musicaFondo.stop();
     }
 
     @Override

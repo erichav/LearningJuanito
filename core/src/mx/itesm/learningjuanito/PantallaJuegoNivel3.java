@@ -800,14 +800,14 @@ public class PantallaJuegoNivel3 extends Pantalla {
                                 if(numero1==-1)
                                 {
                                     numero1 = generaNumeroEntre(0,10);
-                                    numero2 = generaNumeroEntre(0,4);
+                                    numero2 = generaNumeroEntre(0,3);
                                 }
                                 instruccionMinijuego = "ELEVA: " + numero1 + " ^ " + numero2;
                                 break;
                             case 3:
                                 if(numero1==-1)
                                 {
-                                    numero1 = generaNumeroEntre(0,100);
+                                    numero1 = generaNumeroEntre(0,10);
                                     numero2 = generaNumeroEntre(1,10);
                                 }
                                 instruccionMinijuego = "DIVIDE: " + numero1*numero2 + " / " + numero2;
@@ -1026,6 +1026,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 break;
             case PERDIDO:
                 if(tiempoFinal<=0) {
+                    menu.musicaFondo.stop();
                     if (escenaGameOver == null) {
                         escenaGameOver = new EscenaGameOver(vistaHUD, batch);
                         actualizarCamara();
@@ -1057,6 +1058,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 break;
             case TERMINADO:
                 if(tiempoGanador<=0) {
+                    menu.musicaFondo.stop();
                     if (escenaGanaste == null) {
                         escenaGanaste = new EscenaGanaste(vistaHUD, batch);
                         actualizarCamara();
@@ -1141,6 +1143,11 @@ public class PantallaJuegoNivel3 extends Pantalla {
         if(Juanito.Colisiona(Mama))
         {
             Juanito.quitaRetraso();
+            // Efecto de sonido (cachetada)
+            if(menu.isEffectsOn())
+            {
+                cachetada.play();
+            }
             if(vidas>0)
             {
                 vidas--;
@@ -1155,13 +1162,7 @@ public class PantallaJuegoNivel3 extends Pantalla {
                 Mama.setEstadoSalto(Personaje.EstadoSalto.EN_PISO);
                 eliminarObjetos();
                 reacomodarPersonajes();
-                menu.musicaFondo.stop();
-
-                // Efecto de sonido (cachetada)
-                if(menu.isEffectsOn())
-                {
-                    cachetada.play();
-                }
+                menu.musicaFondo.pause();
             } else {
                 gameOver();
             }
@@ -1404,19 +1405,15 @@ public class PantallaJuegoNivel3 extends Pantalla {
         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         eliminarObjetos();
-        menu.musicaFondo.stop();
+        escenaHUD.clear();
     }
-
 
     private void ganaste() {
         estadoJuego = EstadoJuego.TERMINADO;
         Juanito.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Mama.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
-        Mama.actualizar(mapa);
-        Juanito.actualizar(mapa);
         eliminarObjetos();
         escenaHUD.clear();
-        menu.musicaFondo.stop();
     }
 
     @Override
